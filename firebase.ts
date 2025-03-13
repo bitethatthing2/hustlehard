@@ -35,41 +35,6 @@ const messaging = async () => {
 const shownNotifications = new Map<string, number>();
 const NOTIFICATION_TIMEOUT = 5000; // 5 seconds
 
-// Generate a consistent notification ID from the payload - same logic as service worker
-function generateNotificationId(payload: MessagePayload) {
-  // Use collapseKey if available, otherwise create a hash from the notification content
-  if (payload.collapseKey) {
-    return `collapseKey:${payload.collapseKey}`;
-  }
-  
-  // Create a hash from notification content
-  const title = payload.data?.title || payload.notification?.title || '';
-  const body = payload.data?.body || payload.notification?.body || '';
-  const timestamp = Math.floor(Date.now() / 10000); // Round to nearest 10 seconds to prevent duplicates
-  
-  return `content:${title}:${body}:${timestamp}`;
-}
-
-// Notify the service worker that the client is handling notifications
-async function notifyServiceWorkerClientIsHandling(notificationId?: string) {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      for (const registration of registrations) {
-        if (registration.active) {
-          console.log('Notifying service worker that client is handling notifications');
-          registration.active.postMessage({
-            type: 'NOTIFICATION_HANDLED_BY_CLIENT',
-            notificationId
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error notifying service worker:', error);
-    }
-  }
-}
-
 // Fetch FCM token
 export const fetchToken = async () => {
   try {
@@ -124,10 +89,6 @@ export const fetchToken = async () => {
             });
             console.log('Service worker registered successfully:', swRegistration.scope);
           }
-          
-          // Notify the service worker that the client is handling notifications
-          await notifyServiceWorkerClientIsHandling();
-          
         } catch (error) {
           console.error("Error registering service worker:", error);
         }
@@ -165,9 +126,6 @@ export const setupForegroundMessageHandler = async () => {
 
   console.log("Successfully installed custom message handler");
   
-  // Notify the service worker that the client is handling notifications
-  await notifyServiceWorkerClientIsHandling();
-  
   return onMessage(m, (payload: MessagePayload) => {
     console.log('Foreground message received:', payload);
     
@@ -176,11 +134,17 @@ export const setupForegroundMessageHandler = async () => {
     const deviceIsIOS = isIOS();
     
     if (Notification.permission === 'granted') {
-      // Generate the same notification ID as the service worker would
-      const notificationId = generateNotificationId(payload);
+      // For iOS use notification payload, for Android prioritize data payload
+      const title = deviceIsIOS 
+        ? (payload.notification?.title || 'New Notification')
+        : (payload.data?.title || payload.notification?.title || 'New Notification');
       
-      // Notify the service worker about this specific notification
-      notifyServiceWorkerClientIsHandling(notificationId);
+      const body = deviceIsIOS 
+        ? (payload.notification?.body || '')
+        : (payload.data?.body || payload.notification?.body || '');
+      
+      // Generate a unique ID for the notification
+      const notificationId = payload.messageId || payload.collapseKey || `${Date.now()}`;
       
       // Check if we've shown this notification recently
       const lastShownTime = shownNotifications.get(notificationId);
@@ -201,15 +165,6 @@ export const setupForegroundMessageHandler = async () => {
         }
       }
       
-      // For iOS use notification payload, for Android prioritize data payload
-      const title = deviceIsIOS 
-        ? (payload.notification?.title || 'New Notification')
-        : (payload.data?.title || payload.notification?.title || 'New Notification');
-      
-      const body = deviceIsIOS 
-        ? (payload.notification?.body || '')
-        : (payload.data?.body || payload.notification?.body || '');
-      
       // Extract link from payload
       const notificationLink = deviceIsIOS 
         ? (payload.data?.link || payload.fcmOptions?.link || '/')
@@ -223,19 +178,17 @@ export const setupForegroundMessageHandler = async () => {
           ? '/icons/mipmap-xxxhdpi/ic_launcher.png'
           : (payload.data?.image || payload.notification?.image || '/icons/mipmap-xxxhdpi/ic_launcher.png'),
         badge: '/icons/icon-72x72.png',
-        tag: notificationId,
+        tag: notificationId, // Use tag to prevent duplicates
         data: deviceIsIOS ? {
           ...payload.notification,
           timestamp: currentTime,
-          link: notificationLink,
-          imageUrl: payload.notification?.image,
-          notificationId: notificationId
+          url: notificationLink,
+          imageUrl: payload.notification?.image
         } : {
           ...payload.data,
           timestamp: currentTime,
-          link: notificationLink,
-          imageUrl: payload.data?.image || payload.notification?.image,
-          notificationId: notificationId
+          url: notificationLink,
+          imageUrl: payload.data?.image || payload.notification?.image
         },
         ...((!deviceIsIOS && payload.notification?.image) && {
           image: payload.notification.image
@@ -254,8 +207,8 @@ export const setupForegroundMessageHandler = async () => {
       // Add click handler directly to the notification
       notification.onclick = function(event) {
         event.preventDefault(); // Prevent the browser from focusing the Notification's tab
-        console.log('Notification clicked, navigating to:', notificationOptions.data.link);
-        window.open(notificationOptions.data.link, '_blank');
+        console.log('Notification clicked, navigating to:', notificationOptions.data.url);
+        window.open(notificationOptions.data.url, '_blank');
       };
     }
   });
@@ -291,14 +244,6 @@ async function registerServiceWorker() {
       
       if (existingFCMServiceWorker) {
         console.log('Found existing service worker registration:', existingFCMServiceWorker.scope);
-        
-        // Notify the service worker that the client is handling notifications
-        if (existingFCMServiceWorker.active) {
-          existingFCMServiceWorker.active.postMessage({
-            type: 'NOTIFICATION_HANDLED_BY_CLIENT'
-          });
-        }
-        
         return existingFCMServiceWorker;
       }
       
@@ -309,14 +254,6 @@ async function registerServiceWorker() {
         });
         
         console.log('Service worker registered successfully:', registration.scope);
-        
-        // Notify the service worker that the client is handling notifications
-        if (registration.active) {
-          registration.active.postMessage({
-            type: 'NOTIFICATION_HANDLED_BY_CLIENT'
-          });
-        }
-        
         return registration;
       } catch (regError) {
         console.warn('Service worker registration failed:', regError);

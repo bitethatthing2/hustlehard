@@ -1,18 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getToken, onMessage, Unsubscribe, MessagePayload } from "firebase/messaging";
-import { fetchToken, messaging, setupForegroundMessageHandler } from "@/firebase";
+import { fetchToken, setupForegroundMessageHandler } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { saveNotificationSubscription } from "@/lib/supabase";
-
-// Keep track of notifications to prevent duplicates
-const processedNotifications = new Set<string>();
-
-// Track the last notification timestamp to prevent duplicates that arrive within a short time window
-let lastNotificationTimestamp = 0;
-const NOTIFICATION_DEBOUNCE_MS = 1000; // 1 second debounce
 
 async function getNotificationPermissionAndToken() {
   // Step 1: Check if Notifications are supported in the browser.
@@ -89,39 +81,6 @@ async function getNotificationPermissionAndToken() {
   return { token: null, isDevelopmentMode: false };
 }
 
-// Helper function to check if a notification is a duplicate
-function isDuplicateNotification(payload: MessagePayload): boolean {
-  // Create a notification ID based on content and timestamp
-  const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
-  
-  // Check if we've already processed this notification
-  if (processedNotifications.has(notificationId)) {
-    console.log("Duplicate notification prevented (already in set):", notificationId);
-    return true;
-  }
-  
-  // Check if this notification arrived too soon after the last one
-  const now = Date.now();
-  if (now - lastNotificationTimestamp < NOTIFICATION_DEBOUNCE_MS) {
-    console.log("Duplicate notification prevented (debounce):", notificationId);
-    return true;
-  }
-  
-  // Update the last notification timestamp
-  lastNotificationTimestamp = now;
-  
-  // Add to processed notifications
-  processedNotifications.add(notificationId);
-  
-  // Clean up processed notifications (keep only last 10)
-  if (processedNotifications.size > 10) {
-    const iterator = processedNotifications.values();
-    processedNotifications.delete(iterator.next().value);
-  }
-  
-  return false;
-}
-
 const useFcmToken = () => {
   const router = useRouter(); // Initialize the router for navigation.
   const [notificationPermissionStatus, setNotificationPermissionStatus] =
@@ -130,7 +89,7 @@ const useFcmToken = () => {
   const [isDevelopmentMode, setIsDevelopmentMode] = useState(false); // State to track if we're using development mode
   const retryLoadToken = useRef(0); // Ref to keep track of retry attempts.
   const isLoading = useRef(false); // Ref to keep track if a token fetch is currently in progress.
-  const messageHandlerRef = useRef<Unsubscribe | null>(null); // Ref to keep track of the message handler
+  const messageHandlerRef = useRef<any>(null); // Ref to keep track of the message handler
 
   const loadToken = async () => {
     // Step 4: Prevent multiple fetches if already fetched or in progress.
@@ -189,7 +148,14 @@ const useFcmToken = () => {
   useEffect(() => {
     // Step 8: Initialize token loading when the component mounts.
     if ("Notification" in window) {
-      loadToken();
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (!isIOS) {
+        // For non-iOS devices, request permission immediately
+        loadToken();
+      } else {
+        // For iOS, we'll wait for user interaction
+        console.log("iOS detected, deferring permission request until user interaction");
+      }
     }
   }, []);
 
@@ -199,7 +165,7 @@ const useFcmToken = () => {
 
       console.log(`Setting up foreground message handler with token ${token}`);
       
-      // Use the new setupForegroundMessageHandler function
+      // Set up the foreground message handler
       const unsubscribe = await setupForegroundMessageHandler();
       
       if (unsubscribe) {
@@ -217,7 +183,18 @@ const useFcmToken = () => {
     };
   }, [token]);
 
-  return { token, notificationPermissionStatus, isDevelopmentMode }; // Return the token, permission status, and development mode flag.
+  // Function to request notification permission (for iOS)
+  const requestNotificationPermission = async () => {
+    console.log("User initiated notification permission request");
+    await loadToken();
+  };
+
+  return { 
+    token, 
+    notificationPermissionStatus, 
+    isDevelopmentMode,
+    requestNotificationPermission 
+  }; // Return the token, permission status, and development mode flag.
 };
 
 export default useFcmToken;
