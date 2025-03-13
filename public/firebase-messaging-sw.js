@@ -10,8 +10,8 @@ const firebaseConfig = {
   projectId: "new1-f04b3",
   storageBucket: "new1-f04b3.firebasestorage.app",
   messagingSenderId: "802463638703",
-  appId: "1:802463638703:web:d22b1b65ec67cdc5d5205a",
-  measurementId: "G-5HMHSW8SLR"
+  appId: "1:802463638703:web:bd0bbdaf3407d784d5205a",
+  measurementId: "G-3RZEW537LN"
 };
 
 firebase.initializeApp(firebaseConfig);
