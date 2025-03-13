@@ -7,8 +7,8 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Firebase Cloud Messaging Demo",
-  description: "A demo application for Firebase Cloud Messaging with Next.js",
+  title: "The Side Hustle Bar",
+  description: "Get notified about the latest side hustle opportunities",
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "FCM Demo",
+    title: "Side Hustle",
   },
   viewport: {
     width: "device-width",

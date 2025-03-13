@@ -1,7 +1,7 @@
 {
-  "name": "Firebase Cloud Messaging Demo",
-  "short_name": "FCM Demo",
-  "description": "A demo application for Firebase Cloud Messaging with Next.js",
+  "name": "The Side Hustle Bar",
+  "short_name": "Side Hustle",
+  "description": "Get notified about the latest side hustle opportunities",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
