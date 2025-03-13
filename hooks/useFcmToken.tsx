@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getToken, onMessage, Unsubscribe, MessagePayload } from "firebase/messaging";
-import { fetchToken, messaging } from "@/firebase";
+import { fetchToken, messaging, setupForegroundMessageHandler } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { saveNotificationSubscription } from "@/lib/supabase";
@@ -130,6 +130,7 @@ const useFcmToken = () => {
   const [isDevelopmentMode, setIsDevelopmentMode] = useState(false); // State to track if we're using development mode
   const retryLoadToken = useRef(0); // Ref to keep track of retry attempts.
   const isLoading = useRef(false); // Ref to keep track if a token fetch is currently in progress.
+  const messageHandlerRef = useRef<Unsubscribe | null>(null); // Ref to keep track of the message handler
 
   const loadToken = async () => {
     // Step 4: Prevent multiple fetches if already fetched or in progress.
@@ -196,60 +197,25 @@ const useFcmToken = () => {
     const setupListener = async () => {
       if (!token) return; // Exit if no token is available.
 
-      console.log(`onMessage registered with token ${token}`);
-      const m = await messaging();
-      if (!m) return;
-
-      // Step 9: Register a listener for incoming FCM messages.
-      const unsubscribe = onMessage(m, (payload: MessagePayload) => {
-        if (Notification.permission !== "granted") return;
-
-        console.log("Foreground push notification received:", payload);
-        
-        // Check if this is a duplicate notification
-        if (isDuplicateNotification(payload)) {
-          console.log("Skipping duplicate notification in foreground handler");
-          return;
-        }
-        
-        // Extract notification data
-        const title = payload.notification?.title || "New Notification";
-        const body = payload.notification?.body || "You have a new notification";
-        const link = payload.fcmOptions?.link || payload.data?.link;
-
-        // Show toast notification with or without action button
-        if (link) {
-          toast.info(
-            `${title}: ${body}`,
-            {
-              action: {
-                label: "View",
-                onClick: () => {
-                  // We know link is defined here because of the if (link) check
-                  router.push(link as string);
-                },
-              },
-            }
-          );
-        } else {
-          toast.info(`${title}: ${body}`);
-        }
-      });
-
-      return unsubscribe;
+      console.log(`Setting up foreground message handler with token ${token}`);
+      
+      // Use the new setupForegroundMessageHandler function
+      const unsubscribe = await setupForegroundMessageHandler();
+      
+      if (unsubscribe) {
+        messageHandlerRef.current = unsubscribe;
+      }
     };
 
-    let unsubscribe: Unsubscribe | null = null;
-
-    setupListener().then((unsub) => {
-      if (unsub) {
-        unsubscribe = unsub;
-      }
-    });
+    setupListener();
 
     // Step 11: Cleanup the listener when the component unmounts.
-    return () => unsubscribe?.();
-  }, [token, router, toast]);
+    return () => {
+      if (messageHandlerRef.current) {
+        messageHandlerRef.current();
+      }
+    };
+  }, [token]);
 
   return { token, notificationPermissionStatus, isDevelopmentMode }; // Return the token, permission status, and development mode flag.
 };

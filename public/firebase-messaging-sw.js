@@ -10,24 +10,11 @@ self.addEventListener('activate', function(event) {
   event.waitUntil(self.clients.claim()); // Take control of all clients
 });
 
-// Keep track of notifications to prevent duplicates
-const notificationTracker = new Set();
+// Import Firebase scripts
+importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js");
 
-// Track if Firebase is handling a message to prevent duplicates
-let isFirebaseHandlingMessage = false;
-
-// Try to import Firebase scripts with error handling
-try {
-  importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
-  importScripts(
-    "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"
-  );
-  console.log('[firebase-messaging-sw.js] Firebase scripts imported successfully');
-} catch (e) {
-  console.error('Error importing Firebase scripts:', e);
-}
-
-// Replace these with your own Firebase config keys...
+// Initialize Firebase with your config
 const firebaseConfig = {
   apiKey: "AIzaSyB0Nxf3pvW32KBc0D1o2-K6qIeKovhGWfg",
   authDomain: "new1-f04b3.firebaseapp.com",
@@ -38,212 +25,105 @@ const firebaseConfig = {
   measurementId: "G-3RZEW537LN"
 };
 
-// Initialize Firebase with error handling
-try {
-  if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
-    console.log('[firebase-messaging-sw.js] Firebase initialized successfully');
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
 
-    // CRITICAL: Override the default onBackgroundMessage handler
-    messaging.onBackgroundMessage((payload) => {
-      console.log("[firebase-messaging-sw.js] Received background message ", payload);
-      
-      // Set flag to indicate Firebase is handling this message
-      isFirebaseHandlingMessage = true;
-      
-      try {
-        // Create a notification ID based on the payload content to prevent duplicates
-        const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
-        
-        // Check if we've already shown this notification
-        if (notificationTracker.has(notificationId)) {
-          console.log('[firebase-messaging-sw.js] Duplicate notification prevented:', notificationId);
-          isFirebaseHandlingMessage = false;
-          return Promise.resolve();
-        }
-        
-        // Add to tracker
-        notificationTracker.add(notificationId);
-        
-        // Clean up tracker (keep only last 10 notifications)
-        if (notificationTracker.size > 10) {
-          const iterator = notificationTracker.values();
-          notificationTracker.delete(iterator.next().value);
-        }
-        
-        // payload.fcmOptions?.link comes from our backend API route handle
-        // payload.data.link comes from the Firebase Console where link is the 'key'
-        const link = payload.fcmOptions?.link || payload.data?.link || '/';
-        
-        // Get appropriate icon
-        const icon = getAppropriateIcon(payload);
-        
-        const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-          body: payload.notification.body,
-          icon: icon,
-          badge: '/icons_folder/icon72.png',
-          data: { url: link },
-          tag: notificationId, // Use tag to prevent duplicates
-          actions: [
-            {
-              action: "open",
-              title: "View",
-            }
-          ],
-          requireInteraction: true
-        };
-        
-        return self.registration.showNotification(notificationTitle, notificationOptions)
-          .finally(() => {
-            // Reset the flag when we're done
-            setTimeout(() => {
-              isFirebaseHandlingMessage = false;
-            }, 1000);
-          });
-      } catch (error) {
-        console.error('[firebase-messaging-sw.js] Error in background message handler:', error);
-        isFirebaseHandlingMessage = false;
-        return Promise.resolve();
-      }
-    });
+// Keep track of processed notifications to prevent duplicates
+const processedNotifications = new Set();
+
+// Handle background messages
+messaging.onBackgroundMessage(async (payload) => {
+  try {
+    console.log('[firebase-messaging-sw.js] Received background message:', payload);
+
+    // Create a unique notification ID
+    const notificationId = payload.collapseKey || `${Date.now()}`;
     
-    // Helper function to get the appropriate icon
-    function getAppropriateIcon(payload) {
-      // Check if payload has a specific icon
-      if (payload.notification && payload.notification.icon) {
-        return payload.notification.icon;
-      }
-      
-      // Get user agent to determine device type
-      const userAgent = self.navigator.userAgent.toLowerCase();
-      
-      // Default icons for different platforms
-      if (userAgent.includes('android')) {
-        return '/icons_folder/mipmap-xxxhdpi/ic_launcher.png';
-      } else if (userAgent.includes('iphone') || userAgent.includes('ipad') || userAgent.includes('ipod')) {
-        return '/icons_folder/touch-icon-iphone.png';
-      } else {
-        return '/icons_folder/icon-192.png';
-      }
+    // Check if we've already processed this notification
+    if (processedNotifications.has(notificationId)) {
+      console.log('[firebase-messaging-sw.js] Skipping duplicate notification:', notificationId);
+      return;
     }
     
-  } else {
-    console.warn('[firebase-messaging-sw.js] Firebase is not defined, possibly due to script import failure');
-  }
-} catch (e) {
-  console.error('Error initializing Firebase in service worker:', e);
-}
+    // Add to processed notifications
+    processedNotifications.add(notificationId);
+    
+    // Clean up processed notifications (keep only last 10)
+    if (processedNotifications.size > 10) {
+      const iterator = processedNotifications.values();
+      processedNotifications.delete(iterator.next().value);
+    }
 
-// CRITICAL: Add a push event handler to prevent duplicate notifications
-// This will check if Firebase is already handling the message
-self.addEventListener('push', function(event) {
-  console.log('[firebase-messaging-sw.js] Push event received:', event);
-  
-  // If Firebase is handling this message, don't show another notification
-  if (isFirebaseHandlingMessage) {
-    console.log('[firebase-messaging-sw.js] Firebase is already handling this message, ignoring push event');
-    return;
+    // Extract notification data
+    const notificationData = {
+      title: payload.data?.title || payload.notification?.title || 'New Notification',
+      body: payload.data?.body || payload.notification?.body || '',
+      image: payload.data?.image || payload.notification?.image,
+      link: payload.data?.link || payload.fcmOptions?.link || '/'
+    };
+
+    console.log('[firebase-messaging-sw.js] Extracted notification data:', notificationData);
+
+    if (!notificationData.title) {
+      console.error('[firebase-messaging-sw.js] Missing title in payload');
+      return;
+    }
+
+    const deviceIsIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    const notificationOptions = {
+      body: notificationData.body,
+      icon: '/icons/mipmap-xxxhdpi/ic_launcher.png',
+      badge: '/icons/icon-72x72.png',
+      tag: notificationId, // Use tag to prevent duplicates
+      data: {
+        ...notificationData,
+        timestamp: Date.now()
+      },
+      ...((!deviceIsIOS && notificationData.image) && {
+        image: notificationData.image
+      }),
+      renotify: false,
+      requireInteraction: true,
+      silent: deviceIsIOS,
+      actions: deviceIsIOS ? [] : [
+        {
+          action: "open",
+          title: "View",
+        }
+      ]
+    };
+
+    console.log('[firebase-messaging-sw.js] Showing notification with options:', notificationOptions);
+    const registration = await self.registration.showNotification(notificationData.title, notificationOptions);
+    console.log('[firebase-messaging-sw.js] Notification shown successfully:', registration);
+    return registration;
+
+  } catch (error) {
+    console.error('[firebase-messaging-sw.js] Error showing notification:', error);
+    console.error('[firebase-messaging-sw.js] Error details:', error.message);
+    return null;
   }
-  
-  // Wait a moment to see if Firebase will handle this message
-  event.waitUntil(
-    new Promise(resolve => {
-      // Give Firebase a chance to handle the message first
-      setTimeout(() => {
-        // If Firebase started handling the message during our wait, don't show a notification
-        if (isFirebaseHandlingMessage) {
-          console.log('[firebase-messaging-sw.js] Firebase started handling the message during wait, ignoring push event');
-          return resolve();
-        }
-        
-        // If Firebase isn't handling this message, we need to handle it ourselves
-        console.log('[firebase-messaging-sw.js] Firebase is not handling this message, handling push event ourselves');
-        
-        // Only proceed if we have data
-        if (!event.data) {
-          return resolve();
-        }
-        
-        try {
-          const data = event.data.json();
-          console.log('[firebase-messaging-sw.js] Push data:', data);
-          
-          // Create a notification ID based on the payload content to prevent duplicates
-          const notificationId = `${(data.notification?.title || data.data?.title || '')}-${Date.now()}`;
-          
-          // Check if we've already shown this notification
-          if (notificationTracker.has(notificationId)) {
-            console.log('[firebase-messaging-sw.js] Duplicate notification prevented:', notificationId);
-            return resolve();
-          }
-          
-          // Add to tracker
-          notificationTracker.add(notificationId);
-          
-          // Only show notification if there's notification data
-          if (!data.notification && !data.data?.title) {
-            console.log('[firebase-messaging-sw.js] No notification data in push message, ignoring');
-            return resolve();
-          }
-          
-          // Extract notification data
-          const title = data.notification?.title || data.data?.title || "New Notification";
-          const body = data.notification?.body || data.data?.body || "You have a new notification";
-          
-          // Get link from various possible locations
-          const link = data.fcmOptions?.link || data.data?.link || data.data?.url || '/';
-          
-          // Create notification options
-          const options = {
-            body: body,
-            icon: data.notification?.icon || '/icons_folder/icon-192.png',
-            badge: '/icons_folder/icon72.png',
-            tag: notificationId, // Use tag to prevent duplicates
-            data: { url: link },
-            actions: [
-              {
-                action: "open",
-                title: "View",
-              }
-            ],
-            requireInteraction: true
-          };
-          
-          // Show the notification
-          return self.registration.showNotification(title, options)
-            .then(resolve);
-        } catch (error) {
-          console.error('[firebase-messaging-sw.js] Error handling push event:', error);
-          resolve();
-        }
-      }, 500); // Wait 500ms to see if Firebase handles it
-    })
-  );
 });
 
 // Handle notification clicks
-self.addEventListener("notificationclick", function (event) {
-  console.log("[firebase-messaging-sw.js] Notification click received.");
-
-  // Close the notification
+self.addEventListener('notificationclick', (event) => {
+  console.log('[firebase-messaging-sw.js] Notification click received:', event);
+  
   event.notification.close();
   
   // Handle action buttons if clicked
   if (event.action === 'open') {
     console.log("[firebase-messaging-sw.js] 'View' button clicked");
   }
-
-  // Get the URL to open
-  const url = event.notification.data?.url || "/";
   
-  // This checks if the client is already open and if it is, it focuses on the tab
-  // If it is not open, it opens a new tab with the URL
+  const url = event.notification.data?.link || '/';
+  console.log('[firebase-messaging-sw.js] Opening link:', url);
+  
   event.waitUntil(
-    clients
-      .matchAll({ type: "window", includeUncontrolled: true })
-      .then(function (clientList) {
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
         // Try to find an existing window with the URL
         for (const client of clientList) {
           const clientUrl = new URL(client.url);
@@ -261,5 +141,15 @@ self.addEventListener("notificationclick", function (event) {
           return clients.openWindow(url);
         }
       })
+      .catch(error => {
+        console.error('[firebase-messaging-sw.js] Error handling notification click:', error);
+      })
   );
+});
+
+// Explicitly handle push events to prevent duplicate notifications
+self.addEventListener('push', function(event) {
+  console.log('[firebase-messaging-sw.js] Push event received, but will be handled by onBackgroundMessage');
+  // We don't need to do anything here as onBackgroundMessage will handle it
+  // This empty handler prevents the browser from showing its own notification
 });
