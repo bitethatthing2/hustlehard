@@ -10,6 +10,10 @@ import { saveNotificationSubscription } from "@/lib/supabase";
 // Keep track of notifications to prevent duplicates
 const processedNotifications = new Set<string>();
 
+// Track the last notification timestamp to prevent duplicates that arrive within a short time window
+let lastNotificationTimestamp = 0;
+const NOTIFICATION_DEBOUNCE_MS = 1000; // 1 second debounce
+
 async function getNotificationPermissionAndToken() {
   // Step 1: Check if Notifications are supported in the browser.
   if (!("Notification" in window)) {
@@ -83,6 +87,39 @@ async function getNotificationPermissionAndToken() {
 
   console.log("Notification permission not granted.");
   return { token: null, isDevelopmentMode: false };
+}
+
+// Helper function to check if a notification is a duplicate
+function isDuplicateNotification(payload: MessagePayload): boolean {
+  // Create a notification ID based on content and timestamp
+  const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
+  
+  // Check if we've already processed this notification
+  if (processedNotifications.has(notificationId)) {
+    console.log("Duplicate notification prevented (already in set):", notificationId);
+    return true;
+  }
+  
+  // Check if this notification arrived too soon after the last one
+  const now = Date.now();
+  if (now - lastNotificationTimestamp < NOTIFICATION_DEBOUNCE_MS) {
+    console.log("Duplicate notification prevented (debounce):", notificationId);
+    return true;
+  }
+  
+  // Update the last notification timestamp
+  lastNotificationTimestamp = now;
+  
+  // Add to processed notifications
+  processedNotifications.add(notificationId);
+  
+  // Clean up processed notifications (keep only last 10)
+  if (processedNotifications.size > 10) {
+    const iterator = processedNotifications.values();
+    processedNotifications.delete(iterator.next().value);
+  }
+  
+  return false;
 }
 
 const useFcmToken = () => {
@@ -169,46 +206,33 @@ const useFcmToken = () => {
 
         console.log("Foreground push notification received:", payload);
         
-        // Create a notification ID to prevent duplicates
-        const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
-        
-        // Check if we've already processed this notification
-        if (processedNotifications.has(notificationId)) {
-          console.log("Duplicate notification prevented:", notificationId);
+        // Check if this is a duplicate notification
+        if (isDuplicateNotification(payload)) {
+          console.log("Skipping duplicate notification in foreground handler");
           return;
         }
         
-        // Add to processed notifications
-        processedNotifications.add(notificationId);
-        
-        // Clean up processed notifications (keep only last 10)
-        if (processedNotifications.size > 10) {
-          const iterator = processedNotifications.values();
-          processedNotifications.delete(iterator.next().value);
-        }
-        
+        // Extract notification data
+        const title = payload.notification?.title || "New Notification";
+        const body = payload.notification?.body || "You have a new notification";
         const link = payload.fcmOptions?.link || payload.data?.link;
 
+        // Show toast notification with or without action button
         if (link) {
           toast.info(
-            `${payload.notification?.title}: ${payload.notification?.body}`,
+            `${title}: ${body}`,
             {
               action: {
-                label: "Visit",
+                label: "View",
                 onClick: () => {
-                  const linkUrl = payload.fcmOptions?.link || payload.data?.link;
-                  if (linkUrl) {
-                    // Use type assertion to tell TypeScript this is a valid URL
-                    router.push(linkUrl as string);
-                  }
+                  // We know link is defined here because of the if (link) check
+                  router.push(link as string);
                 },
               },
             }
           );
         } else {
-          toast.info(
-            `${payload.notification?.title}: ${payload.notification?.body}`
-          );
+          toast.info(`${title}: ${body}`);
         }
       });
 

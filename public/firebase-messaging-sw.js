@@ -13,6 +13,10 @@ self.addEventListener('activate', function(event) {
 // Keep track of notifications to prevent duplicates
 const notificationTracker = new Set();
 
+// Global flag to track if we're currently handling a notification
+// This helps prevent Firebase from showing its own notification
+let isHandlingNotification = false;
+
 // Try to import Firebase scripts with error handling
 try {
   importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
@@ -47,57 +51,71 @@ try {
     messaging.setBackgroundMessageHandler(function(payload) {
       console.log('[firebase-messaging-sw.js] Background message handled by custom handler:', payload);
       
-      // Create a notification ID based on the payload content to prevent duplicates
-      const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
+      // Set the global flag to indicate we're handling this notification
+      isHandlingNotification = true;
       
-      // Check if we've already shown this notification
-      if (notificationTracker.has(notificationId)) {
-        console.log('[firebase-messaging-sw.js] Duplicate notification prevented:', notificationId);
+      try {
+        // Create a notification ID based on the payload content to prevent duplicates
+        const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
+        
+        // Check if we've already shown this notification
+        if (notificationTracker.has(notificationId)) {
+          console.log('[firebase-messaging-sw.js] Duplicate notification prevented:', notificationId);
+          isHandlingNotification = false;
+          return Promise.resolve();
+        }
+        
+        // Add to tracker
+        notificationTracker.add(notificationId);
+        
+        // Clean up tracker (keep only last 10 notifications)
+        if (notificationTracker.size > 10) {
+          const iterator = notificationTracker.values();
+          notificationTracker.delete(iterator.next().value);
+        }
+        
+        // Extract notification data
+        const notificationTitle = payload.notification?.title || "New Notification";
+        const notificationBody = payload.notification?.body || "You have a new notification";
+        
+        // Get link from payload
+        const link = payload.data?.link || 
+                    payload.data?.url || 
+                    payload.fcmOptions?.link || 
+                    '/';
+        
+        // Get device-appropriate icons
+        const icon = getDeviceAppropriateIcon(payload);
+        const badge = getDeviceAppropriateBadge(payload);
+        
+        // Create notification options
+        const notificationOptions = {
+          body: notificationBody,
+          icon: icon,
+          badge: badge,
+          vibrate: [100, 50, 100],
+          data: { url: link },
+          tag: notificationId, // Use tag to prevent duplicates
+          actions: [
+            {
+              action: "open",
+              title: "View",
+            }
+          ],
+          requireInteraction: true
+        };
+        
+        // Show the notification
+        return self.registration.showNotification(notificationTitle, notificationOptions)
+          .finally(() => {
+            // Reset the flag when we're done
+            isHandlingNotification = false;
+          });
+      } catch (error) {
+        console.error('[firebase-messaging-sw.js] Error in background message handler:', error);
+        isHandlingNotification = false;
         return Promise.resolve();
       }
-      
-      // Add to tracker
-      notificationTracker.add(notificationId);
-      
-      // Clean up tracker (keep only last 10 notifications)
-      if (notificationTracker.size > 10) {
-        const iterator = notificationTracker.values();
-        notificationTracker.delete(iterator.next().value);
-      }
-      
-      // Extract notification data
-      const notificationTitle = payload.notification?.title || "New Notification";
-      const notificationBody = payload.notification?.body || "You have a new notification";
-      
-      // Get link from payload
-      const link = payload.data?.link || 
-                  payload.data?.url || 
-                  payload.fcmOptions?.link || 
-                  '/';
-      
-      // Get device-appropriate icons
-      const icon = getDeviceAppropriateIcon(payload);
-      const badge = getDeviceAppropriateBadge(payload);
-      
-      // Create notification options
-      const notificationOptions = {
-        body: notificationBody,
-        icon: icon,
-        badge: badge,
-        vibrate: [100, 50, 100],
-        data: { url: link },
-        tag: notificationId, // Use tag to prevent duplicates
-        actions: [
-          {
-            action: "open",
-            title: "View",
-          }
-        ],
-        requireInteraction: true
-      };
-      
-      // Show the notification
-      return self.registration.showNotification(notificationTitle, notificationOptions);
     });
 
     /**
@@ -126,16 +144,16 @@ try {
       // Default icons for different platforms
       if (userAgent.includes('android')) {
         // Android device
-        return './icons_folder/mipmap-xxxhdpi/ic_launcher.png';
+        return '/icons_folder/mipmap-xxxhdpi/ic_launcher.png';
       } else if (userAgent.includes('iphone') || userAgent.includes('ipad') || userAgent.includes('ipod')) {
         // iOS device
-        return './icons_folder/touch-icon-iphone.png';
+        return '/icons_folder/touch-icon-iphone.png';
       } else if (userAgent.includes('windows')) {
         // Windows device
-        return './icons_folder/icon-144.png';
+        return '/icons_folder/icon-144.png';
       } else {
         // Default for other devices
-        return './icons_folder/icon-192.png';
+        return '/icons_folder/icon-192.png';
       }
     }
     
@@ -152,18 +170,38 @@ try {
       // Default badges for different platforms
       if (userAgent.includes('android')) {
         // Android device
-        return './icons_folder/icon-72.png';
+        return '/icons_folder/icon72.png';
       } else if (userAgent.includes('iphone') || userAgent.includes('ipad') || userAgent.includes('ipod')) {
         // iOS device - iOS prefers smaller badges
-        return './icons_folder/icon-40.png';
+        return '/icons_folder/icon-40.png';
       } else {
         // Default for other devices
-        return './icons_folder/icon-72.png';
+        return '/icons_folder/icon72.png';
       }
     }
 
-    // REMOVED: We no longer need this as we've completely overridden the default handler
-    // messaging.onBackgroundMessage((payload) => { ... });
+    // CRITICAL: Monkey patch Firebase's internal methods to prevent duplicate notifications
+    // This is a more aggressive approach to ensure Firebase doesn't show its own notifications
+    try {
+      // Override the internal _displayNotification method if it exists
+      if (messaging._displayNotification) {
+        const originalDisplayNotification = messaging._displayNotification;
+        messaging._displayNotification = function(payload) {
+          console.log('[firebase-messaging-sw.js] Intercepted Firebase _displayNotification call');
+          
+          // If we're already handling this notification in our custom handler, don't show it again
+          if (isHandlingNotification) {
+            console.log('[firebase-messaging-sw.js] Preventing duplicate notification from Firebase');
+            return Promise.resolve();
+          }
+          
+          // Otherwise, let Firebase handle it
+          return originalDisplayNotification.call(this, payload);
+        };
+      }
+    } catch (err) {
+      console.warn('[firebase-messaging-sw.js] Could not override Firebase internal methods:', err);
+    }
     
   } else {
     console.warn('[firebase-messaging-sw.js] Firebase is not defined, possibly due to script import failure');
@@ -217,45 +255,71 @@ self.addEventListener("notificationclick", function (event) {
 self.addEventListener('push', function(event) {
   console.log('[firebase-messaging-sw.js] Push received:', event);
   
-  // If the push has data but no notification (raw push),
-  // create a notification from the data
-  if (!event.data) return;
+  // Set the global flag to indicate we're handling this notification
+  isHandlingNotification = true;
+  
+  // If the push has no data, we can't do anything with it
+  if (!event.data) {
+    isHandlingNotification = false;
+    return;
+  }
   
   try {
     const data = event.data.json();
+    console.log('[firebase-messaging-sw.js] Push data:', data);
     
     // Create a notification ID based on the payload content to prevent duplicates
-    const notificationId = `${data.data?.title || ''}-${Date.now()}`;
+    const notificationId = `${(data.notification?.title || data.data?.title || '')}-${Date.now()}`;
     
     // Check if we've already shown this notification
     if (notificationTracker.has(notificationId)) {
       console.log('[firebase-messaging-sw.js] Duplicate notification prevented:', notificationId);
+      isHandlingNotification = false;
       return;
     }
     
     // Add to tracker
     notificationTracker.add(notificationId);
     
-    // If Firebase already created a notification, don't create another one
-    if (data.notification) return;
+    // CRITICAL: Always show our own notification, even if data.notification exists
+    // This ensures we have complete control over the notification display
+    const title = data.notification?.title || data.data?.title || "New Notification";
+    const body = data.notification?.body || data.data?.body || "You have a new notification";
     
-    // Otherwise, create a notification from the data
-    const title = data.data?.title || "New Notification";
+    // Get link from various possible locations
+    const link = data.fcmOptions?.link || 
+                data.data?.link || 
+                data.data?.url || 
+                '/';
+    
+    // Create notification options
     const options = {
-      body: data.data?.body || "You have a new notification",
-      icon: './icons_folder/icon-192.png',
-      badge: './icons_folder/icon-72.png',
+      body: body,
+      icon: data.notification?.icon || '/icons_folder/icon-192.png',
+      badge: data.notification?.badge || '/icons_folder/icon72.png',
+      vibrate: [100, 50, 100],
       tag: notificationId, // Use tag to prevent duplicates
-      data: {
-        url: data.data?.link || data.data?.url || '/'
-      }
+      data: { url: link },
+      actions: [
+        {
+          action: "open",
+          title: "View",
+        }
+      ],
+      requireInteraction: true
     };
     
+    // Show our notification and prevent any others
     event.waitUntil(
       self.registration.showNotification(title, options)
+        .finally(() => {
+          // Reset the flag when we're done
+          isHandlingNotification = false;
+        })
     );
   } catch (error) {
     console.error('[firebase-messaging-sw.js] Error handling push:', error);
+    isHandlingNotification = false;
   }
 });
 
