@@ -18,51 +18,117 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
+// Handle background messages
 messaging.onBackgroundMessage((payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
   );
 
-  // payload.fcmOptions?.link comes from our backend API route handle
-  // payload.data.link comes from the Firebase Console where link is the 'key'
-  const link = payload.fcmOptions?.link || payload.data?.link;
-
-  const notificationTitle = payload.notification.title;
+  // Extract notification data from payload
+  const notificationTitle = payload.notification.title || "New Notification";
+  const notificationBody = payload.notification.body || "You have a new notification";
+  
+  // Get link from various possible locations
+  // 1. From FCM options (from our API)
+  // 2. From data.link (from our API or Firebase Console)
+  // 3. Default to root
+  const link = payload.fcmOptions?.link || payload.data?.link || "/";
+  
+  // Get icon from payload or use default
+  const icon = payload.notification.icon || "./icon-192x192.png";
+  const badge = payload.notification.badge || "./badge-72x72.png";
+  
+  // Create notification options
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: "./logo.png",
+    body: notificationBody,
+    icon: icon,
+    badge: badge,
+    vibrate: [100, 50, 100],
     data: { url: link },
+    actions: [
+      {
+        action: "open",
+        title: "View",
+      }
+    ],
+    requireInteraction: true
   };
+  
+  // Show the notification
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
+// Handle notification clicks
 self.addEventListener("notificationclick", function (event) {
-  console.log("[firebase-messaging-sw.js] Notification click received.");
+  console.log("[firebase-messaging-sw.js] Notification click received.", event);
 
+  // Close the notification
   event.notification.close();
+  
+  // Handle action buttons if clicked
+  if (event.action === 'open') {
+    console.log("[firebase-messaging-sw.js] 'View' button clicked");
+  }
 
-  // This checks if the client is already open and if it is, it focuses on the tab. If it is not open, it opens a new tab with the URL passed in the notification payload
+  // Get the URL to open
+  const url = event.notification.data.url || "/";
+  
+  // This checks if the client is already open and if it is, it focuses on the tab
+  // If it is not open, it opens a new tab with the URL
   event.waitUntil(
     clients
-      // https://developer.mozilla.org/en-US/docs/Web/API/Clients/matchAll
       .matchAll({ type: "window", includeUncontrolled: true })
       .then(function (clientList) {
-        const url = event.notification.data.url;
-
-        if (!url) return;
-
-        // If relative URL is passed in firebase console or API route handler, it may open a new window as the client.url is the full URL i.e. https://example.com/ and the url is /about whereas if we passed in the full URL, it will focus on the existing tab i.e. https://example.com/about
+        // Try to find an existing window with the URL
         for (const client of clientList) {
-          if (client.url === url && "focus" in client) {
+          const clientUrl = new URL(client.url);
+          const targetUrl = new URL(url, self.location.origin);
+          
+          // If we find a matching client, focus it
+          if (clientUrl.pathname === targetUrl.pathname && "focus" in client) {
             return client.focus();
           }
         }
 
+        // If no matching client is found, open a new window
         if (clients.openWindow) {
-          console.log("OPENWINDOW ON CLIENT");
+          console.log("[firebase-messaging-sw.js] Opening new window:", url);
           return clients.openWindow(url);
         }
       })
   );
+});
+
+// Handle push events directly (for web push)
+self.addEventListener('push', function(event) {
+  console.log('[firebase-messaging-sw.js] Push received:', event);
+  
+  // If the push has data but no notification (raw push),
+  // create a notification from the data
+  if (!event.data) return;
+  
+  try {
+    const data = event.data.json();
+    
+    // If Firebase already created a notification, don't create another one
+    if (data.notification) return;
+    
+    // Otherwise, create a notification from the data
+    const title = data.data?.title || "New Notification";
+    const options = {
+      body: data.data?.body || "You have a new notification",
+      icon: "./icon-192x192.png",
+      badge: "./badge-72x72.png",
+      data: {
+        url: data.data?.link || "/"
+      }
+    };
+    
+    event.waitUntil(
+      self.registration.showNotification(title, options)
+    );
+  } catch (error) {
+    console.error('[firebase-messaging-sw.js] Error handling push:', error);
+  }
 });
