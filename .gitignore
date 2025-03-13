@@ -37,3 +37,6 @@ next-env.d.ts
 
 certificates
 service_key.json
+
+# Firebase service account key
+service_key.json
