@@ -52,12 +52,69 @@ try {
              '/';
     }
 
+    // Helper function to get the appropriate icon based on device
+    function getDeviceAppropriateIcon(payload) {
+      // Check if payload has a specific icon
+      if (payload.notification && payload.notification.icon) {
+        return payload.notification.icon;
+      }
+      
+      // Get user agent to determine device type
+      const userAgent = self.navigator.userAgent.toLowerCase();
+      
+      // Default icons for different platforms
+      if (userAgent.includes('android')) {
+        // Android device
+        return './icons_folder/mipmap-xxxhdpi/ic_launcher.png';
+      } else if (userAgent.includes('iphone') || userAgent.includes('ipad') || userAgent.includes('ipod')) {
+        // iOS device
+        return './icons_folder/touch-icon-iphone.png';
+      } else if (userAgent.includes('windows')) {
+        // Windows device
+        return './icons_folder/icon-144.png';
+      } else {
+        // Default for other devices
+        return './icons_folder/icon-192.png';
+      }
+    }
+    
+    // Helper function to get the appropriate badge based on device
+    function getDeviceAppropriateBadge(payload) {
+      // Check if payload has a specific badge
+      if (payload.notification && payload.notification.badge) {
+        return payload.notification.badge;
+      }
+      
+      // Get user agent to determine device type
+      const userAgent = self.navigator.userAgent.toLowerCase();
+      
+      // Default badges for different platforms
+      if (userAgent.includes('android')) {
+        // Android device
+        return './icons_folder/icon-72.png';
+      } else if (userAgent.includes('iphone') || userAgent.includes('ipad') || userAgent.includes('ipod')) {
+        // iOS device - iOS prefers smaller badges
+        return './icons_folder/icon-40.png';
+      } else {
+        // Default for other devices
+        return './icons_folder/icon-72.png';
+      }
+    }
+
     // Handle background messages
     messaging.onBackgroundMessage((payload) => {
       console.log(
         "[firebase-messaging-sw.js] Received background message ",
         payload
       );
+
+      // IMPORTANT: Set FCM's default notification behavior to silent
+      // This prevents Firebase from showing its default notification
+      messaging.setBackgroundMessageHandler(function(payload) {
+        console.log('[firebase-messaging-sw.js] Handling background message with custom handler');
+        // Return empty promise to prevent default notification
+        return Promise.resolve();
+      });
 
       // Extract notification data from payload
       const notificationTitle = payload.notification.title || "New Notification";
@@ -66,9 +123,9 @@ try {
       // Get link from various possible locations using our utility function
       const link = getNotificationUrl(payload);
       
-      // Get icon from payload or use default
-      const icon = payload.notification.icon || "./icon-192x192.png";
-      const badge = payload.notification.badge || "./badge-72x72.png";
+      // Get device-appropriate icons
+      const icon = getDeviceAppropriateIcon(payload);
+      const badge = getDeviceAppropriateBadge(payload);
       
       // Create notification options
       const notificationOptions = {
@@ -155,8 +212,8 @@ self.addEventListener('push', function(event) {
     const title = data.data?.title || "New Notification";
     const options = {
       body: data.data?.body || "You have a new notification",
-      icon: "./icon-192x192.png",
-      badge: "./badge-72x72.png",
+      icon: './icons_folder/icon-192.png',
+      badge: './icons_folder/icon-72.png',
       data: {
         url: data.data?.link || data.data?.url || '/'
       }

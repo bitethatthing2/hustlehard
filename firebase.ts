@@ -252,10 +252,30 @@ export const fetchToken = async () => {
   try {
     const fcmMessaging = await messaging();
     if (fcmMessaging) {
+      // Add more detailed console logs for debugging
+      console.log("VAPID Key Environment Variable:", process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY);
+      console.log("All environment variables:", Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC')));
+      
       // Add console log for debugging
       console.log("Attempting to get FCM token with VAPID key:", 
         process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY ? "Key exists (length: " + 
         process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY.length + ")" : "Key missing");
+      
+      // Configure FCM to not show default notifications
+      // This ensures only our service worker shows notifications with custom styling
+      if (typeof window !== 'undefined') {
+        // Set notification options to silent for foreground messages
+        // This prevents duplicate notifications
+        try {
+          // @ts-ignore - Accessing internal property for configuration
+          fcmMessaging.onMessage = () => {
+            console.log("Intercepted foreground message, preventing default notification");
+            return Promise.resolve();
+          };
+        } catch (err) {
+          console.warn("Could not override onMessage handler:", err);
+        }
+      }
       
       // Check if we're in a development environment with a self-signed certificate
       const isDevelopmentWithUntrustedCert = 
