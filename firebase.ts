@@ -1,5 +1,5 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getMessaging, getToken, isSupported } from "firebase/messaging";
+import { getMessaging, getToken, isSupported, Messaging, MessagePayload } from "firebase/messaging";
 
 // Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
@@ -265,17 +265,34 @@ export const fetchToken = async () => {
       console.log("Attempting to get FCM token with VAPID key:", 
         vapidKey ? "Key exists (length: " + vapidKey.length + ")" : "Key missing");
       
-      // Configure FCM to not show default notifications
-      // This ensures only our service worker shows notifications with custom styling
+      // CRITICAL: Completely override the onMessage handler to prevent duplicate notifications
+      // This is more aggressive than the previous approach
       if (typeof window !== 'undefined') {
-        // Set notification options to silent for foreground messages
-        // This prevents duplicate notifications
         try {
+          // Store the original onMessage function
           // @ts-ignore - Accessing internal property for configuration
-          fcmMessaging.onMessage = () => {
-            console.log("Intercepted foreground message, preventing default notification");
-            return Promise.resolve();
+          const originalOnMessage = (fcmMessaging as any).onMessage;
+          
+          // Replace it with our custom implementation
+          // @ts-ignore - Accessing internal property for configuration
+          (fcmMessaging as any).onMessage = (callback: (payload: MessagePayload) => void) => {
+            console.log("Custom onMessage handler registered");
+            
+            // Return a function that completely intercepts the message
+            return originalOnMessage.call(fcmMessaging, (payload: MessagePayload) => {
+              console.log("Intercepted foreground message:", payload);
+              
+              // Call the user's callback but prevent the default notification
+              // by returning a resolved promise
+              callback(payload);
+              return Promise.resolve();
+            });
           };
+          
+          // Also set a flag to indicate we've overridden the handler
+          (fcmMessaging as any).__customHandlerInstalled = true;
+          
+          console.log("Successfully installed custom message handler");
         } catch (err) {
           console.warn("Could not override onMessage handler:", err);
         }

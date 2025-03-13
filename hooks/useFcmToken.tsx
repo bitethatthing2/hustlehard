@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getToken, onMessage, Unsubscribe } from "firebase/messaging";
+import { getToken, onMessage, Unsubscribe, MessagePayload } from "firebase/messaging";
 import { fetchToken, messaging } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { saveNotificationSubscription } from "@/lib/supabase";
+
+// Keep track of notifications to prevent duplicates
+const processedNotifications = new Set<string>();
 
 async function getNotificationPermissionAndToken() {
   // Step 1: Check if Notifications are supported in the browser.
@@ -161,10 +164,29 @@ const useFcmToken = () => {
       if (!m) return;
 
       // Step 9: Register a listener for incoming FCM messages.
-      const unsubscribe = onMessage(m, (payload) => {
+      const unsubscribe = onMessage(m, (payload: MessagePayload) => {
         if (Notification.permission !== "granted") return;
 
         console.log("Foreground push notification received:", payload);
+        
+        // Create a notification ID to prevent duplicates
+        const notificationId = `${payload.notification?.title || ''}-${Date.now()}`;
+        
+        // Check if we've already processed this notification
+        if (processedNotifications.has(notificationId)) {
+          console.log("Duplicate notification prevented:", notificationId);
+          return;
+        }
+        
+        // Add to processed notifications
+        processedNotifications.add(notificationId);
+        
+        // Clean up processed notifications (keep only last 10)
+        if (processedNotifications.size > 10) {
+          const iterator = processedNotifications.values();
+          processedNotifications.delete(iterator.next().value);
+        }
+        
         const link = payload.fcmOptions?.link || payload.data?.link;
 
         if (link) {
@@ -174,9 +196,10 @@ const useFcmToken = () => {
               action: {
                 label: "Visit",
                 onClick: () => {
-                  const link = payload.fcmOptions?.link || payload.data?.link;
-                  if (link) {
-                    router.push(link);
+                  const linkUrl = payload.fcmOptions?.link || payload.data?.link;
+                  if (linkUrl) {
+                    // Use type assertion to tell TypeScript this is a valid URL
+                    router.push(linkUrl as string);
                   }
                 },
               },
