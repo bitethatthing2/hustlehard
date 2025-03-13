@@ -1,7 +1,25 @@
-importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
-importScripts(
-  "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"
-);
+// Self-registration for the service worker
+self.addEventListener('install', function(event) {
+  console.log('[firebase-messaging-sw.js] Service Worker installed');
+  self.skipWaiting(); // Ensure the service worker activates immediately
+});
+
+// Handle service worker activation
+self.addEventListener('activate', function(event) {
+  console.log('[firebase-messaging-sw.js] Service Worker activated');
+  event.waitUntil(self.clients.claim()); // Take control of all clients
+});
+
+// Try to import Firebase scripts with error handling
+try {
+  importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
+  importScripts(
+    "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"
+  );
+  console.log('[firebase-messaging-sw.js] Firebase scripts imported successfully');
+} catch (e) {
+  console.error('Error importing Firebase scripts:', e);
+}
 
 // Replace these with your own Firebase config keys...
 const firebaseConfig = {
@@ -14,60 +32,69 @@ const firebaseConfig = {
   measurementId: "G-3RZEW537LN"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase with error handling
+try {
+  if (typeof firebase !== 'undefined') {
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+    console.log('[firebase-messaging-sw.js] Firebase initialized successfully');
 
-const messaging = firebase.messaging();
+    /**
+     * Get the URL from a notification
+     * @param {Object} notification - The notification object
+     * @returns {string} The URL to navigate to
+     */
+    function getNotificationUrl(notification) {
+      // Extract link from various possible locations
+      return notification.data?.link || 
+             notification.data?.url || 
+             notification.fcmOptions?.link || 
+             '/';
+    }
 
-/**
- * Get the URL from a notification
- * @param {Object} notification - The notification object
- * @returns {string} The URL to navigate to
- */
-function getNotificationUrl(notification) {
-  // Extract link from various possible locations
-  return notification.data?.link || 
-         notification.data?.url || 
-         notification.fcmOptions?.link || 
-         '/';
+    // Handle background messages
+    messaging.onBackgroundMessage((payload) => {
+      console.log(
+        "[firebase-messaging-sw.js] Received background message ",
+        payload
+      );
+
+      // Extract notification data from payload
+      const notificationTitle = payload.notification.title || "New Notification";
+      const notificationBody = payload.notification.body || "You have a new notification";
+      
+      // Get link from various possible locations using our utility function
+      const link = getNotificationUrl(payload);
+      
+      // Get icon from payload or use default
+      const icon = payload.notification.icon || "./icon-192x192.png";
+      const badge = payload.notification.badge || "./badge-72x72.png";
+      
+      // Create notification options
+      const notificationOptions = {
+        body: notificationBody,
+        icon: icon,
+        badge: badge,
+        vibrate: [100, 50, 100],
+        data: { url: link },
+        actions: [
+          {
+            action: "open",
+            title: "View",
+          }
+        ],
+        requireInteraction: true
+      };
+      
+      // Show the notification
+      self.registration.showNotification(notificationTitle, notificationOptions);
+    });
+  } else {
+    console.warn('[firebase-messaging-sw.js] Firebase is not defined, possibly due to script import failure');
+  }
+} catch (e) {
+  console.error('Error initializing Firebase in service worker:', e);
 }
-
-// Handle background messages
-messaging.onBackgroundMessage((payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-
-  // Extract notification data from payload
-  const notificationTitle = payload.notification.title || "New Notification";
-  const notificationBody = payload.notification.body || "You have a new notification";
-  
-  // Get link from various possible locations using our utility function
-  const link = getNotificationUrl(payload);
-  
-  // Get icon from payload or use default
-  const icon = payload.notification.icon || "./icon-192x192.png";
-  const badge = payload.notification.badge || "./badge-72x72.png";
-  
-  // Create notification options
-  const notificationOptions = {
-    body: notificationBody,
-    icon: icon,
-    badge: badge,
-    vibrate: [100, 50, 100],
-    data: { url: link },
-    actions: [
-      {
-        action: "open",
-        title: "View",
-      }
-    ],
-    requireInteraction: true
-  };
-  
-  // Show the notification
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
 
 // Handle notification clicks
 self.addEventListener("notificationclick", function (event) {
@@ -82,7 +109,7 @@ self.addEventListener("notificationclick", function (event) {
   }
 
   // Get the URL to open using our utility function
-  const url = event.notification.data.url || "/";
+  const url = event.notification.data?.url || "/";
   
   // This checks if the client is already open and if it is, it focuses on the tab
   // If it is not open, it opens a new tab with the URL
@@ -131,7 +158,7 @@ self.addEventListener('push', function(event) {
       icon: "./icon-192x192.png",
       badge: "./badge-72x72.png",
       data: {
-        url: getNotificationUrl(data)
+        url: data.data?.link || data.data?.url || '/'
       }
     };
     
@@ -140,5 +167,18 @@ self.addEventListener('push', function(event) {
     );
   } catch (error) {
     console.error('[firebase-messaging-sw.js] Error handling push:', error);
+  }
+});
+
+// Add a message event listener to handle communication from the client
+self.addEventListener('message', function(event) {
+  console.log('[firebase-messaging-sw.js] Message received from client:', event.data);
+  
+  if (event.data && event.data.type === 'PING') {
+    // Respond to ping to confirm service worker is active
+    event.ports[0].postMessage({
+      type: 'PONG',
+      status: 'Service worker is active'
+    });
   }
 });

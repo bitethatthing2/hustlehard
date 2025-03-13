@@ -51,6 +51,27 @@ export async function POST(request: Request) {
       );
     }
 
+    // Handle development mode with test token
+    if (token === "test-token-for-ui-development") {
+      console.log("Development mode detected, simulating notification send");
+      
+      // Simulate a successful response for development
+      return NextResponse.json({
+        success: true,
+        sent: 1,
+        failed: 0,
+        details: [
+          { 
+            token: "test-token-for-ui-development", 
+            platform: platform || "web", 
+            status: "success",
+            development: true
+          }
+        ],
+        message: "This is a simulated response for development mode. In production, real notifications would be sent."
+      });
+    }
+
     // Check if Firebase Admin is initialized
     if (getApps().length === 0) {
       return NextResponse.json(
@@ -105,6 +126,11 @@ export async function POST(request: Request) {
             devicePlatform = "ios";
           }
           
+          // Skip if we're targeting a specific platform and this device doesn't match
+          if (platform !== "all" && platform !== devicePlatform) {
+            continue;
+          }
+          
           try {
             if (devicePlatform === "android") {
               await messaging.send({...androidPayload, token: deviceToken});
@@ -150,6 +176,7 @@ export async function POST(request: Request) {
         results.sent++;
         results.details.push({ platform: "android", status: "success" });
       } catch (error: any) {
+        results.failed++;
         results.details.push({ 
           platform: "android", 
           status: "failed",
@@ -162,6 +189,7 @@ export async function POST(request: Request) {
         results.sent++;
         results.details.push({ platform: "ios", status: "success" });
       } catch (error: any) {
+        results.failed++;
         results.details.push({ 
           platform: "ios", 
           status: "failed",
@@ -174,6 +202,7 @@ export async function POST(request: Request) {
         results.sent++;
         results.details.push({ platform: "web", status: "success" });
       } catch (error: any) {
+        results.failed++;
         results.details.push({ 
           platform: "web", 
           status: "failed",
@@ -183,80 +212,32 @@ export async function POST(request: Request) {
       
       results.success = results.sent > 0;
       return NextResponse.json(results);
-    } else if (platform === "android") {
-      // Send to Android
-      try {
-        const response = await messaging.send({...androidPayload, token});
-        results.sent = 1;
-        results.success = true;
-        results.details.push({ platform, status: "success" });
-        return NextResponse.json(results);
-      } catch (error: any) {
-        console.error(`Error sending to ${platform}:`, error);
-        return NextResponse.json(
-          { 
-            error: `Failed to send to ${platform}: ${error.message}`,
-            details: [{ platform, status: "failed", error: error.message }]
-          },
-          { status: 500 }
-        );
-      }
-    } else if (platform === "ios") {
-      // Send to iOS
-      try {
-        const response = await messaging.send({...iosPayload, token});
-        results.sent = 1;
-        results.success = true;
-        results.details.push({ platform, status: "success" });
-        return NextResponse.json(results);
-      } catch (error: any) {
-        console.error(`Error sending to ${platform}:`, error);
-        return NextResponse.json(
-          { 
-            error: `Failed to send to ${platform}: ${error.message}`,
-            details: [{ platform, status: "failed", error: error.message }]
-          },
-          { status: 500 }
-        );
-      }
-    } else if (platform === "web") {
-      // Send to Web
-      try {
-        const response = await messaging.send({...webPayload, token});
-        results.sent = 1;
-        results.success = true;
-        results.details.push({ platform, status: "success" });
-        return NextResponse.json(results);
-      } catch (error: any) {
-        console.error(`Error sending to ${platform}:`, error);
-        return NextResponse.json(
-          { 
-            error: `Failed to send to ${platform}: ${error.message}`,
-            details: [{ platform, status: "failed", error: error.message }]
-          },
-          { status: 500 }
-        );
-      }
     } else {
-      // Default to base payload if platform not specified
+      // Send to specific platform
       try {
-        const response = await messaging.send({
-          token,
-          notification: basePayload.notification,
-          data: basePayload.data
-        });
-        return NextResponse.json({ 
-          success: true, 
-          sent: 1,
-          failed: 0,
-          details: [{ platform: "default", status: "success" }]
-        });
+        let response;
+        if (platform === "android") {
+          response = await messaging.send({...androidPayload, token});
+        } else if (platform === "ios") {
+          response = await messaging.send({...iosPayload, token});
+        } else {
+          // Default to web
+          response = await messaging.send({...webPayload, token});
+        }
+        
+        results.sent = 1;
+        results.success = true;
+        results.details.push({ platform, status: "success" });
+        return NextResponse.json(results);
       } catch (error: any) {
-        console.error("Error sending notification:", error);
+        console.error(`Error sending to ${platform}:`, error);
         return NextResponse.json(
           { 
-            error: `Failed to send notification: ${error.message}`,
-            details: [{ platform: "default", status: "failed", error: error.message }]
+            success: false,
+            sent: 0,
+            failed: 1,
+            error: `Failed to send to ${platform}: ${error.message}`,
+            details: [{ platform, status: "failed", error: error.message }]
           },
           { status: 500 }
         );
