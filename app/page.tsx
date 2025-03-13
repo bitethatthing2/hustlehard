@@ -5,6 +5,7 @@ import useFcmToken from "@/hooks/useFcmToken";
 import { useEffect, useState } from "react";
 import { getActiveSubscriptions, testSupabaseConnection, saveNotificationSubscription } from "@/lib/supabase";
 import { useRouter } from "@/lib/router";
+import { toast } from "sonner";
 
 export default function Home() {
   const { token, notificationPermissionStatus, isDevelopmentMode } = useFcmToken();
@@ -14,6 +15,7 @@ export default function Home() {
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
   const [supabaseError, setSupabaseError] = useState<string>("");
   const [notificationResponse, setNotificationResponse] = useState<any>(null);
+  const [isSending, setIsSending] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -39,11 +41,14 @@ export default function Home() {
   }, [token, isDevelopmentMode]);
 
   const handleTestNotification = async () => {
+    if (!token) {
+      toast.error("No notification token available");
+      return;
+    }
+
+    setIsSending(true);
     try {
-      setNotificationStatus("sending");
-      setNotificationResponse(null);
-      
-      const response = await fetch("/api/send-notification", {
+      const response = await fetch("/api/send-simple-notification", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,25 +56,24 @@ export default function Home() {
         body: JSON.stringify({
           token: token,
           title: "Test Notification",
-          message: `This is a test notification for ${selectedPlatform === "all" ? "all platforms" : selectedPlatform}`,
+          message: "This is a test notification",
           link: "/contact",
-          platform: selectedPlatform
         }),
       });
 
       const data = await response.json();
-      console.log("Notification response:", data);
-      setNotificationResponse(data);
+      console.log("Notification API response:", data);
       
       if (data.success) {
-        setNotificationStatus("sent");
+        toast.success("Notification sent successfully!");
       } else {
-        setNotificationStatus("error");
+        toast.error(`Failed to send notification: ${data.error || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error sending notification:", error);
-      setNotificationStatus("error");
-      setNotificationResponse({ error: error instanceof Error ? error.message : "Unknown error" });
+      toast.error("Failed to send notification. Check console for details.");
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -131,112 +135,50 @@ export default function Home() {
     <main className="p-10">
       <h1 className="text-4xl mb-4 font-bold">Firebase Cloud Messaging Demo</h1>
 
-      <div className="space-y-4">
+      <div className="mb-6 p-4 border rounded-md bg-gray-50">
+        <h2 className="text-xl font-semibold mb-2">Notification Status</h2>
+        
         {notificationPermissionStatus === "granted" ? (
-          <div>
-            <p className="text-green-600">✅ Permission to receive notifications has been granted.</p>
-            {isDevelopmentMode && (
-              <p className="text-yellow-600">⚠️ Running in development mode with mock service worker due to SSL certificate issues.</p>
-            )}
-            {subscriptionStatus === "saved" && (
-              <p className="text-green-600">✅ Subscription saved to database.</p>
-            )}
-            {subscriptionStatus === "pending" && (
-              <p className="text-yellow-600">⏳ Saving subscription...</p>
-            )}
-            {subscriptionStatus === "error" && (
-              <p className="text-red-600">❌ Error saving subscription. {supabaseError}</p>
-            )}
-            {subscriptionStatus === "no-subscriptions" && (
-              <p className="text-yellow-600">⚠️ No subscriptions found in database.</p>
-            )}
-          </div>
-        ) : notificationPermissionStatus !== null ? (
+          <p className="text-green-600">✅ Permission to receive notifications has been granted.</p>
+        ) : notificationPermissionStatus === "denied" ? (
           <p className="text-red-600">
-            ❌ You have not granted permission to receive notifications. Please
+            ❌ You have denied permission to receive notifications. Please
             enable notifications in your browser settings.
           </p>
-        ) : null}
+        ) : notificationPermissionStatus === "default" ? (
+          <p className="text-yellow-600">
+            ⚠️ You haven't decided about notifications yet. Click the button below to enable them.
+          </p>
+        ) : (
+          <p className="text-gray-600">Loading notification permission status...</p>
+        )}
+        
+        {token ? (
+          <p className="mt-2 text-green-600">✅ FCM Token obtained successfully.</p>
+        ) : (
+          <p className="mt-2 text-red-600">❌ No FCM token available. Notifications won't work.</p>
+        )}
+        
+        {isDevelopmentMode && (
+          <p className="mt-2 text-blue-600">
+            ℹ️ Running in development mode. Notifications will be simulated.
+          </p>
+        )}
       </div>
 
-      <div className="mt-6 space-y-4">
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="platform-select" className="text-sm font-medium">
-            Select Platform:
-          </label>
-          <select 
-            id="platform-select"
-            value={selectedPlatform}
-            onChange={(e) => setSelectedPlatform(e.target.value)}
-            className="p-2 border rounded-md w-48"
-            aria-label="Select platform for notification"
-          >
-            <option value="all">All Platforms</option>
-            <option value="android">Android</option>
-            <option value="ios">iOS</option>
-            <option value="web">Web</option>
-          </select>
-        </div>
-
-        <div className="flex space-x-4">
-          <Button
-            disabled={!token || notificationStatus === "sending" || (!isDevelopmentMode && subscriptionStatus !== "saved")}
-            onClick={handleTestNotification}
-          >
-            {notificationStatus === "sending" ? "Sending..." : `Send ${selectedPlatform === "all" ? "All" : selectedPlatform} Notification`}
-          </Button>
-
-          <Button
-            variant="outline"
-            onClick={navigateToContact}
-          >
-            Go to Contact Page
-          </Button>
-          
-          <Button
-            variant="secondary"
-            onClick={handleTestSupabase}
-            disabled={supabaseTestStatus === "testing"}
-          >
-            {supabaseTestStatus === "testing" ? "Testing..." : "Test Supabase Connection"}
-          </Button>
-          
-          <Button
-            variant="outline"
-            onClick={handleRetrySaveSubscription}
-            disabled={!token || subscriptionStatus === "saving"}
-          >
-            {subscriptionStatus === "saving" ? "Saving..." : "Retry Save Subscription"}
-          </Button>
-        </div>
-        
-        {notificationStatus === "sent" && (
-          <p className="text-green-600 mt-2">✅ Notification sent successfully!</p>
-        )}
-        {notificationStatus === "error" && (
-          <p className="text-red-600 mt-2">❌ Error sending notification. Check console for details.</p>
-        )}
-        
-        {notificationResponse && (
-          <div className="mt-4 p-4 bg-gray-100 rounded-md">
-            <h3 className="font-medium mb-2">Notification Response:</h3>
-            <pre className="text-xs overflow-auto max-h-40">
-              {JSON.stringify(notificationResponse, null, 2)}
-            </pre>
-          </div>
-        )}
-        
-        {supabaseTestStatus === "success" && (
-          <p className="text-green-600 mt-2">✅ Supabase connection successful!</p>
-        )}
-        {supabaseTestStatus === "error" && (
-          <p className="text-red-600 mt-2">❌ Error connecting to Supabase. Check console for details.</p>
-        )}
-      </div>
+      <Button
+        disabled={!token || isSending}
+        className="mt-5"
+        onClick={handleTestNotification}
+      >
+        {isSending ? "Sending..." : "Send Test Notification"}
+      </Button>
       
-      <div className="text-center mt-8">
-        <p className="text-sm text-gray-500">
-          Firebase Cloud Messaging Demo with Next.js 14
+      <div className="mt-8 text-sm text-gray-600">
+        <p>
+          When you click the button above, a notification will be sent to your device.
+          If the app is in the background, you'll see a system notification.
+          If the app is in the foreground, you'll see a toast notification.
         </p>
       </div>
     </main>
