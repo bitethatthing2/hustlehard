@@ -4,10 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-  const serviceAccount = require("@/service_key.json");
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  try {
+    // Try to get service account from environment variable
+    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+      ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+      : require("@/service_key.json");
+
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  } catch (error) {
+    console.error("Error initializing Firebase Admin:", error);
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -30,7 +38,8 @@ export async function POST(request: NextRequest) {
     await admin.messaging().send(payload);
 
     return NextResponse.json({ success: true, message: "Notification sent!" });
-  } catch (error) {
-    return NextResponse.json({ success: false, error });
+  } catch (error: any) {
+    console.error("Error sending notification:", error);
+    return NextResponse.json({ success: false, error: error.message });
   }
 }
