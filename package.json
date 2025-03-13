@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --experimental-https",
     "build": "next build",
+    "netlify-build": "cross-env next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -15,6 +16,7 @@
     "@supabase/supabase-js": "^2.49.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.2.0",
     "lucide-react": "^0.394.0",

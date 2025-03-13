@@ -7,13 +7,22 @@ import { getActiveSubscriptions } from "@/lib/supabase";
 const apps = getApps();
 
 if (!apps.length) {
-  initializeApp({
-    credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    }),
-  });
+  // Handle the private key properly for Netlify
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY 
+    ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") 
+    : undefined;
+
+  try {
+    initializeApp({
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: privateKey,
+      }),
+    });
+  } catch (error) {
+    console.error("Firebase Admin initialization error:", error);
+  }
 }
 
 // Define result types
@@ -38,6 +47,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Either token or sendToAll must be provided" },
         { status: 400 }
+      );
+    }
+
+    // Check if Firebase Admin is initialized
+    if (getApps().length === 0) {
+      return NextResponse.json(
+        { error: "Firebase Admin is not initialized. Check server logs for details." },
+        { status: 500 }
       );
     }
 

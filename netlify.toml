@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm run netlify-build"
   publish = ".next"
 
 [[plugins]]
@@ -7,4 +7,15 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  NPM_VERSION = "9" 
+  NPM_VERSION = "9"
+  NEXT_PUBLIC_FIREBASE_API_KEY = "AIzaSyB0Nxf3pvW32KBc0D1o2-K6qIeKovhGWfg"
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "new1-f04b3.firebaseapp.com"
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID = "new1-f04b3"
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "new1-f04b3.firebasestorage.app"
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "802463638703"
+  NEXT_PUBLIC_FIREBASE_APP_ID = "1:802463638703:web:bd0bbdaf3407d784d5205a"
+  NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID = "G-3RZEW537LN"
+  # These need to be set in Netlify UI environment variables
+  # FIREBASE_PROJECT_ID
+  # FIREBASE_CLIENT_EMAIL
+  # FIREBASE_PRIVATE_KEY 
