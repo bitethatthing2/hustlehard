@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import useFcmToken from "@/hooks/useFcmToken";
 import { useEffect, useState } from "react";
 import { getActiveSubscriptions } from "@/lib/supabase";
+import { useRouter } from "@/lib/router";
 
 export default function Home() {
   const { token, notificationPermissionStatus } = useFcmToken();
   const [subscriptionStatus, setSubscriptionStatus] = useState<string>("");
   const [notificationStatus, setNotificationStatus] = useState<string>("");
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
+  const router = useRouter();
 
   useEffect(() => {
     async function checkSubscription() {
@@ -53,6 +55,10 @@ export default function Home() {
     }
   };
 
+  const navigateToContact = () => {
+    router.navigate("/contact");
+  };
+
   return (
     <main className="p-10">
       <h1 className="text-4xl mb-4 font-bold">Firebase Cloud Messaging Demo</h1>
@@ -94,13 +100,21 @@ export default function Home() {
           </select>
         </div>
 
-        <Button
-          disabled={!token || notificationStatus === "sending"}
-          className="mt-2"
-          onClick={handleTestNotification}
-        >
-          {notificationStatus === "sending" ? "Sending..." : `Send ${selectedPlatform === "all" ? "All" : selectedPlatform} Notification`}
-        </Button>
+        <div className="flex space-x-4">
+          <Button
+            disabled={!token || notificationStatus === "sending"}
+            onClick={handleTestNotification}
+          >
+            {notificationStatus === "sending" ? "Sending..." : `Send ${selectedPlatform === "all" ? "All" : selectedPlatform} Notification`}
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={navigateToContact}
+          >
+            Go to Contact Page
+          </Button>
+        </div>
         
         {notificationStatus === "sent" && (
           <p className="text-green-600 mt-2">✅ Notification sent successfully!</p>

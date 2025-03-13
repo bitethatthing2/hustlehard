@@ -18,6 +18,19 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
+/**
+ * Get the URL from a notification
+ * @param {Object} notification - The notification object
+ * @returns {string} The URL to navigate to
+ */
+function getNotificationUrl(notification) {
+  // Extract link from various possible locations
+  return notification.data?.link || 
+         notification.data?.url || 
+         notification.fcmOptions?.link || 
+         '/';
+}
+
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
   console.log(
@@ -29,11 +42,8 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title || "New Notification";
   const notificationBody = payload.notification.body || "You have a new notification";
   
-  // Get link from various possible locations
-  // 1. From FCM options (from our API)
-  // 2. From data.link (from our API or Firebase Console)
-  // 3. Default to root
-  const link = payload.fcmOptions?.link || payload.data?.link || "/";
+  // Get link from various possible locations using our utility function
+  const link = getNotificationUrl(payload);
   
   // Get icon from payload or use default
   const icon = payload.notification.icon || "./icon-192x192.png";
@@ -71,7 +81,7 @@ self.addEventListener("notificationclick", function (event) {
     console.log("[firebase-messaging-sw.js] 'View' button clicked");
   }
 
-  // Get the URL to open
+  // Get the URL to open using our utility function
   const url = event.notification.data.url || "/";
   
   // This checks if the client is already open and if it is, it focuses on the tab
@@ -121,7 +131,7 @@ self.addEventListener('push', function(event) {
       icon: "./icon-192x192.png",
       badge: "./badge-72x72.png",
       data: {
-        url: data.data?.link || "/"
+        url: getNotificationUrl(data)
       }
     };
     

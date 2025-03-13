@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getMessaging } from "firebase-admin/messaging";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getActiveSubscriptions } from "@/lib/supabase";
+import { createPlatformPayloads } from "@/lib/router";
 
 // Initialize Firebase Admin
 const apps = getApps();
@@ -72,69 +73,9 @@ export async function POST(request: Request) {
       },
     };
 
-    // Platform-specific payloads
-    const androidPayload = {
-      token,
-      notification: basePayload.notification,
-      data: basePayload.data,
-      android: {
-        notification: {
-          icon: "notification_icon", // Custom icon name in Android resources
-          color: "#4CAF50", // Custom color for Android
-          channelId: "default", // Android notification channel
-          priority: "high" as const, // High priority for Android
-          clickAction: "FLUTTER_NOTIFICATION_CLICK", // Standard action for handling clicks
-        },
-        priority: "high" as const,
-      },
-    };
-
-    const iosPayload = {
-      token,
-      notification: basePayload.notification,
-      data: basePayload.data,
-      apns: {
-        headers: {
-          "apns-priority": "10", // High priority
-        },
-        payload: {
-          aps: {
-            alert: {
-              title: basePayload.notification.title,
-              body: basePayload.notification.body,
-            },
-            sound: "default",
-            badge: 1,
-            "mutable-content": 1,
-            "content-available": 1,
-            category: "NEW_MESSAGE", // iOS notification category
-          },
-        },
-      },
-    };
-
-    const webPayload = {
-      token,
-      notification: basePayload.notification,
-      data: basePayload.data,
-      webpush: {
-        notification: {
-          icon: "/icon-192x192.png", // Web notification icon
-          badge: "/badge-72x72.png", // Web notification badge
-          vibrate: [100, 50, 100], // Vibration pattern
-          actions: [
-            {
-              action: "open_url",
-              title: "View",
-            },
-          ],
-          requireInteraction: true, // Notification won't auto-dismiss
-        },
-        fcmOptions: {
-          link: basePayload.data.link,
-        },
-      },
-    };
+    // Get platform-specific payloads using our router utility
+    const { android: androidPayload, ios: iosPayload, web: webPayload } = 
+      createPlatformPayloads(basePayload, token);
 
     // Send to all registered devices
     if (sendToAll) {
