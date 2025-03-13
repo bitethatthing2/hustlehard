@@ -5,6 +5,7 @@ import { getToken, onMessage, Unsubscribe } from "firebase/messaging";
 import { fetchToken, messaging } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { saveNotificationSubscription } from "@/lib/supabase";
 
 async function getNotificationPermissionAndToken() {
   // Step 1: Check if Notifications are supported in the browser.
@@ -15,14 +16,57 @@ async function getNotificationPermissionAndToken() {
 
   // Step 2: Check if permission is already granted.
   if (Notification.permission === "granted") {
-    return await fetchToken();
+    console.log("Notification permission already granted");
+    const token = await fetchToken();
+    if (token) {
+      console.log("FCM Token obtained:", token);
+      try {
+        // Save subscription to Supabase
+        const registration = await navigator.serviceWorker.ready;
+        console.log("Service Worker ready");
+        const subscription = await registration.pushManager.getSubscription();
+        console.log("Push Subscription:", subscription);
+        if (subscription) {
+          console.log("Attempting to save subscription to Supabase...");
+          const result = await saveNotificationSubscription(subscription, navigator.userAgent);
+          console.log("Supabase save result:", result);
+        } else {
+          console.log("No subscription found");
+        }
+      } catch (error) {
+        console.error("Error saving subscription:", error);
+      }
+    }
+    return token;
   }
 
   // Step 3: If permission is not denied, request permission from the user.
   if (Notification.permission !== "denied") {
+    console.log("Requesting notification permission...");
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      return await fetchToken();
+      console.log("Notification permission granted");
+      const token = await fetchToken();
+      if (token) {
+        console.log("FCM Token obtained:", token);
+        try {
+          // Save subscription to Supabase
+          const registration = await navigator.serviceWorker.ready;
+          console.log("Service Worker ready");
+          const subscription = await registration.pushManager.getSubscription();
+          console.log("Push Subscription:", subscription);
+          if (subscription) {
+            console.log("Attempting to save subscription to Supabase...");
+            const result = await saveNotificationSubscription(subscription, navigator.userAgent);
+            console.log("Supabase save result:", result);
+          } else {
+            console.log("No subscription found");
+          }
+        } catch (error) {
+          console.error("Error saving subscription:", error);
+        }
+      }
+      return token;
     }
   }
 
