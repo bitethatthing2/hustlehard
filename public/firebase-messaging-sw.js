@@ -32,17 +32,66 @@ const messaging = firebase.messaging();
 // Keep track of processed notifications to prevent duplicates
 const processedNotifications = new Set();
 
+// Flag to track if we're in the foreground
+let clientIsHandlingNotifications = false;
+
+// Check if any client windows are visible
+async function hasVisibleClients() {
+  const windowClients = await self.clients.matchAll({
+    type: 'window',
+    includeUncontrolled: true
+  });
+  
+  return windowClients.some(client => client.visibilityState === 'visible');
+}
+
+// Generate a consistent notification ID from the payload
+function generateNotificationId(payload) {
+  // Use collapseKey if available, otherwise create a hash from the notification content
+  if (payload.collapseKey) {
+    return `collapseKey:${payload.collapseKey}`;
+  }
+  
+  // Create a hash from notification content
+  const title = payload.data?.title || payload.notification?.title || '';
+  const body = payload.data?.body || payload.notification?.body || '';
+  const timestamp = Math.floor(Date.now() / 10000); // Round to nearest 10 seconds to prevent duplicates
+  
+  return `content:${title}:${body}:${timestamp}`;
+}
+
+// Listen for messages from clients
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'NOTIFICATION_HANDLED_BY_CLIENT') {
+    console.log('[firebase-messaging-sw.js] Client is handling notifications');
+    clientIsHandlingNotifications = true;
+    
+    // Store the notification ID that was handled by the client
+    if (event.data.notificationId) {
+      processedNotifications.add(event.data.notificationId);
+      console.log('[firebase-messaging-sw.js] Added client-handled notification ID:', event.data.notificationId);
+    }
+  }
+});
+
 // Handle background messages
 messaging.onBackgroundMessage(async (payload) => {
   try {
     console.log('[firebase-messaging-sw.js] Received background message:', payload);
 
     // Create a unique notification ID
-    const notificationId = payload.collapseKey || `${Date.now()}`;
+    const notificationId = generateNotificationId(payload);
     
     // Check if we've already processed this notification
     if (processedNotifications.has(notificationId)) {
       console.log('[firebase-messaging-sw.js] Skipping duplicate notification:', notificationId);
+      return;
+    }
+
+    // Check if any clients are visible - if so, let the client handle the notification
+    const clientsAreVisible = await hasVisibleClients();
+    if (clientsAreVisible && clientIsHandlingNotifications) {
+      console.log('[firebase-messaging-sw.js] Clients are visible and handling notifications, skipping SW notification');
       return;
     }
     
@@ -79,7 +128,8 @@ messaging.onBackgroundMessage(async (payload) => {
       tag: notificationId, // Use tag to prevent duplicates
       data: {
         ...notificationData,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        notificationId: notificationId // Store the ID for reference
       },
       ...((!deviceIsIOS && notificationData.image) && {
         image: notificationData.image

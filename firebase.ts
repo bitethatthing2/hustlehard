@@ -35,6 +35,41 @@ const messaging = async () => {
 const shownNotifications = new Map<string, number>();
 const NOTIFICATION_TIMEOUT = 5000; // 5 seconds
 
+// Generate a consistent notification ID from the payload - same logic as service worker
+function generateNotificationId(payload: MessagePayload) {
+  // Use collapseKey if available, otherwise create a hash from the notification content
+  if (payload.collapseKey) {
+    return `collapseKey:${payload.collapseKey}`;
+  }
+  
+  // Create a hash from notification content
+  const title = payload.data?.title || payload.notification?.title || '';
+  const body = payload.data?.body || payload.notification?.body || '';
+  const timestamp = Math.floor(Date.now() / 10000); // Round to nearest 10 seconds to prevent duplicates
+  
+  return `content:${title}:${body}:${timestamp}`;
+}
+
+// Notify the service worker that the client is handling notifications
+async function notifyServiceWorkerClientIsHandling(notificationId?: string) {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        if (registration.active) {
+          console.log('Notifying service worker that client is handling notifications');
+          registration.active.postMessage({
+            type: 'NOTIFICATION_HANDLED_BY_CLIENT',
+            notificationId
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error notifying service worker:', error);
+    }
+  }
+}
+
 // Fetch FCM token
 export const fetchToken = async () => {
   try {
@@ -73,10 +108,26 @@ export const fetchToken = async () => {
       let swRegistration = null;
       if ('serviceWorker' in navigator) {
         try {
-          swRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-            scope: '/firebase-cloud-messaging-push-scope',
-          });
-          console.log('Service worker registered successfully:', swRegistration.scope);
+          // Check if service worker is already registered
+          const existingRegistrations = await navigator.serviceWorker.getRegistrations();
+          const existingFCMServiceWorker = existingRegistrations.find(
+            reg => reg.scope.includes('firebase-cloud-messaging-push-scope')
+          );
+          
+          if (existingFCMServiceWorker) {
+            console.log('Found existing service worker registration:', existingFCMServiceWorker.scope);
+            console.log('Service worker is already active');
+            swRegistration = existingFCMServiceWorker;
+          } else {
+            swRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+              scope: '/firebase-cloud-messaging-push-scope',
+            });
+            console.log('Service worker registered successfully:', swRegistration.scope);
+          }
+          
+          // Notify the service worker that the client is handling notifications
+          await notifyServiceWorkerClientIsHandling();
+          
         } catch (error) {
           console.error("Error registering service worker:", error);
         }
@@ -108,9 +159,15 @@ export const fetchToken = async () => {
 
 // Setup foreground message handler
 export const setupForegroundMessageHandler = async () => {
+  console.log("Setting up foreground message handler");
   const m = await messaging();
   if (!m) return null;
 
+  console.log("Successfully installed custom message handler");
+  
+  // Notify the service worker that the client is handling notifications
+  await notifyServiceWorkerClientIsHandling();
+  
   return onMessage(m, (payload: MessagePayload) => {
     console.log('Foreground message received:', payload);
     
@@ -119,17 +176,11 @@ export const setupForegroundMessageHandler = async () => {
     const deviceIsIOS = isIOS();
     
     if (Notification.permission === 'granted') {
-      // For iOS use notification payload, for Android prioritize data payload
-      const title = deviceIsIOS 
-        ? (payload.notification?.title || 'New Notification')
-        : (payload.data?.title || payload.notification?.title || 'New Notification');
+      // Generate the same notification ID as the service worker would
+      const notificationId = generateNotificationId(payload);
       
-      const body = deviceIsIOS 
-        ? (payload.notification?.body || '')
-        : (payload.data?.body || payload.notification?.body || '');
-      
-      // Generate a unique ID for the notification
-      const notificationId = payload.collapseKey || `${Date.now()}`;
+      // Notify the service worker about this specific notification
+      notifyServiceWorkerClientIsHandling(notificationId);
       
       // Check if we've shown this notification recently
       const lastShownTime = shownNotifications.get(notificationId);
@@ -150,6 +201,15 @@ export const setupForegroundMessageHandler = async () => {
         }
       }
       
+      // For iOS use notification payload, for Android prioritize data payload
+      const title = deviceIsIOS 
+        ? (payload.notification?.title || 'New Notification')
+        : (payload.data?.title || payload.notification?.title || 'New Notification');
+      
+      const body = deviceIsIOS 
+        ? (payload.notification?.body || '')
+        : (payload.data?.body || payload.notification?.body || '');
+      
       // Extract link from payload
       const notificationLink = deviceIsIOS 
         ? (payload.data?.link || payload.fcmOptions?.link || '/')
@@ -168,12 +228,14 @@ export const setupForegroundMessageHandler = async () => {
           ...payload.notification,
           timestamp: currentTime,
           link: notificationLink,
-          imageUrl: payload.notification?.image
+          imageUrl: payload.notification?.image,
+          notificationId: notificationId
         } : {
           ...payload.data,
           timestamp: currentTime,
           link: notificationLink,
-          imageUrl: payload.data?.image || payload.notification?.image
+          imageUrl: payload.data?.image || payload.notification?.image,
+          notificationId: notificationId
         },
         ...((!deviceIsIOS && payload.notification?.image) && {
           image: payload.notification.image
@@ -221,6 +283,25 @@ async function registerServiceWorker() {
     console.log("Secure context detected, proceeding with normal service worker registration");
     
     if ('serviceWorker' in navigator) {
+      // Check if service worker is already registered
+      const existingRegistrations = await navigator.serviceWorker.getRegistrations();
+      const existingFCMServiceWorker = existingRegistrations.find(
+        reg => reg.scope.includes('firebase-cloud-messaging-push-scope')
+      );
+      
+      if (existingFCMServiceWorker) {
+        console.log('Found existing service worker registration:', existingFCMServiceWorker.scope);
+        
+        // Notify the service worker that the client is handling notifications
+        if (existingFCMServiceWorker.active) {
+          existingFCMServiceWorker.active.postMessage({
+            type: 'NOTIFICATION_HANDLED_BY_CLIENT'
+          });
+        }
+        
+        return existingFCMServiceWorker;
+      }
+      
       // Try to register the service worker
       try {
         const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
@@ -228,6 +309,14 @@ async function registerServiceWorker() {
         });
         
         console.log('Service worker registered successfully:', registration.scope);
+        
+        // Notify the service worker that the client is handling notifications
+        if (registration.active) {
+          registration.active.postMessage({
+            type: 'NOTIFICATION_HANDLED_BY_CLIENT'
+          });
+        }
+        
         return registration;
       } catch (regError) {
         console.warn('Service worker registration failed:', regError);
