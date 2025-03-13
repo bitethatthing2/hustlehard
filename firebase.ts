@@ -252,14 +252,18 @@ export const fetchToken = async () => {
   try {
     const fcmMessaging = await messaging();
     if (fcmMessaging) {
+      // Try to get VAPID key from window.ENV first, then fall back to process.env
+      const vapidKey = typeof window !== 'undefined' && (window as any).ENV?.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY 
+        ? (window as any).ENV.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY 
+        : process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY;
+      
       // Add more detailed console logs for debugging
-      console.log("VAPID Key Environment Variable:", process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY);
+      console.log("VAPID Key Environment Variable:", vapidKey);
       console.log("All environment variables:", Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC')));
       
       // Add console log for debugging
       console.log("Attempting to get FCM token with VAPID key:", 
-        process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY ? "Key exists (length: " + 
-        process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY.length + ")" : "Key missing");
+        vapidKey ? "Key exists (length: " + vapidKey.length + ")" : "Key missing");
       
       // Configure FCM to not show default notifications
       // This ensures only our service worker shows notifications with custom styling
@@ -382,7 +386,7 @@ export const fetchToken = async () => {
           vapidKey: string;
           serviceWorkerRegistration?: ServiceWorkerRegistration;
         } = {
-          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY || '',
+          vapidKey: vapidKey || '',
         };
         
         // Only add the registration if it's not null and we're not using a mock
