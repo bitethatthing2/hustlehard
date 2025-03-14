@@ -82,8 +82,8 @@ export async function POST(request: NextRequest) {
         } : undefined,
         // Set notification configuration
         notification: {
-          // Use proper icons from only_these folder
-          icon: "/only_these/android-icon-192x192.png",
+          // Use proper large icon from only_these folder
+          icon: "/only_these/ms-icon-310x310.png",
           badge: "/only_these/favicon-32x32.png",
           // Allow interaction
           requireInteraction: true,

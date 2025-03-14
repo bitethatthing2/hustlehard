@@ -51,7 +51,7 @@ function isValidImageUrl(url) {
 const processedNotifications = new Set();
 
 // Service worker version - used for logging
-const SW_VERSION = '2.1.0';
+const SW_VERSION = '2.2.0';
 
 // Set a timeout for clearing the processed notifications set to avoid memory leaks
 setTimeout(() => {
@@ -98,9 +98,9 @@ messaging.onBackgroundMessage((payload) => {
   // Use the correct icon paths from only_these folder
   const notificationOptions = {
     body,
-    // Use android icon for Android and apple icon for others
+    // Use larger icon for Android and apple icon for others
     icon: isAndroid ? 
-      `${baseUrl}/only_these/android-icon-192x192.png` : 
+      `${baseUrl}/only_these/ms-icon-310x310.png` : 
       `${baseUrl}/only_these/apple-icon-180x180.png`,
     badge: `${baseUrl}/only_these/favicon-32x32.png`,
     data: { 
