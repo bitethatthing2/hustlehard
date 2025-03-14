@@ -46,26 +46,36 @@ function isValidImageUrl(url) {
 // Track processed notification IDs to prevent duplicates
 const processedNotifications = new Set();
 
+// Service worker version - used for logging
+const SW_VERSION = '2.0.0';
+
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
-  console.log("[firebase-messaging-sw.js] Received background message ", payload);
+  console.log(`[SW v${SW_VERSION}] Received background message`, payload);
   
   // Extract notification ID to prevent duplicates
   const notificationId = payload.messageId || payload.collapseKey || Date.now().toString();
   
   // Skip if we've already processed this notification
   if (processedNotifications.has(notificationId)) {
-    console.log(`[SW] Skipping duplicate notification ${notificationId}`);
+    console.log(`[SW v${SW_VERSION}] Skipping duplicate notification ${notificationId}`);
     return;
   }
   
+  // Check for iOS - handle differently based on device
+  const userAgent = self.navigator ? self.navigator.userAgent : '';
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+  console.log(`[SW v${SW_VERSION}] Device detection - iOS: ${isIOS}, UA: ${userAgent.substring(0, 50)}...`);
+  
   // Add to processed set
   processedNotifications.add(notificationId);
+  console.log(`[SW v${SW_VERSION}] Added notification ${notificationId} to processed set. Total: ${processedNotifications.size}`);
   
   // Clear old notification IDs (keep set small)
   if (processedNotifications.size > 20) {
     const oldestId = processedNotifications.values().next().value;
     processedNotifications.delete(oldestId);
+    console.log(`[SW v${SW_VERSION}] Removed oldest notification ${oldestId} from processed set`);
   }
   
   // Extract notification data
@@ -73,9 +83,6 @@ messaging.onBackgroundMessage((payload) => {
   const body = payload.notification?.body || payload.data?.body || "You have a new notification";
   const link = payload.fcmOptions?.link || payload.data?.link || '/';
   const image = payload.data?.image || payload.notification?.image;
-  
-  // iOS specific handling - use simpler notification format
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   
   const notificationOptions = {
     body,
@@ -86,7 +93,9 @@ messaging.onBackgroundMessage((payload) => {
       url: link,
       ...payload.data,
       // Store notification ID to prevent duplicates later
-      notificationId
+      notificationId,
+      fromServiceWorker: true, // Flag to identify source
+      swVersion: SW_VERSION
     },
     // Use notification ID as tag to prevent duplicate system notifications
     tag: notificationId,
@@ -97,16 +106,16 @@ messaging.onBackgroundMessage((payload) => {
 
   if (isValidImageUrl(image)) {
     notificationOptions.image = image;
-    console.log("Adding image to notification:", image);
+    console.log(`[SW v${SW_VERSION}] Adding image to notification:`, image);
   }
 
-  console.log("SW: Creating notification with options:", notificationOptions);
+  console.log(`[SW v${SW_VERSION}] Creating notification with options:`, notificationOptions);
   return self.registration.showNotification(title, notificationOptions);
 });
 
 // Handle notification clicks
 self.addEventListener("notificationclick", (event) => {
-  console.log("SW: Notification clicked", event);
+  console.log(`[SW v${SW_VERSION}] Notification clicked`, event);
   event.notification.close();
   
   const url = event.notification.data?.url || '/';
@@ -131,7 +140,8 @@ self.addEventListener("notificationclick", (event) => {
 
 // Add explicit push event listener to prevent browser from showing its own notification
 self.addEventListener('push', (event) => {
-  console.log('SW: Push event received but letting Firebase handle it');
+  console.log(`[SW v${SW_VERSION}] Push event received but letting Firebase handle it`);
+  event.stopImmediatePropagation();
   // Don't do anything here - let Firebase's onBackgroundMessage handle it
   // This just prevents the browser from showing its own notification
 });

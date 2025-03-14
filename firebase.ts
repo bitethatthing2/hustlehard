@@ -34,6 +34,9 @@ const messaging = async () => {
 // Track processed notification IDs to prevent duplicates
 const processedNotifications = new Set();
 
+// For debugging and coordination with SW
+const CLIENT_VERSION = '2.0.0';
+
 // Fetch FCM token
 export const fetchToken = async () => {
   try {
@@ -61,26 +64,35 @@ export const fetchToken = async () => {
         return "test-token-for-ui-development";
       }
       
-      // Register service worker if needed
+      // Register service worker if needed - IMPORTANT: Handle this explicitly to avoid duplicates
       let serviceWorkerRegistration = null;
       if ('serviceWorker' in navigator) {
         try {
-          // Check for existing service worker
+          // First, unregister ALL existing service workers to prevent duplicates
+          console.log('Checking for existing service workers...');
           const registrations = await navigator.serviceWorker.getRegistrations();
-          const existingFCMServiceWorker = registrations.find(
-            reg => reg.active && reg.scope.includes(window.location.origin)
-          );
           
-          if (existingFCMServiceWorker) {
-            console.log('Found existing service worker:', existingFCMServiceWorker.scope);
-            serviceWorkerRegistration = existingFCMServiceWorker;
-          } else {
-            console.log('Registering new service worker');
-            serviceWorkerRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-            console.log('Service worker registered:', serviceWorkerRegistration.scope);
+          if (registrations.length > 0) {
+            console.log(`Found ${registrations.length} existing service worker(s), unregistering...`);
+            for (const registration of registrations) {
+              console.log(`Unregistering service worker with scope: ${registration.scope}`);
+              await registration.unregister();
+              console.log('Service worker unregistered');
+            }
           }
+          
+          // Register a fresh service worker
+          console.log('Registering new service worker...');
+          serviceWorkerRegistration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+            scope: '/'
+          });
+          console.log('Service worker registered with scope:', serviceWorkerRegistration.scope);
+          
+          // Wait for the service worker to be ready
+          await navigator.serviceWorker.ready;
+          console.log('Service worker is now ready and active');
         } catch (error) {
-          console.error("Error registering service worker:", error);
+          console.error("Error managing service worker:", error);
         }
       }
       
@@ -96,6 +108,14 @@ export const fetchToken = async () => {
         tokenOptions.serviceWorkerRegistration = serviceWorkerRegistration;
       }
       
+      // Add a small delay to ensure service worker is fully registered
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log('Getting FCM token with options:', {
+        vapidKey: vapidKey ? '[KEY_PRESENT]' : '[KEY_MISSING]',
+        serviceWorker: serviceWorkerRegistration ? 'Present' : 'Missing'
+      });
+      
       const token = await getToken(fcmMessaging, tokenOptions);
       console.log("FCM token obtained:", token ? token.substring(0, 10) + "..." : "null");
       return token;
@@ -109,41 +129,62 @@ export const fetchToken = async () => {
 
 // Setup foreground message handler
 export const setupForegroundMessageHandler = async () => {
-  console.log("Setting up foreground message handler");
+  console.log(`[Client v${CLIENT_VERSION}] Setting up foreground message handler`);
   const m = await messaging();
-  if (!m) return null;
+  if (!m) {
+    console.log(`[Client v${CLIENT_VERSION}] Messaging not supported, skipping handler setup`);
+    return null;
+  }
 
-  console.log("Successfully installed foreground message handler");
+  console.log(`[Client v${CLIENT_VERSION}] Successfully installed foreground message handler`);
   
   return onMessage(m, (payload: MessagePayload) => {
-    console.log('Foreground message received:', payload);
+    console.log(`[Client v${CLIENT_VERSION}] Foreground message received:`, payload);
     
-    if (!payload.data && !payload.notification) return;
+    if (!payload.data && !payload.notification) {
+      console.log(`[Client v${CLIENT_VERSION}] Empty message payload, ignoring`);
+      return;
+    }
 
     if (Notification.permission !== 'granted') {
-      console.log('Notification permission not granted, skipping foreground notification');
+      console.log(`[Client v${CLIENT_VERSION}] Notification permission not granted, skipping foreground notification`);
       return;
     }
 
     // Extract notification ID to prevent duplicates
     const notificationId = payload.messageId || payload.collapseKey || Date.now().toString();
+    console.log(`[Client v${CLIENT_VERSION}] Notification ID: ${notificationId}`);
     
     // Skip if we've already processed this notification
     if (processedNotifications.has(notificationId)) {
-      console.log(`Skipping duplicate notification ${notificationId}`);
+      console.log(`[Client v${CLIENT_VERSION}] Skipping duplicate notification ${notificationId}`);
       return;
     }
     
     // Add to processed set
     processedNotifications.add(notificationId);
+    console.log(`[Client v${CLIENT_VERSION}] Added notification ${notificationId} to processed set. Total: ${processedNotifications.size}`);
     
     // Keep the set small by removing older notifications
     if (processedNotifications.size > 20) {
       const oldestId = processedNotifications.values().next().value;
       processedNotifications.delete(oldestId);
+      console.log(`[Client v${CLIENT_VERSION}] Removed oldest notification ${oldestId} from processed set`);
     }
 
     const deviceIsIOS = isIOS();
+    console.log(`[Client v${CLIENT_VERSION}] Device is iOS: ${deviceIsIOS}`);
+    
+    // For non-iOS: Let service worker handle the notification 
+    if (!deviceIsIOS) {
+      console.log(`[Client v${CLIENT_VERSION}] Non-iOS device detected. Deferring to service worker.`);
+      // The service worker will show the notification
+      // This prevents duplicates by letting only one component handle it
+      return;
+    }
+    
+    // For iOS: Handle the notification here since SW might not work well on iOS
+    console.log(`[Client v${CLIENT_VERSION}] iOS device detected. Client will handle notification.`);
     
     // Extract notification data
     const title = payload.notification?.title || payload.data?.title || "New Notification";
@@ -161,10 +202,12 @@ export const setupForegroundMessageHandler = async () => {
       tag: notificationId, // Use tag to prevent duplicates
       data: { 
         url: link,
-        notificationId
+        notificationId,
+        fromClient: true, // Flag to identify source
+        clientVersion: CLIENT_VERSION
       },
-      requireInteraction: !deviceIsIOS,
-      silent: deviceIsIOS, // Keep notifications silent on iOS
+      requireInteraction: false, // On iOS, don't require interaction
+      silent: true, // Keep notifications silent on iOS
       renotify: false
     };
 
@@ -172,7 +215,7 @@ export const setupForegroundMessageHandler = async () => {
       notificationOptions.image = image;
     }
 
-    console.log('Creating foreground notification with options:', notificationOptions);
+    console.log(`[Client v${CLIENT_VERSION}] Creating foreground notification with options:`, notificationOptions);
     
     // Create and show the notification
     const notification = new Notification(title, notificationOptions);
@@ -180,7 +223,7 @@ export const setupForegroundMessageHandler = async () => {
     // Add click handler directly to the notification
     notification.onclick = function(event) {
       event.preventDefault();
-      console.log('Notification clicked, navigating to:', link);
+      console.log(`[Client v${CLIENT_VERSION}] Notification clicked, navigating to:`, link);
       window.open(link, '_blank');
     };
   });
