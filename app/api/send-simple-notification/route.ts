@@ -44,7 +44,10 @@ export async function POST(request: NextRequest) {
     // Initialize Firebase Admin before proceeding
     initializeFirebaseAdmin();
     
-    const { token, title, message, link } = await request.json();
+    const { token, title, message, link, image } = await request.json();
+    
+    // Log the received parameters for debugging
+    console.log("Notification request received:", { token: token ? "present" : "missing", title, message, link, image });
     
     // Validate required fields
     if (!token) {
@@ -65,17 +68,50 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Prepare the notification payload
     const payload: Message = {
       token,
       notification: {
         title: title || "New Notification",
         body: message || "You have a new notification",
       },
-      webpush: link ? {
-        fcmOptions: {
+      webpush: {
+        // Pass URL for click handling
+        fcmOptions: link ? {
           link,
-        },
-      } : undefined,
+        } : undefined,
+        // Set notification configuration
+        notification: {
+          // Use proper icons from only_these folder
+          icon: "/only_these/android-icon-192x192.png",
+          badge: "/only_these/favicon-32x32.png",
+          // Allow interaction
+          requireInteraction: true,
+          // Include image in webpush notification if provided
+          image: image,
+          // Add actions for Android
+          actions: [
+            {
+              action: "open",
+              title: "Open",
+              icon: "/only_these/favicon-32x32.png"
+            }
+          ],
+          // Add data to help with click handling
+          data: {
+            url: link || "/",
+            notificationId: Date.now().toString(),
+          }
+        }
+      },
+      // Include data for handling in service worker
+      data: {
+        title: title || "New Notification",
+        body: message || "You have a new notification",
+        link: link || "/",
+        image: image || "",
+        timestamp: Date.now().toString(),
+      }
     };
 
     try {

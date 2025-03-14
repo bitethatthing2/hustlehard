@@ -35,9 +35,13 @@ const baseUrl = self.location.origin;
 // Helper function to validate image URLs
 function isValidImageUrl(url) {
   if (!url || url === 'undefined' || url === '') return false;
+  
+  // Allow relative URLs
+  if (url.startsWith('/')) return true;
+  
   try {
     const parsed = new URL(url);
-    return parsed.protocol === 'https:';
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
   } catch {
     return false;
   }
@@ -47,7 +51,13 @@ function isValidImageUrl(url) {
 const processedNotifications = new Set();
 
 // Service worker version - used for logging
-const SW_VERSION = '2.0.0';
+const SW_VERSION = '2.1.0';
+
+// Set a timeout for clearing the processed notifications set to avoid memory leaks
+setTimeout(() => {
+  processedNotifications.clear();
+  console.log(`[SW v${SW_VERSION}] Cleared processed notifications set after timeout`);
+}, 1000 * 60 * 60); // Clear after 1 hour
 
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
@@ -65,7 +75,8 @@ messaging.onBackgroundMessage((payload) => {
   // Check for iOS - handle differently based on device
   const userAgent = self.navigator ? self.navigator.userAgent : '';
   const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-  console.log(`[SW v${SW_VERSION}] Device detection - iOS: ${isIOS}, UA: ${userAgent.substring(0, 50)}...`);
+  const isAndroid = /Android/.test(userAgent);
+  console.log(`[SW v${SW_VERSION}] Device detection - iOS: ${isIOS}, Android: ${isAndroid}, UA: ${userAgent.substring(0, 50)}...`);
   
   // Add to processed set
   processedNotifications.add(notificationId);
@@ -84,11 +95,14 @@ messaging.onBackgroundMessage((payload) => {
   const link = payload.fcmOptions?.link || payload.data?.link || '/';
   const image = payload.data?.image || payload.notification?.image;
   
+  // Use the correct icon paths from only_these folder
   const notificationOptions = {
     body,
-    // Use exact same icon path as Vite project
-    icon: `${baseUrl}/ic_stat_barber_1024/res/drawable-xxxhdpi/ic_stat_barber_1024.png`,
-    badge: `${baseUrl}/ic_stat_barber_1024/res/drawable-xxxhdpi/ic_stat_barber_1024.png`,
+    // Use android icon for Android and apple icon for others
+    icon: isAndroid ? 
+      `${baseUrl}/only_these/android-icon-192x192.png` : 
+      `${baseUrl}/only_these/apple-icon-180x180.png`,
+    badge: `${baseUrl}/only_these/favicon-32x32.png`,
     data: { 
       url: link,
       ...payload.data,
@@ -101,9 +115,17 @@ messaging.onBackgroundMessage((payload) => {
     tag: notificationId,
     renotify: false,
     requireInteraction: !isIOS,
-    silent: isIOS // Keep notifications silent on iOS
+    silent: isIOS, // Keep notifications silent on iOS
+    actions: [
+      {
+        action: 'open',
+        title: 'Open',
+        icon: `${baseUrl}/only_these/favicon-32x32.png`
+      }
+    ]
   };
 
+  // Add image if valid
   if (isValidImageUrl(image)) {
     notificationOptions.image = image;
     console.log(`[SW v${SW_VERSION}] Adding image to notification:`, image);
@@ -118,22 +140,42 @@ self.addEventListener("notificationclick", (event) => {
   console.log(`[SW v${SW_VERSION}] Notification clicked`, event);
   event.notification.close();
   
+  // Get the URL from the notification data
   const url = event.notification.data?.url || '/';
+  console.log(`[SW v${SW_VERSION}] Notification click - opening URL: ${url}`);
+  
+  // Handle action clicks
+  if (event.action === 'open') {
+    console.log(`[SW v${SW_VERSION}] Open action clicked`);
+  }
   
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true })
       .then((clientList) => {
-        // Focus existing window with matching URL if found
+        // Try to focus an existing window with matching URL if found
         for (const client of clientList) {
           if (client.url === url && 'focus' in client) {
+            console.log(`[SW v${SW_VERSION}] Focusing existing window with URL: ${url}`);
             return client.focus();
+          }
+        }
+        
+        // If no matching window, find any available window and navigate
+        for (const client of clientList) {
+          if ('focus' in client && 'navigate' in client) {
+            console.log(`[SW v${SW_VERSION}] Navigating existing window to: ${url}`);
+            return client.focus().then(() => client.navigate(url));
           }
         }
         
         // Otherwise open a new window
         if (clients.openWindow) {
+          console.log(`[SW v${SW_VERSION}] Opening new window with URL: ${url}`);
           return clients.openWindow(url);
         }
+      })
+      .catch(err => {
+        console.error(`[SW v${SW_VERSION}] Error handling notification click:`, err);
       })
   );
 });
@@ -141,7 +183,6 @@ self.addEventListener("notificationclick", (event) => {
 // Add explicit push event listener to prevent browser from showing its own notification
 self.addEventListener('push', (event) => {
   console.log(`[SW v${SW_VERSION}] Push event received but letting Firebase handle it`);
-  event.stopImmediatePropagation();
-  // Don't do anything here - let Firebase's onBackgroundMessage handle it
-  // This just prevents the browser from showing its own notification
+  // Let Firebase's onBackgroundMessage handle it
+  // This prevents the browser from showing its own notification
 });
