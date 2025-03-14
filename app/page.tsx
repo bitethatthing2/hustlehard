@@ -147,7 +147,7 @@ export default function Home() {
           </p>
         ) : notificationPermissionStatus === "default" ? (
           <p className="text-yellow-600">
-            ⚠️ You haven't decided about notifications yet. Click the button below to enable them.
+            ⚠️ You haven&apos;t decided about notifications yet. Click the button below to enable them.
           </p>
         ) : (
           <p className="text-gray-600">Loading notification permission status...</p>
@@ -156,7 +156,7 @@ export default function Home() {
         {token ? (
           <p className="mt-2 text-green-600">✅ FCM Token obtained successfully.</p>
         ) : (
-          <p className="mt-2 text-red-600">❌ No FCM token available. Notifications won't work.</p>
+          <p className="mt-2 text-red-600">❌ No FCM token available. Notifications won&apos;t work.</p>
         )}
         
         {isDevelopmentMode && (
@@ -177,8 +177,8 @@ export default function Home() {
       <div className="mt-8 text-sm text-gray-600">
         <p>
           When you click the button above, a notification will be sent to your device.
-          If the app is in the background, you'll see a system notification.
-          If the app is in the foreground, you'll see a toast notification.
+          If the app is in the background, you&apos;ll see a system notification.
+          If the app is in the foreground, you&apos;ll see a toast notification.
         </p>
       </div>
     </main>

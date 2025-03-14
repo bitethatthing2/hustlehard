@@ -3,31 +3,47 @@ import { Message } from "firebase-admin/messaging";
 import { NextRequest, NextResponse } from "next/server";
 
 // Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  try {
-    // Handle the private key properly for Netlify
-    const privateKey = process.env.FIREBASE_PRIVATE_KEY 
-      ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") 
-      : undefined;
+let firebaseAdminInitialized = false;
+
+// Ensure Firebase Admin is initialized just once
+function initializeFirebaseAdmin() {
+  if (firebaseAdminInitialized) {
+    return;
+  }
+  
+  if (!admin.apps.length) {
+    try {
+      // Handle the private key properly for Netlify
+      const privateKey = process.env.FIREBASE_PRIVATE_KEY 
+        ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") 
+        : undefined;
+        
+      const serviceAccount = {
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: privateKey,
+      };
       
-    const serviceAccount = {
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: privateKey,
-    };
-    
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-    });
-    
-    console.log("Firebase Admin initialized successfully");
-  } catch (error) {
-    console.error("Firebase Admin initialization error:", error);
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+      });
+      
+      firebaseAdminInitialized = true;
+      console.log("Firebase Admin initialized successfully");
+    } catch (error) {
+      console.error("Firebase Admin initialization error:", error);
+      throw error; // Re-throw to handle in the API route
+    }
+  } else {
+    firebaseAdminInitialized = true;
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    // Initialize Firebase Admin before proceeding
+    initializeFirebaseAdmin();
+    
     const { token, title, message, link } = await request.json();
     
     // Validate required fields
