@@ -16,6 +16,9 @@ const nextConfig = {
     NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY: process.env.NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY,
   },
   
+  // Output standalone build to ensure assets are included
+  output: 'standalone',
+  
   // Add headers for service worker and cross-origin isolation
   async headers() {
     return [

@@ -10,7 +10,7 @@
     "generate-certs": "node generate-certs.js",
     "setup-trusted-dev": "npm run generate-certs && npm run dev:trusted",
     "build": "next build",
-    "netlify-build": "cross-env next build",
+    "netlify-build": "cross-env next build && node netlify-build.js",
     "start": "next start",
     "lint": "next lint"
   },
@@ -25,6 +25,7 @@
     "dotenv": "^16.4.7",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.2.0",
+    "fs-extra": "^11.2.0",
     "lucide-react": "^0.394.0",
     "next-themes": "^0.3.0",
     "react": "^18",

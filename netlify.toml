@@ -5,6 +5,34 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Add redirects to ensure public files are accessible
+[[redirects]]
+  from = "/only_these/*"
+  to = "/only_these/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/firebase-messaging-sw.js"
+  to = "/firebase-messaging-sw.js"
+  status = 200
+
+[[redirects]]
+  from = "/manifest.json"
+  to = "/manifest.json"
+  status = 200
+
+# Additional redirects to handle static assets better
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# Make a special entry for the public directory
+[[redirects]]
+  from = "/public/*"
+  to = "/:splat"
+  status = 200
+
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
