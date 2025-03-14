@@ -43,27 +43,56 @@ function isValidImageUrl(url) {
   }
 }
 
+// Track processed notification IDs to prevent duplicates
+const processedNotifications = new Set();
+
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
   console.log("[firebase-messaging-sw.js] Received background message ", payload);
   
+  // Extract notification ID to prevent duplicates
+  const notificationId = payload.messageId || payload.collapseKey || Date.now().toString();
+  
+  // Skip if we've already processed this notification
+  if (processedNotifications.has(notificationId)) {
+    console.log(`[SW] Skipping duplicate notification ${notificationId}`);
+    return;
+  }
+  
+  // Add to processed set
+  processedNotifications.add(notificationId);
+  
+  // Clear old notification IDs (keep set small)
+  if (processedNotifications.size > 20) {
+    const oldestId = processedNotifications.values().next().value;
+    processedNotifications.delete(oldestId);
+  }
+  
+  // Extract notification data
   const title = payload.notification?.title || payload.data?.title || "New Notification";
   const body = payload.notification?.body || payload.data?.body || "You have a new notification";
   const link = payload.fcmOptions?.link || payload.data?.link || '/';
   const image = payload.data?.image || payload.notification?.image;
   
+  // iOS specific handling - use simpler notification format
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  
   const notificationOptions = {
     body,
-    icon: `${baseUrl}/icons/mipmap-xxxhdpi/ic_launcher.png`,
-    badge: `${baseUrl}/icons/icon-72x72.png`,
+    // Use exact same icon path as Vite project
+    icon: `${baseUrl}/ic_stat_barber_1024/res/drawable-xxxhdpi/ic_stat_barber_1024.png`,
+    badge: `${baseUrl}/ic_stat_barber_1024/res/drawable-xxxhdpi/ic_stat_barber_1024.png`,
     data: { 
       url: link,
       ...payload.data,
-      messageId: payload.messageId || payload.collapseKey || Date.now().toString()
+      // Store notification ID to prevent duplicates later
+      notificationId
     },
-    tag: payload.messageId || payload.collapseKey || Date.now().toString(), // Use messageId as tag to prevent duplicate notifications
-    renotify: false, // Don't notify again for same tag
-    silent: false
+    // Use notification ID as tag to prevent duplicate system notifications
+    tag: notificationId,
+    renotify: false,
+    requireInteraction: !isIOS,
+    silent: isIOS // Keep notifications silent on iOS
   };
 
   if (isValidImageUrl(image)) {
@@ -85,14 +114,24 @@ self.addEventListener("notificationclick", (event) => {
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true })
       .then((clientList) => {
+        // Focus existing window with matching URL if found
         for (const client of clientList) {
           if (client.url === url && 'focus' in client) {
             return client.focus();
           }
         }
+        
+        // Otherwise open a new window
         if (clients.openWindow) {
           return clients.openWindow(url);
         }
       })
   );
+});
+
+// Add explicit push event listener to prevent browser from showing its own notification
+self.addEventListener('push', (event) => {
+  console.log('SW: Push event received but letting Firebase handle it');
+  // Don't do anything here - let Firebase's onBackgroundMessage handle it
+  // This just prevents the browser from showing its own notification
 });

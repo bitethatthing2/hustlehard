@@ -1,19 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { fetchToken, setupForegroundMessageHandler } from "@/firebase";
-import { useRouter } from "next/navigation";
+import { fetchToken, setupForegroundMessageHandler, isIOS } from "@/firebase";
 import { toast } from "sonner";
-import { saveNotificationSubscription } from "@/lib/supabase";
 
 async function getNotificationPermissionAndToken() {
-  // Step 1: Check if Notifications are supported in the browser.
+  // Check if Notifications are supported in the browser
   if (!("Notification" in window)) {
     console.info("This browser does not support desktop notification");
     return { token: null, isDevelopmentMode: false };
   }
 
-  // Step 2: Check if permission is already granted.
+  // Check if permission is already granted
   if (Notification.permission === "granted") {
     console.log("Notification permission already granted");
     const token = await fetchToken();
@@ -21,29 +19,10 @@ async function getNotificationPermissionAndToken() {
     // Check if we're using a development token
     const isDevelopmentMode = token === "test-token-for-ui-development";
     
-    if (token) {
-      console.log("FCM Token obtained:", token);
-      try {
-        // Save subscription to Supabase
-        const registration = await navigator.serviceWorker.ready;
-        console.log("Service Worker ready");
-        const subscription = await registration.pushManager.getSubscription();
-        console.log("Push Subscription:", subscription);
-        if (subscription) {
-          console.log("Attempting to save subscription to Supabase...");
-          const result = await saveNotificationSubscription(subscription, navigator.userAgent);
-          console.log("Supabase save result:", result);
-        } else {
-          console.log("No subscription found");
-        }
-      } catch (error) {
-        console.error("Error saving subscription:", error);
-      }
-    }
     return { token, isDevelopmentMode };
   }
 
-  // Step 3: If permission is not denied, request permission from the user.
+  // If permission is not denied, request permission from the user
   if (Notification.permission !== "denied") {
     console.log("Requesting notification permission...");
     const permission = await Notification.requestPermission();
@@ -54,25 +33,6 @@ async function getNotificationPermissionAndToken() {
       // Check if we're using a development token
       const isDevelopmentMode = token === "test-token-for-ui-development";
       
-      if (token) {
-        console.log("FCM Token obtained:", token);
-        try {
-          // Save subscription to Supabase
-          const registration = await navigator.serviceWorker.ready;
-          console.log("Service Worker ready");
-          const subscription = await registration.pushManager.getSubscription();
-          console.log("Push Subscription:", subscription);
-          if (subscription) {
-            console.log("Attempting to save subscription to Supabase...");
-            const result = await saveNotificationSubscription(subscription, navigator.userAgent);
-            console.log("Supabase save result:", result);
-          } else {
-            console.log("No subscription found");
-          }
-        } catch (error) {
-          console.error("Error saving subscription:", error);
-        }
-      }
       return { token, isDevelopmentMode };
     }
   }
@@ -82,59 +42,51 @@ async function getNotificationPermissionAndToken() {
 }
 
 const useFcmToken = () => {
-  const router = useRouter(); // Initialize the router for navigation.
   const [notificationPermissionStatus, setNotificationPermissionStatus] =
-    useState<NotificationPermission | null>(null); // State to store the notification permission status.
-  const [token, setToken] = useState<string | null>(null); // State to store the FCM token.
-  const [isDevelopmentMode, setIsDevelopmentMode] = useState(false); // State to track if we're using development mode
-  const retryLoadToken = useRef(0); // Ref to keep track of retry attempts.
-  const isLoading = useRef(false); // Ref to keep track if a token fetch is currently in progress.
-  const messageHandlerRef = useRef<any>(null); // Ref to keep track of the message handler
+    useState<NotificationPermission | null>(null); // State to store the notification permission status
+  const [token, setToken] = useState<string | null>(null); // State to store the FCM token
+  const [isDevelopmentMode, setIsDevelopmentMode] = useState(false); // Track if we're using development mode
+  const retryLoadToken = useRef(0); // Ref to track retry attempts
+  const isLoading = useRef(false); // Ref to track if token fetch is in progress
+  const messageHandlerRef = useRef<any>(null); // Ref to track the message handler
 
   const loadToken = async () => {
-    // Step 4: Prevent multiple fetches if already fetched or in progress.
+    // Prevent multiple fetches if already in progress
     if (isLoading.current) return;
 
-    isLoading.current = true; // Mark loading as in progress.
-    const { token, isDevelopmentMode } = await getNotificationPermissionAndToken(); // Fetch the token.
+    isLoading.current = true; // Mark as in progress
+    const { token, isDevelopmentMode } = await getNotificationPermissionAndToken();
 
-    // Step 5: Handle the case where permission is denied.
+    // Handle permission denied
     if (Notification.permission === "denied") {
       setNotificationPermissionStatus("denied");
-      console.info(
-        "%cPush Notifications issue - permission denied",
-        "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
-      );
+      console.info("Push Notifications permission denied");
       isLoading.current = false;
       return;
     }
 
-    // Step 6: Retry fetching the token if necessary. (up to 3 times)
-    // This step is typical initially as the service worker may not be ready/installed yet.
+    // Retry fetching token if necessary (up to 3 times)
     if (!token) {
       if (retryLoadToken.current >= 3) {
-        toast.error("Unable to load notification token. Some features may not work correctly.");
-        console.info(
-          "%cPush Notifications issue - unable to load token after 3 retries",
-          "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
-        );
+        toast.error("Unable to initialize notifications");
+        console.info("Push Notifications initialization failed after 3 retries");
         isLoading.current = false;
         return;
       }
 
       retryLoadToken.current += 1;
-      console.error("An error occurred while retrieving token. Retrying...");
+      console.error("Retrying token fetch..., attempt:", retryLoadToken.current);
       isLoading.current = false;
       await loadToken();
       return;
     }
 
-    // Step 7: Set the fetched token and mark as fetched.
+    // Set token and status
     setNotificationPermissionStatus(Notification.permission);
     setToken(token);
     setIsDevelopmentMode(isDevelopmentMode);
     
-    // Show a toast if we're in development mode
+    // Show development mode toast
     if (isDevelopmentMode) {
       toast.info(
         "Using development mode for notifications due to SSL certificate issues. This is expected in local development.",
@@ -146,14 +98,14 @@ const useFcmToken = () => {
   };
 
   useEffect(() => {
-    // Step 8: Initialize token loading when the component mounts.
+    // Initialize token loading when component mounts
     if ("Notification" in window) {
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      if (!isIOS) {
-        // For non-iOS devices, request permission immediately
+      const deviceIsIOS = isIOS();
+      if (!deviceIsIOS) {
+        // Non-iOS devices request permission immediately
         loadToken();
       } else {
-        // For iOS, we'll wait for user interaction
+        // For iOS, defer permission request until user interaction
         console.log("iOS detected, deferring permission request until user interaction");
       }
     }
@@ -161,11 +113,11 @@ const useFcmToken = () => {
 
   useEffect(() => {
     const setupListener = async () => {
-      if (!token) return; // Exit if no token is available.
+      if (!token) return; // Exit if no token is available
 
       console.log(`Setting up foreground message handler with token ${token}`);
       
-      // Set up the foreground message handler
+      // Set up foreground message handler
       const unsubscribe = await setupForegroundMessageHandler();
       
       if (unsubscribe) {
@@ -175,7 +127,7 @@ const useFcmToken = () => {
 
     setupListener();
 
-    // Step 11: Cleanup the listener when the component unmounts.
+    // Cleanup the listener when component unmounts
     return () => {
       if (messageHandlerRef.current) {
         messageHandlerRef.current();
@@ -194,7 +146,7 @@ const useFcmToken = () => {
     notificationPermissionStatus, 
     isDevelopmentMode,
     requestNotificationPermission 
-  }; // Return the token, permission status, and development mode flag.
+  };
 };
 
 export default useFcmToken;
