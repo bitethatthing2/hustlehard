@@ -37,11 +37,11 @@ export default function IOSInstructions() {
         &larr; Back to Home
       </Link>
       
-      <h1 className="text-3xl font-bold mb-6">iOS Installation Guide</h1>
+      <h1 className="text-3xl font-bold mb-6">The Side Hustle Bar - iOS Installation Guide</h1>
       
       <div className="bg-gray-900 rounded-lg p-6 mb-8">
         <h2 className="text-2xl font-semibold mb-4">Step 1: Add to Home Screen</h2>
-        <p className="mb-4">To get the best experience, add this app to your home screen:</p>
+        <p className="mb-4">To get the best experience from The Side Hustle Bar app, add it to your home screen:</p>
         
         <ol className="list-decimal pl-6 space-y-4 mb-6">
           <li>
@@ -60,13 +60,13 @@ export default function IOSInstructions() {
         
         <div className="bg-black p-4 rounded-md mb-6">
           <p className="text-yellow-400 font-medium">Important:</p>
-          <p className="text-gray-300">iOS requires you to open the app from your home screen icon to enable full functionality, including background notifications.</p>
+          <p className="text-gray-300">iOS requires you to open the app from your home screen icon to enable full functionality, including notifications about our events and specials.</p>
         </div>
       </div>
       
       <div className="bg-gray-900 rounded-lg p-6">
         <h2 className="text-2xl font-semibold mb-4">Step 2: Enable Notifications</h2>
-        <p className="mb-4">iOS requires a user action to enable notifications. Follow these steps:</p>
+        <p className="mb-4">Stay updated with The Side Hustle Bar&apos;s latest events and specials:</p>
         
         <ol className="list-decimal pl-6 space-y-4 mb-6">
           <li>
@@ -84,7 +84,7 @@ export default function IOSInstructions() {
           {notificationStatus === 'idle' && (
             <button
               onClick={requestNotificationPermission}
-              className="bg-white text-black font-semibold py-3 px-6 rounded-md hover:bg-gray-200 transition-colors"
+              className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-md hover:bg-yellow-500 transition-colors"
             >
               Enable Notifications
             </button>
@@ -99,7 +99,7 @@ export default function IOSInstructions() {
           {notificationStatus === 'granted' && (
             <div className="bg-green-900 p-4 rounded-md">
               <p className="font-medium">Notifications enabled successfully!</p>
-              <p className="mt-2">You will now receive updates about new opportunities.</p>
+              <p className="mt-2">You will now receive updates about events and specials at The Side Hustle Bar.</p>
             </div>
           )}
           
