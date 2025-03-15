@@ -1,186 +1,94 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import useFcmToken from "@/hooks/useFcmToken";
-import { useEffect, useState } from "react";
-import { getActiveSubscriptions, testSupabaseConnection, saveNotificationSubscription } from "@/lib/supabase";
-import { useRouter } from "@/lib/router";
-import { toast } from "sonner";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const { token, notificationPermissionStatus, isDevelopmentMode } = useFcmToken();
-  const [subscriptionStatus, setSubscriptionStatus] = useState<string>("");
-  const [notificationStatus, setNotificationStatus] = useState<string>("");
-  const [supabaseTestStatus, setSupabaseTestStatus] = useState<string>("");
-  const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
-  const [supabaseError, setSupabaseError] = useState<string>("");
-  const [notificationResponse, setNotificationResponse] = useState<any>(null);
-  const [isSending, setIsSending] = useState(false);
-  const router = useRouter();
-
+  const [deviceType, setDeviceType] = useState<'unknown' | 'ios' | 'android'>('unknown');
+  
   useEffect(() => {
-    async function checkSubscription() {
-      if (token) {
-        const subscriptions = await getActiveSubscriptions();
-        if (subscriptions.length === 0) {
-          setSubscriptionStatus("no-subscriptions");
-          return;
-        }
-        
-        // In development mode, consider the subscription saved if we have a token
-        if (isDevelopmentMode) {
-          setSubscriptionStatus("saved");
-          return;
-        }
-        
-        const hasSubscription = subscriptions.some((sub: { endpoint: string }) => sub.endpoint.includes(token));
-        setSubscriptionStatus(hasSubscription ? "saved" : "pending");
-      }
+    // Detect device type
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (/iphone|ipad|ipod/.test(userAgent)) {
+      setDeviceType('ios');
+    } else if (/android/.test(userAgent)) {
+      setDeviceType('android');
     }
-    checkSubscription();
-  }, [token, isDevelopmentMode]);
-
-  const handleTestNotification = async () => {
-    if (!token) {
-      toast.error("No notification token available");
-      return;
-    }
-
-    setIsSending(true);
-    try {
-      const response = await fetch("/api/send-simple-notification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: token,
-          title: "Test Notification",
-          message: "This is a test notification",
-          link: "/contact",
-        }),
-      });
-
-      const data = await response.json();
-      console.log("Notification API response:", data);
-      
-      if (data.success) {
-        toast.success("Notification sent successfully!");
-      } else {
-        toast.error(`Failed to send notification: ${data.error || "Unknown error"}`);
-      }
-    } catch (error) {
-      console.error("Error sending notification:", error);
-      toast.error("Failed to send notification. Check console for details.");
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  async function handleTestSupabase() {
-    setSupabaseTestStatus("testing");
-    setSupabaseError("");
-    try {
-      const result = await testSupabaseConnection();
-      console.log(result);
-      setSupabaseTestStatus(result === true ? "success" : "error");
-      if (result !== true) {
-        setSupabaseError("Failed to connect to Supabase. Check console for details.");
-      }
-    } catch (error) {
-      console.error("Error testing Supabase:", error);
-      setSupabaseTestStatus("error");
-      setSupabaseError(error instanceof Error ? error.message : "Unknown error");
-    }
-  }
-
-  async function handleRetrySaveSubscription() {
-    if (!token) {
-      setSubscriptionStatus("no-token");
-      return;
-    }
-    
-    setSubscriptionStatus("saving");
-    try {
-      // Get the service worker registration
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      
-      if (!subscription) {
-        setSubscriptionStatus("no-subscription");
-        return;
-      }
-      
-      // Save to Supabase
-      const result = await saveNotificationSubscription(subscription, navigator.userAgent);
-      
-      if (result) {
-        setSubscriptionStatus("saved");
-      } else {
-        setSubscriptionStatus("error");
-        setSupabaseError("Failed to save subscription to Supabase. Check console for details.");
-      }
-    } catch (error) {
-      console.error("Error saving subscription:", error);
-      setSubscriptionStatus("error");
-      setSupabaseError(error instanceof Error ? error.message : "Unknown error");
-    }
-  }
-
-  const navigateToContact = () => {
-    router.navigate("/contact");
-  };
+  }, []);
 
   return (
-    <main className="p-10">
-      <h1 className="text-4xl mb-4 font-bold">Firebase Cloud Messaging Demo</h1>
-
-      <div className="mb-6 p-4 border rounded-md bg-gray-50">
-        <h2 className="text-xl font-semibold mb-2">Notification Status</h2>
+    <main className="container mx-auto px-4 py-8">
+      <section className="max-w-3xl mx-auto text-center mb-12">
+        <h1 className="text-4xl font-bold mb-4">Welcome to The Side Hustle Bar</h1>
+        <p className="text-xl mb-8">Get notified about the latest side hustle opportunities</p>
         
-        {notificationPermissionStatus === "granted" ? (
-          <p className="text-green-600">✅ Permission to receive notifications has been granted.</p>
-        ) : notificationPermissionStatus === "denied" ? (
-          <p className="text-red-600">
-            ❌ You have denied permission to receive notifications. Please
-            enable notifications in your browser settings.
+        <div className="bg-gray-900 rounded-lg p-6 mb-8 text-left">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Get the Best Experience</h2>
+          <p className="mb-4">
+            This is a Progressive Web App (PWA) that works best when installed on your device and with notifications enabled.
           </p>
-        ) : notificationPermissionStatus === "default" ? (
-          <p className="text-yellow-600">
-            ⚠️ You haven&apos;t decided about notifications yet. Click the button below to enable them.
-          </p>
-        ) : (
-          <p className="text-gray-600">Loading notification permission status...</p>
-        )}
-        
-        {token ? (
-          <p className="mt-2 text-green-600">✅ FCM Token obtained successfully.</p>
-        ) : (
-          <p className="mt-2 text-red-600">❌ No FCM token available. Notifications won&apos;t work.</p>
-        )}
-        
-        {isDevelopmentMode && (
-          <p className="mt-2 text-blue-600">
-            ℹ️ Running in development mode. Notifications will be simulated.
-          </p>
-        )}
-      </div>
-
-      <Button
-        disabled={!token || isSending}
-        className="mt-5"
-        onClick={handleTestNotification}
-      >
-        {isSending ? "Sending..." : "Send Test Notification"}
-      </Button>
+          
+          {deviceType !== 'unknown' && (
+            <div className="bg-black p-4 rounded-md mb-6">
+              <p className="text-yellow-400 font-medium">We detected you're using {deviceType === 'ios' ? 'an iOS' : 'an Android'} device!</p>
+              <p className="text-gray-300 mb-4">
+                Follow our {deviceType}-specific instructions for the best experience.
+              </p>
+              <Link 
+                href={`/instructions/${deviceType}`}
+                className="inline-block bg-white text-black font-semibold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
+              >
+                View {deviceType === 'ios' ? 'iOS' : 'Android'} Instructions
+              </Link>
+            </div>
+          )}
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="border border-gray-700 rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-3">iOS Users</h3>
+              <p className="mb-4">Learn how to add this app to your home screen and enable notifications on your iPhone or iPad.</p>
+              <Link 
+                href="/instructions/ios"
+                className="inline-block bg-white text-black font-semibold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
+              >
+                iOS Instructions
+              </Link>
+            </div>
+            
+            <div className="border border-gray-700 rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-3">Android Users</h3>
+              <p className="mb-4">Learn how to install this app on your Android device and enable notifications.</p>
+              <Link 
+                href="/instructions/android"
+                className="inline-block bg-white text-black font-semibold py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
+              >
+                Android Instructions
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
       
-      <div className="mt-8 text-sm text-gray-600">
-        <p>
-          When you click the button above, a notification will be sent to your device.
-          If the app is in the background, you&apos;ll see a system notification.
-          If the app is in the foreground, you&apos;ll see a toast notification.
-        </p>
-      </div>
+      <section className="max-w-3xl mx-auto mb-12">
+        <h2 className="text-3xl font-bold mb-6 text-center">Why Install Our App?</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gray-900 rounded-lg p-6">
+            <h3 className="text-xl font-semibold mb-3">Instant Notifications</h3>
+            <p>Get alerted immediately when new side hustle opportunities become available.</p>
+          </div>
+          
+          <div className="bg-gray-900 rounded-lg p-6">
+            <h3 className="text-xl font-semibold mb-3">Works Offline</h3>
+            <p>Access previously loaded content even when you don't have an internet connection.</p>
+          </div>
+          
+          <div className="bg-gray-900 rounded-lg p-6">
+            <h3 className="text-xl font-semibold mb-3">App-Like Experience</h3>
+            <p>Enjoy a smooth, fast experience that feels like a native app on your device.</p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

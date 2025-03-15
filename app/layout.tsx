@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Script from "next/script";
+import NavMenu from "@/components/NavMenu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,8 +56,14 @@ export default function RootLayout({
         <Script src="/notification-icon.js" strategy="afterInteractive" />
       </head>
       <body className={inter.className}>
+        <header className="p-4 border-b border-gray-800">
+          <div className="container mx-auto flex justify-between items-center">
+            <h1 className="text-xl font-bold">The Side Hustle Bar</h1>
+            <NavMenu />
+          </div>
+        </header>
+        
         <Toaster />
-
         {children}
       </body>
     </html>
