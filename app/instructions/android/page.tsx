@@ -51,16 +51,16 @@ export default function AndroidInstructions() {
             <strong>Tap the menu button</strong> - Look for the three dots in the top-right corner.
           </li>
           <li>
-            <strong>Tap "Add to Home screen"</strong> - This option should appear in the menu.
+            <strong>Tap &quot;Add to Home screen&quot;</strong> - This option should appear in the menu.
           </li>
           <li>
-            <strong>Tap "Add"</strong> - Confirm by tapping "Add" on the prompt that appears.
+            <strong>Tap &quot;Add&quot;</strong> - Confirm by tapping &quot;Add&quot; on the prompt that appears.
           </li>
         </ol>
         
         <div className="bg-black p-4 rounded-md mb-6">
           <p className="text-yellow-400 font-medium">Tip:</p>
-          <p className="text-gray-300">On some Android devices, you might see an "Install app" banner at the bottom of the screen. You can tap this for a quicker installation.</p>
+          <p className="text-gray-300">On some Android devices, you might see an &quot;Install app&quot; banner at the bottom of the screen. You can tap this for a quicker installation.</p>
         </div>
       </div>
       
@@ -76,7 +76,7 @@ export default function AndroidInstructions() {
             <strong>Tap the button below</strong> - This will trigger the notification permission prompt.
           </li>
           <li>
-            <strong>Tap "Allow"</strong> - When prompted, allow notifications to stay updated.
+            <strong>Tap &quot;Allow&quot;</strong> - When prompted, allow notifications to stay updated.
           </li>
         </ol>
         

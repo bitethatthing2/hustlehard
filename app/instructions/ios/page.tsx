@@ -51,10 +51,10 @@ export default function IOSInstructions() {
             <strong>Tap the Share button</strong> - Look for the share icon (square with an arrow pointing up) at the bottom of the screen.
           </li>
           <li>
-            <strong>Scroll down and tap "Add to Home Screen"</strong> - You might need to scroll down to find this option.
+            <strong>Scroll down and tap &quot;Add to Home Screen&quot;</strong> - You might need to scroll down to find this option.
           </li>
           <li>
-            <strong>Tap "Add"</strong> - You can rename the app if you want, then tap "Add" in the top-right corner.
+            <strong>Tap &quot;Add&quot;</strong> - You can rename the app if you want, then tap &quot;Add&quot; in the top-right corner.
           </li>
         </ol>
         
@@ -70,13 +70,13 @@ export default function IOSInstructions() {
         
         <ol className="list-decimal pl-6 space-y-4 mb-6">
           <li>
-            <strong>Open the app from your home screen</strong> - Make sure you're using the app from your home screen, not from Safari.
+            <strong>Open the app from your home screen</strong> - Make sure you&apos;re using the app from your home screen, not from Safari.
           </li>
           <li>
             <strong>Tap the button below</strong> - This will trigger the iOS notification permission prompt.
           </li>
           <li>
-            <strong>Tap "Allow"</strong> - When iOS asks if you want to allow notifications, tap "Allow" to receive updates.
+            <strong>Tap &quot;Allow&quot;</strong> - When iOS asks if you want to allow notifications, tap &quot;Allow&quot; to receive updates.
           </li>
         </ol>
         
