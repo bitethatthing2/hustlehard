@@ -100,10 +100,10 @@ messaging.onBackgroundMessage((payload) => {
     body,
     // Use larger icon for Android and apple icon for others
     icon: isAndroid ? 
-      `${baseUrl}/only_these/ms-icon-310x310.png` : 
-      `${baseUrl}/only_these/apple-icon-180x180.png`,
+      `${baseUrl}/only_these/android/android-launchericon-96-96.png` : 
+      `${baseUrl}/only_these/ios/apple-icon-180x180.png`,
     // Use larger badge icon for better visibility in status bar
-    badge: `${baseUrl}/only_these/ms-icon-144x144.png`,
+    badge: `${baseUrl}/only_these/android-icon-96x96.png`,
     data: { 
       url: link,
       ...payload.data,
@@ -121,7 +121,7 @@ messaging.onBackgroundMessage((payload) => {
       {
         action: 'open',
         title: 'Open',
-        icon: `${baseUrl}/only_these/ms-icon-144x144.png`
+        icon: `${baseUrl}/only_these/android-icon-96x96.png`
       }
     ]
   };
