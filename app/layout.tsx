@@ -54,7 +54,7 @@ export default function RootLayout({
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} style={{ backgroundColor: "#000000", color: "white" }}>
         <Toaster />
 
         {children}
