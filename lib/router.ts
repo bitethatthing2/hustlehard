@@ -129,8 +129,8 @@ export function createPlatformPayloads(basePayload: {
       data: basePayload.data,
       webpush: {
         notification: {
-          icon: "/icon-192x192.png", // Web notification icon
-          badge: "/badge-72x72.png", // Web notification badge
+          icon: "/only_these/android-icon-192x192.png", // Web notification icon
+          badge: "/only_these/android-icon-96x96.png", // Web notification badge
           vibrate: [100, 50, 100], // Vibration pattern
           actions: [
             {
