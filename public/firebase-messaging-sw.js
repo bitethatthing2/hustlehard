@@ -51,7 +51,7 @@ function isValidImageUrl(url) {
 const processedNotifications = new Set();
 
 // Service worker version - used for logging
-const SW_VERSION = '2.2.0';
+const SW_VERSION = '2.3.0';
 
 // Set a timeout for clearing the processed notifications set to avoid memory leaks
 setTimeout(() => {
@@ -102,7 +102,8 @@ messaging.onBackgroundMessage((payload) => {
     icon: isAndroid ? 
       `${baseUrl}/only_these/ms-icon-310x310.png` : 
       `${baseUrl}/only_these/apple-icon-180x180.png`,
-    badge: `${baseUrl}/only_these/favicon-32x32.png`,
+    // Use larger badge icon for better visibility in status bar
+    badge: `${baseUrl}/only_these/ms-icon-144x144.png`,
     data: { 
       url: link,
       ...payload.data,
@@ -120,7 +121,7 @@ messaging.onBackgroundMessage((payload) => {
       {
         action: 'open',
         title: 'Open',
-        icon: `${baseUrl}/only_these/favicon-32x32.png`
+        icon: `${baseUrl}/only_these/ms-icon-144x144.png`
       }
     ]
   };

@@ -84,7 +84,8 @@ export async function POST(request: NextRequest) {
         notification: {
           // Use proper large icon from only_these folder
           icon: "/only_these/ms-icon-310x310.png",
-          badge: "/only_these/favicon-32x32.png",
+          // Use larger badge icon for better visibility in status bar
+          badge: "/only_these/ms-icon-144x144.png",
           // Allow interaction
           requireInteraction: true,
           // Include image in webpush notification if provided
@@ -94,7 +95,7 @@ export async function POST(request: NextRequest) {
             {
               action: "open",
               title: "Open",
-              icon: "/only_these/favicon-32x32.png"
+              icon: "/only_these/ms-icon-144x144.png"
             }
           ],
           // Add data to help with click handling
