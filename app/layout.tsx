@@ -51,6 +51,8 @@ export default function RootLayout({
       <head>
         {/* Load environment variables before any other scripts */}
         <Script src="/env-config.js" strategy="beforeInteractive" />
+        {/* Load Android notification icon helper */}
+        <Script src="/notification-icon.js" strategy="afterInteractive" />
       </head>
       <body className={inter.className}>
         <Toaster />
