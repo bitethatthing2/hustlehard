@@ -18,7 +18,7 @@ export const metadata: Metadata = {
       { url: "/only_these/ms-icon-310x310.png", sizes: "310x310", type: "image/png" },
     ],
     apple: [
-      { url: "/only_these/apple-icon-180x180.png", sizes: "180x180", type: "image/png" },
+      { url: "/only_these/ios/apple-icon-180x180.png", sizes: "180x180", type: "image/png" },
       { url: "/only_these/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
     other: [
@@ -54,7 +54,7 @@ export default function RootLayout({
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
       </head>
-      <body className={inter.className} style={{ backgroundColor: "#000000", color: "white" }}>
+      <body className={inter.className}>
         <Toaster />
 
         {children}
