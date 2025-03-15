@@ -26,16 +26,16 @@ export function useRouter() {
    * Handle a notification click by navigating to the appropriate route
    * @param notification - The notification object
    */
-  const handleNotificationClick = (notification: { 
-    data?: { link?: string; url?: string; }; 
-    fcmOptions?: { link?: string; }; 
+  const handleNotificationClick = (notification: {
+    data?: { link?: string; url?: string; };
+    fcmOptions?: { link?: string; };
   }) => {
     // Extract link from various possible locations
-    const link = notification.data?.link || 
-                notification.data?.url || 
-                notification.fcmOptions?.link || 
+    const link = notification.data?.link ||
+                notification.data?.url ||
+                notification.fcmOptions?.link ||
                 '/';
-    
+
     // Navigate to the link
     navigate(link);
   };
@@ -63,14 +63,14 @@ export function useRouter() {
  * @param notification - The notification object
  * @returns The URL to navigate to
  */
-export function getNotificationUrl(notification: { 
-  data?: { link?: string; url?: string; }; 
-  fcmOptions?: { link?: string; }; 
+export function getNotificationUrl(notification: {
+  data?: { link?: string; url?: string; };
+  fcmOptions?: { link?: string; };
 }): string {
   // Extract link from various possible locations
-  return notification.data?.link || 
-         notification.data?.url || 
-         notification.fcmOptions?.link || 
+  return notification.data?.link ||
+         notification.data?.url ||
+         notification.fcmOptions?.link ||
          '/';
 }
 
@@ -92,7 +92,7 @@ export function createPlatformPayloads(basePayload: {
       android: {
         notification: {
           icon: "notification_icon", // Custom icon name in Android resources
-          color: "#4CAF50", // Custom color for Android
+          color: "#000000", // Custom color for Android (changed to black)
           channelId: "default", // Android notification channel
           priority: "high" as const, // High priority for Android
           clickAction: "FLUTTER_NOTIFICATION_CLICK", // Standard action for handling clicks
@@ -129,7 +129,7 @@ export function createPlatformPayloads(basePayload: {
       data: basePayload.data,
       webpush: {
         notification: {
-          icon: "/only_these/android-icon-192x192.png", // Web notification icon
+          icon: "/only_these/android-launchericon-96-96.png", // Web notification icon
           badge: "/only_these/android-icon-96x96.png", // Web notification badge
           vibrate: [100, 50, 100], // Vibration pattern
           actions: [
