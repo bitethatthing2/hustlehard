@@ -5,7 +5,8 @@
 function getNotificationIconPath() {
   // For Android, use a PNG with transparency
   if (/Android/.test(navigator.userAgent)) {
-    return '/only_these/android/android-launchericon-96-96.png';
+    // Use a smaller icon with more padding for Android notifications
+    return '/only_these/optimized/android-notification-icon.png';
   }
   
   // For iOS, use Apple icon

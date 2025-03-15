@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Generator with Padding</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .canvas-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        button {
+            margin: 10px 0;
+            padding: 8px 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Icon Generator with Padding</h1>
+    <p>This tool helps you create optimized icons with proper padding for Android notifications.</p>
+    
+    <div class="controls">
+        <label for="iconUpload">Upload your icon image:</label>
+        <input type="file" id="iconUpload" accept="image/*">
+        
+        <label for="canvasSize">Canvas Size (px):</label>
+        <input type="number" id="canvasSize" value="96" min="16" max="512">
+        
+        <label for="iconSize">Icon Size (% of canvas):</label>
+        <input type="range" id="iconSize" min="10" max="100" value="70">
+        <span id="iconSizeValue">70%</span>
+        
+        <label for="bgColor">Background Color:</label>
+        <input type="color" id="bgColor" value="#000000">
+        
+        <button id="generateBtn">Generate Icon</button>
+    </div>
+    
+    <div class="canvas-container">
+        <canvas id="iconCanvas" width="96" height="96"></canvas>
+        <div>
+            <button id="downloadBtn">Download Icon</button>
+        </div>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+        const iconUpload = document.getElementById('iconUpload');
+        const canvasSizeInput = document.getElementById('canvasSize');
+        const iconSizeInput = document.getElementById('iconSize');
+        const iconSizeValue = document.getElementById('iconSizeValue');
+        const bgColorInput = document.getElementById('bgColor');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        let uploadedImage = null;
+        
+        // Initialize canvas
+        function initCanvas() {
+            const size = parseInt(canvasSizeInput.value);
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Fill with background color
+            ctx.fillStyle = bgColorInput.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Handle image upload
+        iconUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        uploadedImage = img;
+                        generateIcon();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Update icon size value display
+        iconSizeInput.addEventListener('input', function() {
+            iconSizeValue.textContent = `${iconSizeInput.value}%`;
+        });
+        
+        // Generate icon when button is clicked
+        generateBtn.addEventListener('click', generateIcon);
+        
+        // Generate icon with current settings
+        function generateIcon() {
+            if (!uploadedImage) {
+                alert('Please upload an image first');
+                return;
+            }
+            
+            initCanvas();
+            
+            const canvasSize = parseInt(canvasSizeInput.value);
+            const iconSizePercent = parseInt(iconSizeInput.value) / 100;
+            const iconSize = canvasSize * iconSizePercent;
+            
+            // Calculate position to center the icon
+            const x = (canvasSize - iconSize) / 2;
+            const y = (canvasSize - iconSize) / 2;
+            
+            // Draw the icon
+            ctx.drawImage(uploadedImage, x, y, iconSize, iconSize);
+        }
+        
+        // Download the generated icon
+        downloadBtn.addEventListener('click', function() {
+            if (!uploadedImage) {
+                alert('Please generate an icon first');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = 'android-notification-icon.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+        
+        // Initialize
+        initCanvas();
+    </script>
+</body>
+</html> 
