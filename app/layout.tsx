@@ -55,16 +55,18 @@ export default function RootLayout({
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
       </head>
-      <body className={inter.className}>
-        <header className="p-4 border-b border-gray-800">
-          <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-xl font-bold">The Side Hustle Bar</h1>
+      <body className={`${inter.className} bg-black min-h-screen`}>
+        <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
+          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 className="text-xl font-bold text-white">The Side Hustle Bar</h1>
             <NavMenu />
           </div>
         </header>
         
-        <Toaster />
-        {children}
+        <main className="pt-16">
+          <Toaster />
+          {children}
+        </main>
       </body>
     </html>
   );

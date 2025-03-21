@@ -10,11 +10,11 @@ export default function NavMenu() {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center px-4 py-2 text-white bg-black border border-white rounded-md"
+        className="flex items-center px-4 py-2 text-white bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all duration-300"
       >
-        Instructions
+        <span className="mr-2">Instructions</span>
         <svg 
-          className={`w-4 h-4 ml-2 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24" 
@@ -25,18 +25,18 @@ export default function NavMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-48 mt-2 bg-black border border-white rounded-md shadow-lg">
+        <div className="absolute right-0 z-10 w-48 mt-2 bg-black/95 border border-white/10 rounded-lg shadow-xl backdrop-blur-sm animate-fade-in">
           <div className="py-1">
             <Link 
               href="/instructions/ios" 
-              className="block px-4 py-2 text-white hover:bg-gray-800"
+              className="block px-4 py-3 text-white hover:bg-white/5 transition-colors duration-200"
               onClick={() => setIsOpen(false)}
             >
               iOS Instructions
             </Link>
             <Link 
               href="/instructions/android" 
-              className="block px-4 py-2 text-white hover:bg-gray-800"
+              className="block px-4 py-3 text-white hover:bg-white/5 transition-colors duration-200"
               onClick={() => setIsOpen(false)}
             >
               Android Instructions
