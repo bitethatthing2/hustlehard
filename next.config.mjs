@@ -1,4 +1,10 @@
-import withPWA from 'next-pwa'
+let withPWA;
+try {
+  withPWA = (await import('next-pwa')).default;
+} catch (e) {
+  withPWA = (config) => config;
+  console.warn('next-pwa not found, continuing without PWA support');
+}
 
 /** @type {import('next').NextConfig} */
 const config = {

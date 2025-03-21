@@ -9,7 +9,7 @@
     "dev:trusted": "node server.js",
     "generate-certs": "node generate-certs.js",
     "setup-trusted-dev": "npm run generate-certs && npm run dev:trusted",
-    "build": "next build",
+    "build": "npm install && next build",
     "netlify-build": "cross-env next build && node netlify-build.js",
     "start": "next start",
     "lint": "next lint"
@@ -27,6 +27,7 @@
     "firebase-admin": "^12.2.0",
     "fs-extra": "^11.2.0",
     "lucide-react": "^0.394.0",
+    "next-pwa": "^5.6.0",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
