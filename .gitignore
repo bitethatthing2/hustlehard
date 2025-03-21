@@ -40,3 +40,6 @@ service_key.json
 
 # Firebase service account key
 service_key.json
+
+# Local Netlify folder
+.netlify
