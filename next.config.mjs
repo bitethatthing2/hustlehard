@@ -98,6 +98,43 @@ const withPWAConfig = withPWA({
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
-})
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/thesidehustlebar\.netlify\.app\/.*$/,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'app-cache',
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        }
+      }
+    },
+    {
+      urlPattern: /\.(png|jpg|jpeg|svg|gif|ico)$/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'image-cache',
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 7 * 24 * 60 * 60 // 7 days
+        }
+      }
+    },
+    {
+      urlPattern: /\/only_these\/.*/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'static-cache',
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+        }
+      }
+    }
+  ],
+  buildExcludes: [/middleware-manifest\.json$/],
+  publicExcludes: ['!noprecache/**/*']
+});
 
 export default withPWAConfig(config);
