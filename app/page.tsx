@@ -9,6 +9,8 @@ import Image from 'next/image';
 export default function Home(): React.ReactElement {
   const [deviceType, setDeviceType] = useState<'unknown' | 'ios' | 'android'>('unknown');
   const [notificationStatus, setNotificationStatus] = useState<'idle' | 'requested' | 'granted' | 'denied'>('idle');
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     // Detect device type
@@ -19,6 +21,19 @@ export default function Home(): React.ReactElement {
     } else if (/android/i.test(userAgent)) {
       setDeviceType('android');
     }
+
+    // Handle PWA install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    });
+
+    // Reset installable state when PWA is installed
+    window.addEventListener('appinstalled', () => {
+      setDeferredPrompt(null);
+      setIsInstallable(false);
+    });
   }, []);
 
   const requestNotificationPermission = async () => {
@@ -41,6 +56,20 @@ export default function Home(): React.ReactElement {
     } catch (error) {
       console.error('Error requesting notification permission:', error);
       setNotificationStatus('denied');
+    }
+  };
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to install prompt: ${outcome}`);
+      setDeferredPrompt(null);
+      setIsInstallable(false);
+    } catch (error) {
+      console.error('Error installing PWA:', error);
     }
   };
 
@@ -69,18 +98,27 @@ export default function Home(): React.ReactElement {
           Your go-to spot for side hustle opportunities
         </p>
 
-        {/* Installation Instructions */}
+        {/* Installation Section */}
         {deviceType !== 'unknown' && (
-          <div className="w-full max-w-md p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10 shadow-xl animate-slide-up">
+          <div className="w-full max-w-md p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10 shadow-xl animate-slide-up space-y-4">
             <p className="text-white mb-4 text-center text-lg">
-              Install our app on your {deviceType === 'ios' ? 'iOS' : 'Android'} device
+              {deviceType === 'ios' ? 'Add to Home Screen' : 'Install App'}
             </p>
-            <Link 
-              href={deviceType === 'ios' ? '/instructions/ios' : '/instructions/android'} 
-              className="w-full bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-lg inline-block text-center font-semibold transition-all duration-300 transform hover:scale-105"
-            >
-              View Installation Guide
-            </Link>
+            {deviceType === 'android' && isInstallable ? (
+              <button
+                onClick={handleInstallClick}
+                className="w-full bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-lg inline-block text-center font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                Install App
+              </button>
+            ) : (
+              <Link 
+                href={deviceType === 'ios' ? '/instructions/ios' : '/instructions/android'} 
+                className="w-full bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-lg inline-block text-center font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                {deviceType === 'ios' ? 'How to Add to Home Screen' : 'How to Install'}
+              </Link>
+            )}
           </div>
         )}
 
