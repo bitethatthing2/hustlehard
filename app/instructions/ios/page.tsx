@@ -46,7 +46,7 @@ export default function IOSInstructions(): React.ReactElement {
           {/* Quick Start Guide */}
           <div className="bg-green-900/30 rounded-lg p-6 backdrop-blur-sm border border-green-500/20">
             <h2 className="text-xl font-bold mb-2 text-green-400">👋 Quick Start</h2>
-            <p className="text-gray-300">You're just two quick steps away from getting set up:</p>
+            <p className="text-gray-300">You&apos;re just two quick steps away from getting set up:</p>
             <div className="mt-3 space-y-2">
               <p className="flex items-center text-gray-300">
                 <span className="inline-block w-6 h-6 bg-green-500/20 rounded-full text-center mr-2">1</span>
@@ -87,14 +87,14 @@ export default function IOSInstructions(): React.ReactElement {
                     <li className="flex items-start">
                       <span className="text-blue-400 mr-2 mt-1">2.</span>
                       <div>
-                        <p className="font-medium">Find "Add to Home Screen"</p>
+                        <p className="font-medium">Find &quot;Add to Home Screen&quot;</p>
                         <p className="text-xs text-gray-400 mt-1">Scroll down in the share menu if needed</p>
                       </div>
                     </li>
                     <li className="flex items-start">
                       <span className="text-blue-400 mr-2 mt-1">3.</span>
                       <div>
-                        <p className="font-medium">Tap "Add"</p>
+                        <p className="font-medium">Tap &quot;Add&quot;</p>
                         <p className="text-xs text-gray-400 mt-1">The app will appear on your home screen</p>
                       </div>
                     </li>
@@ -161,8 +161,8 @@ export default function IOSInstructions(): React.ReactElement {
                 <svg className="w-8 h-8 mx-auto text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p className="text-lg font-medium text-green-400">You're all set! 🎉</p>
-                <p className="text-sm text-gray-300">You'll now receive important updates and announcements</p>
+                <p className="text-lg font-medium text-green-400">You&apos;re all set! 🎉</p>
+                <p className="text-sm text-gray-300">You&apos;ll now receive important updates and announcements</p>
               </div>
             )}
             
@@ -181,7 +181,7 @@ export default function IOSInstructions(): React.ReactElement {
                     <li>Open iOS Settings</li>
                     <li>Scroll down and tap Notifications</li>
                     <li>Find this app in the list</li>
-                    <li>Toggle "Allow Notifications" on</li>
+                    <li>Toggle &quot;Allow Notifications&quot; on</li>
                   </ol>
                 </div>
               </div>
