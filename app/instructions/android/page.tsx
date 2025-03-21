@@ -75,15 +75,15 @@ export default function AndroidInstructions(): React.ReactElement {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-1">Look for the install prompt</h3>
-                  <p className="text-gray-400 text-sm mb-2">You'll see one of these options:</p>
+                  <p className="text-gray-400 text-sm mb-2">You&apos;ll see one of these options:</p>
                   <ul className="space-y-2 text-sm text-gray-300">
                     <li className="flex items-center">
                       <span className="text-blue-400 mr-2">•</span>
-                      A banner at the bottom saying "Add to Home Screen"
+                      A banner at the bottom saying &quot;Add to Home Screen&quot;
                     </li>
                     <li className="flex items-center">
                       <span className="text-blue-400 mr-2">•</span>
-                      Or tap the menu (⋮) and select "Install App"
+                      Or tap the menu (⋮) and select &quot;Install App&quot;
                     </li>
                   </ul>
                 </div>
@@ -150,7 +150,7 @@ export default function AndroidInstructions(): React.ReactElement {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <p className="text-lg font-medium text-green-400">You&apos;re all set! 🎉</p>
-                  <p className="text-sm text-gray-300">You'll now receive important updates and announcements</p>
+                  <p className="text-sm text-gray-300">You&apos;ll now receive important updates and announcements</p>
                 </div>
               )}
               
