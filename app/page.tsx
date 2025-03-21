@@ -50,7 +50,7 @@ export default function Home(): React.ReactElement {
         {/* Logo Display */}
         <div className="relative w-64 h-64 md:w-96 md:h-96 animate-pulse-slow">
           <Image
-            src="/wolf_logo.png"
+            src="/only_these/logos/wolf_logo.png"
             alt="Side Hustle Bar Logo"
             width={384}
             height={384}

@@ -39,8 +39,27 @@ async function main() {
     } else {
       console.warn('Warning: only_these directory not found in public folder!');
     }
+
+    // Step 4: Ensure logos directory is copied
+    console.log('Ensuring logo assets are available...');
+    if (await fs.pathExists('public/only_these/logos')) {
+      await fs.ensureDir('.next/only_these/logos');
+      const logoFiles = await fs.readdir('public/only_these/logos');
+      console.log(`Found ${logoFiles.length} files in logos directory`);
+      
+      // Copy each logo file
+      for (const file of logoFiles) {
+        const srcPath = path.join('public/only_these/logos', file);
+        const destPath = path.join('.next/only_these/logos', file);
+        console.log(`Copying ${srcPath} -> ${destPath}`);
+        await fs.copy(srcPath, destPath, { overwrite: true });
+      }
+      console.log('Logo assets copied successfully!');
+    } else {
+      console.warn('Warning: logos directory not found in only_these folder!');
+    }
     
-    // Step 4: Also copy specific files to the root of .next
+    // Step 5: Also copy specific files to the root of .next
     const criticalFiles = [
       'firebase-messaging-sw.js',
       'manifest.json',
@@ -58,7 +77,7 @@ async function main() {
       }
     }
     
-    // Step 5: Create a special directory directly in .next to mirror /only_these
+    // Step 6: Create a special directory directly in .next to mirror /only_these
     await fs.ensureDir('.next/only_these');
     if (await fs.pathExists('public/only_these')) {
       await fs.copy('public/only_these', '.next/only_these', { 
@@ -67,7 +86,7 @@ async function main() {
       console.log('Created special only_these directory in .next root');
     }
     
-    // Step 6: List files in .next/only_these to verify
+    // Step 7: List files in .next/only_these to verify
     if (await fs.pathExists('.next/only_these')) {
       const copiedFiles = await fs.readdir('.next/only_these');
       console.log('Files in .next/only_these:', copiedFiles);
