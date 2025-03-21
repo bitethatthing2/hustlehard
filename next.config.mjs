@@ -1,5 +1,7 @@
+import withPWA from 'next-pwa'
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   env: {
     NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -18,6 +20,10 @@ const nextConfig = {
   
   // Output standalone build to ensure assets are included
   output: 'standalone',
+  
+  images: {
+    domains: ['firebasestorage.googleapis.com'],
+  },
   
   // Add headers for service worker and cross-origin isolation
   async headers() {
@@ -68,8 +74,24 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/only_these/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ];
   },
 };
 
-export default nextConfig;
+const withPWAConfig = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+})
+
+export default withPWAConfig(config);
