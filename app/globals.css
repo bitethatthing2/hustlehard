@@ -278,3 +278,12 @@
   height: 100%;
   border: 0;
 }
+
+.map-iframe-hidden {
+  opacity: 0;
+}
+
+.map-iframe-visible {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}

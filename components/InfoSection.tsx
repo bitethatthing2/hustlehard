@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Bell } from 'lucide-react';
 import { useLocationData } from '@/hooks/useLocationData';
 import { useLocation } from '@/contexts/LocationContext';
@@ -8,11 +8,37 @@ const InfoSection: React.FC = () => {
   const { currentLocation } = useLocationData();
   const { selectedLocation } = useLocation();
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapVisible, setMapVisible] = useState(false);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
   
   // Google Maps embed URL based on selected location
   const mapEmbedUrl = selectedLocation === 'portland' 
     ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d359667.60700576345!2d-123.163746527526!3d45.22952618954202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742074975056!5m2!1sen!2sus"
     : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.155837503909!2d-123.04139512382973!3d44.940499868228336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742074922603!5m2!1sen!2sus";
+  
+  // Use IntersectionObserver to detect when the map is in view
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting) {
+        setMapVisible(true);
+        observer.disconnect();
+      }
+    }, {
+      threshold: 0.1, // 10% of the element is visible
+      rootMargin: '200px', // Start loading when element is 200px from viewport
+    });
+    
+    observer.observe(mapContainerRef.current);
+    
+    return () => {
+      if (mapContainerRef.current) {
+        observer.unobserve(mapContainerRef.current);
+      }
+    };
+  }, []);
   
   const handleMapLoad = () => {
     setMapLoaded(true);
@@ -68,7 +94,7 @@ const InfoSection: React.FC = () => {
         </div>
         
         {/* Google Maps embed */}
-        <div className="mt-8 mb-12 w-full">
+        <div className="mt-8 mb-12 w-full" ref={mapContainerRef}>
           <div className="bg-black border border-gray-800 hover:border-bar-accent/30 rounded-lg overflow-hidden holographic-border">
             <div className="p-4 md:p-6 pb-2">
               <h3 className="font-display text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 text-center">Find Us</h3>
@@ -78,17 +104,17 @@ const InfoSection: React.FC = () => {
                     Loading map...
                   </div>
                 )}
-                <iframe 
-                  src={mapEmbedUrl}
-                  className="map-iframe w-full h-full"
-                  allowFullScreen 
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title={`${currentLocation.name} Map`}
-                  onLoad={handleMapLoad}
-                  onError={handleMapError}
-                  loading="lazy"
-                  style={{ opacity: mapLoaded ? 1 : 0 }}
-                ></iframe>
+                {mapVisible && (
+                  <iframe 
+                    src={mapEmbedUrl}
+                    className={`map-iframe w-full h-full ${mapLoaded ? 'map-iframe-visible' : 'map-iframe-hidden'}`}
+                    allowFullScreen 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`${currentLocation.name} Map`}
+                    onLoad={handleMapLoad}
+                    onError={handleMapError}
+                  ></iframe>
+                )}
               </AspectRatio>
             </div>
           </div>
