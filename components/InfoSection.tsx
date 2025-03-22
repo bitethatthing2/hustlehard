@@ -17,19 +17,17 @@ const InfoSection: React.FC = () => {
   const { selectedLocation } = useLocation();
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapVisible, setMapVisible] = useState(false);
-  const [useStaticMap, setUseStaticMap] = useState(false);
-  const [loadAttempts, setLoadAttempts] = useState(0);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   
-  // Google Maps embed URL based on selected location
-  const mapEmbedUrl = selectedLocation === 'portland' 
-    ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus"
-    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742617510961!5m2!1sen!2sus";
+  // Direct link to maps
+  const directMapsUrl = selectedLocation === 'portland' 
+    ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&z=15"
+    : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15";
   
-  // Static map image URLs as fallback
-  const staticMapUrl = selectedLocation === 'portland'
-    ? "https://maps.googleapis.com/maps/api/staticmap?center=Side+Hustle+Portland+OR&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7CSide+Hustle+Portland+OR&key=AIzaSyDgj1UEy7_iTt8-Xg_6s6-H9ASiFKCELwM"
-    : "https://maps.googleapis.com/maps/api/staticmap?center=Side+Hustle+Bar+Salem+OR&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7CSide+Hustle+Bar+Salem+OR&key=AIzaSyDgj1UEy7_iTt8-Xg_6s6-H9ASiFKCLwM";
+  // Much simpler URL format that works in more browsers
+  const simpleMapUrl = selectedLocation === 'portland'
+    ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&output=embed"
+    : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&output=embed";
   
   // Use IntersectionObserver to detect when the map is in view
   useEffect(() => {
@@ -57,58 +55,37 @@ const InfoSection: React.FC = () => {
   
   // Effect to handle iframe reference after it's created
   useEffect(() => {
-    if (mapVisible && !useStaticMap) {
-      // Add a small delay to ensure the iframe is in the DOM
-      const timer = setTimeout(() => {
-        const iframe = document.querySelector('.map-iframe') as HTMLIFrameElement;
-        if (iframe && window.ensureIframeLoads) {
-          window.ensureIframeLoads(iframe);
+    if (mapVisible) {
+      // Create a new iframe element for simplicity and reliability 
+      const container = document.querySelector('.map-container');
+      if (container) {
+        const existingIframe = container.querySelector('iframe');
+        if (existingIframe) {
+          existingIframe.remove();
         }
-      }, 100);
-      
-      return () => clearTimeout(timer);
+
+        const iframe = document.createElement('iframe');
+        iframe.src = simpleMapUrl;
+        iframe.className = 'map-iframe w-full h-full';
+        iframe.style.border = '0';
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.loading = 'lazy';
+        
+        iframe.onload = () => {
+          setMapLoaded(true);
+          iframe.classList.add('map-iframe-visible');
+        };
+        
+        container.appendChild(iframe);
+      }
     }
-  }, [mapVisible, useStaticMap]);
+  }, [mapVisible, simpleMapUrl]);
   
   // Reset map state when location changes
   useEffect(() => {
     setMapLoaded(false);
-    setUseStaticMap(false);
-    setLoadAttempts(0);
   }, [selectedLocation]);
-  
-  const handleMapLoad = () => {
-    setMapLoaded(true);
-    setLoadAttempts(0);
-  };
-
-  const handleMapError = (e: React.SyntheticEvent<HTMLIFrameElement, Event>) => {
-    console.error('Error loading map', e);
-    setMapLoaded(false);
-    
-    // Try reloading the iframe a few times before falling back to static image
-    setLoadAttempts(prev => {
-      const newAttempts = prev + 1;
-      if (newAttempts >= 3) {
-        setUseStaticMap(true);
-        return 0;
-      }
-      
-      // Try reloading the iframe
-      const iframe = e.target as HTMLIFrameElement;
-      if (iframe) {
-        setTimeout(() => {
-          const currentSrc = iframe.src;
-          iframe.src = 'about:blank';
-          setTimeout(() => {
-            iframe.src = currentSrc;
-          }, 50);
-        }, 1000);
-      }
-      
-      return newAttempts;
-    });
-  };
   
   return (
     <section className="py-12 md:py-16 bg-black w-full">
@@ -159,64 +136,24 @@ const InfoSection: React.FC = () => {
           <div className="bg-black border border-gray-800 hover:border-bar-accent/30 rounded-lg overflow-hidden holographic-border">
             <div className="p-4 md:p-6 pb-2">
               <h3 className="font-display text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 text-center">Find Us</h3>
-              <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md map-container">
-                {!mapLoaded && !useStaticMap && (
+              <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md map-container" style={{ minHeight: "300px" }}>
+                {!mapLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white text-center p-4">
                     Loading map...
                   </div>
                 )}
-                
-                {useStaticMap ? (
-                  // Fallback static map image
-                  <div className="w-full h-full relative">
-                    <Image 
-                      src={staticMapUrl}
-                      alt={`Map of ${currentLocation.name}`}
-                      fill
-                      style={{objectFit: 'cover'}}
-                      className="rounded-md"
-                    />
-                  </div>
-                ) : (
-                  // Interactive map iframe
-                  mapVisible && (
-                    <iframe 
-                      src={mapEmbedUrl}
-                      className={`map-iframe w-full h-full ${mapLoaded ? 'map-iframe-visible' : 'map-iframe-hidden'}`}
-                      allowFullScreen 
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title={`${currentLocation.name} Map`}
-                      onLoad={handleMapLoad}
-                      onError={handleMapError}
-                    ></iframe>
-                  )
-                )}
+                {/* The iframe will be injected by the useEffect */}
               </AspectRatio>
               {/* Direct link to Google Maps */}
               <div className="text-center mt-2">
                 <a 
-                  href={selectedLocation === 'portland' 
-                    ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR"
-                    : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR"}
+                  href={directMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-bar-accent text-sm hover:underline"
                 >
                   Open in Google Maps
                 </a>
-                {useStaticMap && (
-                  <button 
-                    onClick={() => {
-                      setUseStaticMap(false);
-                      setMapLoaded(false);
-                      setLoadAttempts(0);
-                    }}
-                    className="text-bar-accent text-sm hover:underline ml-4"
-                  >
-                    Try interactive map
-                  </button>
-                )}
               </div>
             </div>
           </div>

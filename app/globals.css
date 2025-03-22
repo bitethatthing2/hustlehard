@@ -327,6 +327,7 @@
   [class*="eapps-instagram-"] {
     forced-color-adjust: none;
     -webkit-appearance: none;
+    appearance: none;
     -webkit-font-smoothing: antialiased;
     color-scheme: light;
     -webkit-print-color-adjust: exact;
