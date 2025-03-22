@@ -16,7 +16,7 @@ export default function MainMenuButton() {
       >
         <div className="rounded-md overflow-hidden mb-1">
           <Image 
-            src="/only_these/logos/menu_logo.jpg" 
+            src="/only_these/logos/menu_icon.png" 
             alt="Menu" 
             width={48} 
             height={48}
