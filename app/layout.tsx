@@ -76,7 +76,7 @@ export default function RootLayout({
         <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>
       <body className={`${inter.className} bg-black min-h-screen`}>
-        <header className="relative bg-black/50 backdrop-blur-md border-b border-white/10">
+        <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <div className="h-12 w-auto">
               <Image
@@ -93,7 +93,7 @@ export default function RootLayout({
           </div>
         </header>
         
-        <main>
+        <main className="pt-16">
           <Toaster />
           {children}
         </main>
