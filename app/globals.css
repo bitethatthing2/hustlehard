@@ -230,6 +230,28 @@
   width: 100%;
 }
 
+/* Common predefined aspect ratios */
+.aspect-ratio-1-1 { padding-bottom: 100%; }
+.aspect-ratio-4-3 { padding-bottom: 75%; }
+.aspect-ratio-16-9 { padding-bottom: 56.25%; }
+.aspect-ratio-21-9 { padding-bottom: 42.86%; }
+.aspect-ratio-3-2 { padding-bottom: 66.67%; }
+.aspect-ratio-3-4 { padding-bottom: 133.33%; }
+.aspect-ratio-9-16 { padding-bottom: 177.78%; }
+.aspect-ratio-2-1 { padding-bottom: 50%; }
+.aspect-ratio-1-2 { padding-bottom: 200%; }
+.aspect-ratio-5-4 { padding-bottom: 80%; }
+.aspect-ratio-4-5 { padding-bottom: 125%; }
+.aspect-ratio-5-3 { padding-bottom: 60%; }
+.aspect-ratio-3-5 { padding-bottom: 166.67%; }
+.aspect-ratio-7-5 { padding-bottom: 71.43%; }
+.aspect-ratio-5-7 { padding-bottom: 140%; }
+
+/* For custom ratios, we'll have to use JavaScript-generated classes */
+[style*="--aspect-ratio"] > .aspect-ratio-spacer {
+  padding-bottom: calc(100% / (var(--aspect-ratio)));
+}
+
 .aspect-ratio-content {
   position: absolute;
   top: 0;
