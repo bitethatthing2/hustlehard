@@ -3,7 +3,6 @@ import { MapPin, Bell } from 'lucide-react';
 import { useLocationData } from '@/hooks/useLocationData';
 import { useLocation } from '@/contexts/LocationContext';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from 'next/image';
 
 // Declare the global window type extension
 declare global {
@@ -16,76 +15,41 @@ const InfoSection: React.FC = () => {
   const { currentLocation } = useLocationData();
   const { selectedLocation } = useLocation();
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapVisible, setMapVisible] = useState(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Google Maps embed code for each location
+  const portlandMapEmbed = (
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus"
+      width="600"
+      height="450"
+      style={{ border: 0 }}
+      allowFullScreen
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      className="w-full h-full map-iframe"
+      onLoad={() => setMapLoaded(true)}
+    />
+  );
+
+  const salemMapEmbed = (
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742618818338!5m2!1sen!2sus"
+      width="600"
+      height="450"
+      style={{ border: 0 }}
+      allowFullScreen
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      className="w-full h-full map-iframe"
+      onLoad={() => setMapLoaded(true)}
+    />
+  );
   
   // Direct link to maps
   const directMapsUrl = selectedLocation === 'portland' 
     ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&z=15"
     : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15";
-  
-  // Much simpler URL format that works in more browsers
-  const simpleMapUrl = selectedLocation === 'portland'
-    ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&output=embed"
-    : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&output=embed";
-  
-  // Use IntersectionObserver to detect when the map is in view
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-      const [entry] = entries;
-      if (entry.isIntersecting) {
-        setMapVisible(true);
-        observer.disconnect();
-      }
-    }, {
-      threshold: 0.1, // 10% of the element is visible
-      rootMargin: '200px', // Start loading when element is 200px from viewport
-    });
-    
-    observer.observe(mapContainerRef.current);
-    
-    return () => {
-      if (mapContainerRef.current) {
-        observer.unobserve(mapContainerRef.current);
-      }
-    };
-  }, []);
-  
-  // Effect to handle iframe reference after it's created
-  useEffect(() => {
-    if (mapVisible) {
-      // Create a new iframe element for simplicity and reliability 
-      const container = document.querySelector('.map-container');
-      if (container) {
-        const existingIframe = container.querySelector('iframe');
-        if (existingIframe) {
-          existingIframe.remove();
-        }
-
-        const iframe = document.createElement('iframe');
-        iframe.src = simpleMapUrl;
-        iframe.className = 'map-iframe w-full h-full';
-        iframe.style.border = '0';
-        iframe.width = '100%';
-        iframe.height = '100%';
-        iframe.loading = 'lazy';
-        
-        iframe.onload = () => {
-          setMapLoaded(true);
-          iframe.classList.add('map-iframe-visible');
-        };
-        
-        container.appendChild(iframe);
-      }
-    }
-  }, [mapVisible, simpleMapUrl]);
-  
-  // Reset map state when location changes
-  useEffect(() => {
-    setMapLoaded(false);
-  }, [selectedLocation]);
   
   return (
     <section className="py-12 md:py-16 bg-black w-full">
@@ -142,7 +106,7 @@ const InfoSection: React.FC = () => {
                     Loading map...
                   </div>
                 )}
-                {/* The iframe will be injected by the useEffect */}
+                {selectedLocation === 'portland' ? portlandMapEmbed : salemMapEmbed}
               </AspectRatio>
               {/* Direct link to Google Maps */}
               <div className="text-center mt-2">
