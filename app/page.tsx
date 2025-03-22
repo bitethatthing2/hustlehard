@@ -9,10 +9,15 @@ import GoogleReviewsSection from '@/components/reviews/GoogleReviewsSection';
 import { LocationProvider } from '@/contexts/LocationContext';
 import dynamic from 'next/dynamic';
 
-// Import HeroSection dynamically to avoid hydration issues
+// Import components dynamically to avoid hydration issues
 const HeroSection = dynamic(() => import('@/components/HeroSection'), {
   ssr: false,
   loading: () => <div className="min-h-[80vh] flex items-center justify-center bg-black">Loading...</div>
+});
+
+const InfoSection = dynamic(() => import('@/components/InfoSection'), {
+  ssr: false,
+  loading: () => <div className="py-12 flex items-center justify-center bg-black">Loading location info...</div>
 });
 
 export default function Home(): React.ReactElement {
@@ -87,6 +92,9 @@ export default function Home(): React.ReactElement {
       <main className="flex min-h-screen flex-col items-center justify-between bg-black">
         {/* Hero Section */}
         <HeroSection />
+        
+        {/* Info Section with Location Details */}
+        <InfoSection />
         
         {/* Installation Section */}
         <div className="w-full bg-black py-12">

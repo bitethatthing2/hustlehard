@@ -54,6 +54,9 @@ const config = {
         },
         'bar-accent': 'hsl(var(--bar-accent))',
       },
+      fontFamily: {
+        'display': ['Inter', 'sans-serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
