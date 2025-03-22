@@ -13,8 +13,8 @@ const InfoSection: React.FC = () => {
   
   // Google Maps embed URL based on selected location
   const mapEmbedUrl = selectedLocation === 'portland' 
-    ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d359667.60700576345!2d-123.163746527526!3d45.22952618954202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742074975056!5m2!1sen!2sus"
-    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.155837503909!2d-123.04139512382973!3d44.940499868228336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742074922603!5m2!1sen!2sus";
+    ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus"
+    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742617510961!5m2!1sen!2sus";
   
   // Use IntersectionObserver to detect when the map is in view
   useEffect(() => {
