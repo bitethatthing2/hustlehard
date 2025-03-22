@@ -12,7 +12,7 @@
     Cross-Origin-Embedder-Policy = "credentialless"
     Cross-Origin-Opener-Policy = "same-origin"
     Access-Control-Allow-Origin = "*"
-    Content-Security-Policy = "default-src 'self' https://*.elfsight.com https://*.googleusercontent.com https://*.instagram.com https://*.cdninstagram.com; img-src 'self' data: https://*.googleusercontent.com https://*.instagram.com https://*.cdninstagram.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.elfsight.com; style-src 'self' 'unsafe-inline' https://*.elfsight.com; connect-src 'self' https://*.elfsight.com https://*.googleapis.com https://*.instagram.com;"
+    Content-Security-Policy = "default-src 'self' https://*.elfsight.com https://*.googleusercontent.com https://*.instagram.com https://*.cdninstagram.com https://*.gstatic.com https://*.firebase.googleapis.com; img-src 'self' data: https://*.googleusercontent.com https://*.instagram.com https://*.cdninstagram.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.elfsight.com https://*.gstatic.com https://*.firebase.googleapis.com; style-src 'self' 'unsafe-inline' https://*.elfsight.com; connect-src 'self' https://*.elfsight.com https://*.googleapis.com https://*.instagram.com https://*.gstatic.com https://*.firebase.googleapis.com;"
     Permissions-Policy = "interest-cohort=()"
 
 [[headers]]
