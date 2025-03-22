@@ -56,9 +56,6 @@ export default function RootLayout({
         <Script src="/env-config.js" strategy="beforeInteractive" />
         {/* Load tracking fix script early */}
         <Script src="/tracking-fix.js" strategy="beforeInteractive" />
-        {/* Load map fix scripts */}
-        <Script src="/map-fix.js" strategy="beforeInteractive" />
-        <Script src="/map-fix-direct.js" strategy="afterInteractive" />
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
         {/* Load Elfsight Widget */}
