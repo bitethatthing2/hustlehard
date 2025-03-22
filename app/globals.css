@@ -247,10 +247,22 @@
 .aspect-ratio-7-5 { padding-bottom: 71.43%; }
 .aspect-ratio-5-7 { padding-bottom: 140%; }
 
-/* For custom ratios, we'll have to use JavaScript-generated classes */
-[style*="--aspect-ratio"] > .aspect-ratio-spacer {
-  padding-bottom: calc(100% / (var(--aspect-ratio)));
-}
+/* Custom aspect ratios using data attributes */
+.aspect-ratio-custom[data-ratio="1.25"] .aspect-ratio-spacer { padding-bottom: 80%; }
+.aspect-ratio-custom[data-ratio="1.33"] .aspect-ratio-spacer { padding-bottom: 75.19%; }
+.aspect-ratio-custom[data-ratio="1.5"] .aspect-ratio-spacer { padding-bottom: 66.67%; }
+.aspect-ratio-custom[data-ratio="1.6"] .aspect-ratio-spacer { padding-bottom: 62.5%; }
+.aspect-ratio-custom[data-ratio="1.66"] .aspect-ratio-spacer { padding-bottom: 60.24%; }
+.aspect-ratio-custom[data-ratio="1.75"] .aspect-ratio-spacer { padding-bottom: 57.14%; }
+.aspect-ratio-custom[data-ratio="1.77"] .aspect-ratio-spacer { padding-bottom: 56.5%; }
+.aspect-ratio-custom[data-ratio="1.78"] .aspect-ratio-spacer { padding-bottom: 56.25%; }
+.aspect-ratio-custom[data-ratio="2"] .aspect-ratio-spacer { padding-bottom: 50%; }
+.aspect-ratio-custom[data-ratio="2.33"] .aspect-ratio-spacer { padding-bottom: 42.92%; }
+.aspect-ratio-custom[data-ratio="2.35"] .aspect-ratio-spacer { padding-bottom: 42.55%; }
+.aspect-ratio-custom[data-ratio="2.4"] .aspect-ratio-spacer { padding-bottom: 41.67%; }
+.aspect-ratio-custom[data-ratio="2.5"] .aspect-ratio-spacer { padding-bottom: 40%; }
+.aspect-ratio-custom[data-ratio="2.6"] .aspect-ratio-spacer { padding-bottom: 38.46%; }
+.aspect-ratio-custom[data-ratio="3"] .aspect-ratio-spacer { padding-bottom: 33.33%; }
 
 .aspect-ratio-content {
   position: absolute;

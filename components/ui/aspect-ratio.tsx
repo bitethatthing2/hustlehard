@@ -8,6 +8,7 @@ export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
   ({ ratio, className, children, ...props }, ref) => {
     // Determine aspect ratio class for common ratios
     let ratioClass = "";
+    let isCustomRatio = false;
     
     // Map common ratios to predefined classes
     if (ratio === 1) ratioClass = "aspect-ratio-1-1";
@@ -25,12 +26,28 @@ export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
     else if (ratio === 3/5) ratioClass = "aspect-ratio-3-5";
     else if (ratio === 7/5) ratioClass = "aspect-ratio-7-5";
     else if (ratio === 5/7) ratioClass = "aspect-ratio-5-7";
+    else isCustomRatio = true;
     
-    // For custom ratios, we'll use CSS variables
-    const style = !ratioClass ? { "--aspect-ratio": ratio } as React.CSSProperties : undefined;
+    // For 16:9 ratio (very common), we'll use the dedicated class
+    if (Math.abs(ratio - 16/9) < 0.01) {
+      ratioClass = "aspect-ratio-16-9";
+      isCustomRatio = false;
+    }
+    
+    const wrapperClasses = isCustomRatio
+      ? `aspect-ratio-wrapper aspect-ratio-custom ${className || ''}`
+      : `aspect-ratio-wrapper ${className || ''}`;
+      
+    // Round the ratio to the nearest 0.01 for stable data attributes
+    const roundedRatio = isCustomRatio ? Math.round(ratio * 100) / 100 : null;
     
     return (
-      <div ref={ref} className={`aspect-ratio-wrapper ${className || ''}`} style={style} {...props}>
+      <div 
+        ref={ref} 
+        className={wrapperClasses}
+        {...(isCustomRatio && roundedRatio ? { 'data-ratio': roundedRatio.toString() } : {})}
+        {...props}
+      >
         <div className={`aspect-ratio-spacer ${ratioClass}`} />
         <div className="aspect-ratio-content">
           {children}
