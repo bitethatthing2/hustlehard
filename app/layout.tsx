@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Script from "next/script";
 import NavMenu from "@/components/NavMenu";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,7 +60,16 @@ export default function RootLayout({
       <body className={`${inter.className} bg-black min-h-screen`}>
         <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-white">The Side Hustle Bar</h1>
+            <div className="h-8 w-auto">
+              <Image
+                src="/only_these/logos/logo.png"
+                alt="Side Hustle Bar Logo"
+                width={32}
+                height={32}
+                className="h-full w-auto"
+                priority
+              />
+            </div>
             <NavMenu />
           </div>
         </header>
