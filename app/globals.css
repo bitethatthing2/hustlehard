@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -33,6 +33,9 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Custom colors for bar elements */
+    --bar-accent: 280 75% 60%;
   }
 
   .dark {
@@ -75,41 +78,37 @@
   }
 }
 
-/* Custom Animations */
+/* Custom animations */
 @keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
-    transform: scale(1);
   }
   50% {
-    opacity: 0.8;
-    transform: scale(0.98);
+    opacity: 0.7;
   }
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 @keyframes slide-up {
   from {
-    opacity: 0;
     transform: translateY(20px);
+    opacity: 0;
   }
   to {
-    opacity: 1;
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
-/* Custom Classes */
+/* Utility classes for animations */
 .animate-pulse-slow {
   animation: pulse-slow 3s ease-in-out infinite;
 }
@@ -119,19 +118,105 @@
 }
 
 .animate-fade-in-delay {
-  animation: fade-in 1s ease-out 0.3s forwards;
   opacity: 0;
+  animation: fade-in 1s ease-out 0.3s forwards;
 }
 
 .animate-fade-in-delay-2 {
-  animation: fade-in 1s ease-out 0.6s forwards;
   opacity: 0;
+  animation: fade-in 1s ease-out 0.6s forwards;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.8s ease-out forwards;
+  opacity: 0;
+  animation: slide-up 0.8s ease-out 0.4s forwards;
 }
 
+/* Drop shadow effect for the logo */
 .filter.drop-shadow-glow {
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+}
+
+/* Custom styles for the Bar */
+.text-bar-accent {
+  color: hsl(var(--bar-accent));
+}
+
+.bg-bar-accent {
+  background-color: hsl(var(--bar-accent));
+}
+
+/* Animation delays */
+.animation-delay-700 {
+  animation-delay: 700ms;
+}
+
+.animation-delay-1300 {
+  animation-delay: 1300ms;
+}
+
+/* Custom pulse animation for neon effects */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Holographic border effect */
+.holographic-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    rgba(255, 0, 255, 0.1) 0%, 
+    rgba(0, 255, 255, 0.1) 25%, 
+    rgba(255, 255, 0, 0.1) 50%, 
+    rgba(255, 0, 255, 0.1) 75%, 
+    rgba(0, 255, 255, 0.1) 100%);
+  z-index: -1;
+  border-radius: inherit;
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Section title styling */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  max-width: 800px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, hsl(var(--bar-accent)), transparent);
 }

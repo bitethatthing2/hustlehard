@@ -56,6 +56,8 @@ export default function RootLayout({
         <Script src="/env-config.js" strategy="beforeInteractive" />
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
+        {/* Load Elfsight Widget */}
+        <Script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer />
       </head>
       <body className={`${inter.className} bg-black min-h-screen`}>
         <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
