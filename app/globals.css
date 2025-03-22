@@ -272,58 +272,6 @@
   left: 0;
 }
 
-/* Map container styles */
-.map-container {
-  min-height: 300px;
-  position: relative;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
-  overflow: hidden;
-  border-radius: 0.375rem; /* equivalent to rounded-md */
-}
-
-.map-loading-indicator {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(31, 41, 55); /* bg-gray-800 */
-  color: white;
-  text-align: center;
-  padding: 1rem;
-}
-
-.map-iframe-container {
-  position: absolute;
-  inset: 0;
-  background-color: rgb(17, 24, 39); /* bg-gray-900 */
-}
-
-/* Additional iframe styles (existing, but enhanced) */
-.map-iframe {
-  width: 100% !important;
-  height: 100% !important;
-  border: 0 !important;
-  min-height: 300px !important;
-  display: block !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-}
-
-.map-iframe-hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.map-iframe-visible {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-}
-
 /* Instagram Feed styles */
 .elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c {
   width: 100%;
