@@ -18,6 +18,18 @@
     Content-Type = "image/png"
 
 [[headers]]
+  for = "/only_these/ios/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
+
+[[headers]]
+  for = "/only_these/android/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/png"
+
+[[headers]]
   for = "/*.png"
   [headers.values]
     Content-Type = "image/png"

@@ -28,7 +28,14 @@ const config = {
   output: 'standalone',
   
   images: {
-    domains: ['firebasestorage.googleapis.com'],
+    domains: ['firebasestorage.googleapis.com', 'thesidehustlebar.netlify.app'],
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'thesidehustlebar.netlify.app',
+      }
+    ]
   },
   
   // Add headers for service worker and cross-origin isolation

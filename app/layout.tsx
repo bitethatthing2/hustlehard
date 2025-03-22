@@ -68,6 +68,7 @@ export default function RootLayout({
                 height={32}
                 className="h-full w-auto"
                 priority
+                unoptimized
               />
             </div>
             <NavMenu />

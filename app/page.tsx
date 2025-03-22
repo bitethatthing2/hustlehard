@@ -85,6 +85,7 @@ export default function Home(): React.ReactElement {
             height={384}
             priority
             className="object-contain filter drop-shadow-glow"
+            unoptimized
           />
         </div>
 
