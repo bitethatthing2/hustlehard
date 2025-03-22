@@ -20,6 +20,11 @@ const InfoSection = dynamic(() => import('@/components/InfoSection'), {
   loading: () => <div className="py-12 flex items-center justify-center bg-black">Loading location info...</div>
 });
 
+const InstagramFeedSection = dynamic(() => import('@/components/social/InstagramFeedSection'), {
+  ssr: false,
+  loading: () => <div className="py-12 flex items-center justify-center bg-black">Loading Instagram feed...</div>
+});
+
 export default function Home(): React.ReactElement {
   const [deviceType, setDeviceType] = useState<'unknown' | 'ios' | 'android'>('unknown');
   const [notificationStatus, setNotificationStatus] = useState<'idle' | 'requested' | 'granted' | 'denied'>('idle');
@@ -157,6 +162,9 @@ export default function Home(): React.ReactElement {
         
         {/* Google Reviews Section */}
         <GoogleReviewsSection />
+        
+        {/* Instagram Feed Section */}
+        <InstagramFeedSection />
       </main>
     </LocationProvider>
   );

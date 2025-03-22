@@ -12,11 +12,20 @@ const GoogleReviewsSection: React.FC = () => {
         </div>
         
         <div className="w-full overflow-hidden">
-          <div className="elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe"></div>
+          <div className="elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe" data-elfsight-app-lazy></div>
         </div>
       </div>
     </section>
   );
 };
+
+// Add the global type declaration
+declare global {
+  interface Window {
+    elfsight?: {
+      initialize: () => void;
+    }
+  }
+}
 
 export default GoogleReviewsSection; 
