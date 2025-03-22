@@ -30,6 +30,9 @@ const config = {
   images: {
     domains: ['firebasestorage.googleapis.com', 'thesidehustlebar.netlify.app'],
     unoptimized: true,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',

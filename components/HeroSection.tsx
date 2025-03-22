@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LocationToggle from './location/LocationToggle';
 import { useLocation } from '@/contexts/LocationContext';
 import { Menu } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const { selectedLocation } = useLocation();
+  const [imgError, setImgError] = useState(false);
+  const [imgErrorCount, setImgErrorCount] = useState(0);
   
-  // Determine which image to show based on location
-  const logoImage = selectedLocation === 'portland' 
-    ? '/only_these/logos/SHB_Logo_WhiteonBlackBG.png' 
-    : '/only_these/logos/salem_location.png';
+  // Define possible paths to try in order
+  const portlandPaths = [
+    '/only_these/logos/SHB_Logo_WhiteonBlackBG.png',
+    '/SHB_Logo_WhiteonBlackBG.png',
+    '/logo.png'
+  ];
+  
+  const salemPaths = [
+    '/only_these/logos/salem_location.png',
+    '/salem_location.png',
+    '/logo.png'
+  ];
+  
+  // Get the current path to try based on location and error count
+  const getImagePath = () => {
+    const paths = selectedLocation === 'portland' ? portlandPaths : salemPaths;
+    return paths[Math.min(imgErrorCount, paths.length - 1)];
+  };
+  
+  const logoImage = getImagePath();
+  
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.error(`Error loading image: ${logoImage}, trying next path...`);
+    setImgErrorCount(prev => prev + 1);
+    
+    // Force a re-render by toggling imgError
+    setImgError(prev => !prev);
+    
+    // Prevent the default error icon
+    e.currentTarget.onerror = null;
+  };
   
   return (
     <section className="relative min-h-[80vh] flex flex-col overflow-hidden bg-black border-b border-bar-accent/20 w-full -mt-16">
@@ -28,6 +57,7 @@ const HeroSection: React.FC = () => {
             src={logoImage} 
             alt="The Sidehustle Bar" 
             className="max-w-[300px] sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-8"
+            onError={handleImageError}
           />
           
           <div className="mt-6 mb-6 w-full flex justify-center">
