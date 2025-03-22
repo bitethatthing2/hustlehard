@@ -54,6 +54,8 @@ export default function RootLayout({
       <head>
         {/* Load environment variables before any other scripts */}
         <Script src="/env-config.js" strategy="beforeInteractive" />
+        {/* Load tracking fix script early */}
+        <Script src="/tracking-fix.js" strategy="beforeInteractive" />
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
         {/* Load Elfsight Widget */}
@@ -62,7 +64,14 @@ export default function RootLayout({
           data-use-service-core 
           strategy="lazyOnload" 
           crossOrigin="anonymous"
+          nonce="elfsight-nonce"
         />
+        {/* Preconnect to external domains to improve performance */}
+        <link rel="preconnect" href="https://static.elfsight.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://lh3.googleusercontent.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://scontent.cdninstagram.com" crossOrigin="anonymous" />
+        {/* Add referrer policy to enable third-party content loading */}
+        <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>
       <body className={`${inter.className} bg-black min-h-screen`}>
         <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10">

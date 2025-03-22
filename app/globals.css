@@ -287,3 +287,36 @@
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
 }
+
+/* Instagram Feed styles */
+.elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c {
+  width: 100%;
+}
+
+/* Fix for high contrast mode */
+@media (forced-colors: active) {
+  .eapps-instagram-feed-posts-item,
+  .eapps-instagram-feed-posts-item-image,
+  .eapps-instagram-feed-posts-item-content,
+  .eapps-instagram-feed-posts-item-overlay {
+    -webkit-appearance: none;
+    -webkit-font-smoothing: antialiased;
+    color-scheme: light;
+    /* Safari/iOS compatible alternatives */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* Google Reviews Styles */
+.elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe {
+  width: 100%;
+}
+
+/* Ensure review photos load properly */
+.elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  border-radius: 50%;
+}
