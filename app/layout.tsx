@@ -82,7 +82,7 @@ export default function RootLayout({
                 alt="Side Hustle Bar Logo"
                 width={48}
                 height={48}
-                className="h-full w-auto"
+                className="h-full w-auto object-contain"
                 priority
                 unoptimized
               />
