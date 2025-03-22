@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, Bell } from 'lucide-react';
 import { useLocationData } from '@/hooks/useLocationData';
 import { useLocation } from '@/contexts/LocationContext';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 // Declare the global window type extension
 declare global {
@@ -15,8 +14,8 @@ const InfoSection: React.FC = () => {
   const { currentLocation } = useLocationData();
   const { selectedLocation } = useLocation();
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapKey, setMapKey] = useState(Date.now()); // Key to force re-render
-
+  const iframeContainerRef = useRef<HTMLDivElement>(null);
+  
   // Google Maps URLs
   const mapUrls = {
     portland: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus",
@@ -28,17 +27,71 @@ const InfoSection: React.FC = () => {
     portland: "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&z=15",
     salem: "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15"
   };
-  
-  // Reset map state and force re-render when location changes
+
+  // Manual DOM manipulation approach for iframes
   useEffect(() => {
+    // Clear any loading indicators
     setMapLoaded(false);
-    setMapKey(Date.now()); // Generate new key to force iframe remount
-  }, [selectedLocation]);
-  
-  // Handle map load
-  const handleMapLoad = () => {
-    setMapLoaded(true);
-  };
+    
+    // Wait for the container to be available
+    if (!iframeContainerRef.current) return;
+    
+    // Clear existing iframe content
+    if (iframeContainerRef.current) {
+      iframeContainerRef.current.innerHTML = '';
+    }
+    
+    // Create new iframe element
+    const iframe = document.createElement('iframe');
+    iframe.src = mapUrls[selectedLocation];
+    iframe.style.border = 'none';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.position = 'absolute';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
+    iframe.setAttribute('allowFullScreen', '');
+    iframe.setAttribute('loading', 'lazy');
+    iframe.setAttribute('referrerPolicy', 'no-referrer-when-downgrade');
+    
+    // Add load event handler
+    iframe.onload = () => {
+      setMapLoaded(true);
+      console.log('Map iframe loaded successfully');
+    };
+    
+    // Add error handler
+    iframe.onerror = (e) => {
+      console.error('Error loading map iframe:', e);
+      // Fallback to direct link
+      const fallbackLink = document.createElement('a');
+      fallbackLink.href = directMapsUrls[selectedLocation];
+      fallbackLink.target = '_blank';
+      fallbackLink.innerText = 'View map on Google Maps';
+      fallbackLink.style.display = 'flex';
+      fallbackLink.style.alignItems = 'center';
+      fallbackLink.style.justifyContent = 'center';
+      fallbackLink.style.width = '100%';
+      fallbackLink.style.height = '100%';
+      fallbackLink.style.textDecoration = 'none';
+      fallbackLink.style.color = 'white';
+      fallbackLink.style.background = '#1e1e1e';
+      
+      if (iframeContainerRef.current) {
+        iframeContainerRef.current.innerHTML = '';
+        iframeContainerRef.current.appendChild(fallbackLink);
+      }
+    };
+    
+    // Append to container
+    if (iframeContainerRef.current) {
+      iframeContainerRef.current.appendChild(iframe);
+    }
+    
+    // Add a debug message
+    console.log(`Loading ${selectedLocation} map from URL: ${mapUrls[selectedLocation]}`);
+    
+  }, [selectedLocation, mapUrls, directMapsUrls]);
   
   return (
     <section className="py-12 md:py-16 bg-black w-full">
@@ -96,21 +149,12 @@ const InfoSection: React.FC = () => {
                   </div>
                 )}
                 
-                {/* The key attribute forces React to remount this component when the location changes */}
-                <div className="absolute inset-0" key={mapKey}>
-                  <iframe 
-                    src={mapUrls[selectedLocation]} 
-                    width="100%" 
-                    height="100%" 
-                    style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} 
-                    allowFullScreen 
-                    loading="lazy" 
-                    referrerPolicy="no-referrer-when-downgrade"
-                    onLoad={handleMapLoad}
-                    className="map-iframe"
-                    title={`${currentLocation.name} Map`}
-                  />
-                </div>
+                {/* Container for the dynamically created iframe */}
+                <div 
+                  ref={iframeContainerRef}
+                  className="absolute inset-0 bg-gray-900"
+                  id={`map-container-${selectedLocation}`}
+                />
               </div>
               {/* Direct link to Google Maps */}
               <div className="text-center mt-2">
