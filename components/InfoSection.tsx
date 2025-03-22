@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Bell } from 'lucide-react';
 import { useLocationData } from '@/hooks/useLocationData';
 import { useLocation } from '@/contexts/LocationContext';
@@ -15,41 +15,46 @@ const InfoSection: React.FC = () => {
   const { currentLocation } = useLocationData();
   const { selectedLocation } = useLocation();
   const [mapLoaded, setMapLoaded] = useState(false);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
   
-  // Google Maps embed code for each location
-  const portlandMapEmbed = (
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus"
-      width="600"
-      height="450"
-      style={{ border: 0 }}
-      allowFullScreen
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      className="w-full h-full map-iframe"
-      onLoad={() => setMapLoaded(true)}
-    />
-  );
-
-  const salemMapEmbed = (
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742618818338!5m2!1sen!2sus"
-      width="600"
-      height="450"
-      style={{ border: 0 }}
-      allowFullScreen
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      className="w-full h-full map-iframe"
-      onLoad={() => setMapLoaded(true)}
-    />
-  );
+  // Raw HTML for maps - using dangerouslySetInnerHTML to preserve exact formatting
+  const portlandMapHtml = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus" width="100%" height="100%" style="border:0; display:block; min-height:300px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-iframe"></iframe>`;
+  
+  const salemMapHtml = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742618818338!5m2!1sen!2sus" width="100%" height="100%" style="border:0; display:block; min-height:300px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-iframe"></iframe>`;
   
   // Direct link to maps
   const directMapsUrl = selectedLocation === 'portland' 
     ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&z=15"
     : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15";
+  
+  // Handle iframe load event
+  useEffect(() => {
+    const handleIframeLoad = () => {
+      setMapLoaded(true);
+    };
+    
+    // Add event listener after component mounts
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'GOOGLE_MAPS_LOADED') {
+        setMapLoaded(true);
+      }
+    });
+    
+    // Find iframe after rendering and add load listener
+    setTimeout(() => {
+      const iframe = document.querySelector('.map-iframe');
+      if (iframe) {
+        iframe.addEventListener('load', handleIframeLoad);
+      }
+    }, 500);
+    
+    return () => {
+      // Clean up event listeners
+      const iframe = document.querySelector('.map-iframe');
+      if (iframe) {
+        iframe.removeEventListener('load', handleIframeLoad);
+      }
+    };
+  }, [selectedLocation]);
   
   return (
     <section className="py-12 md:py-16 bg-black w-full">
@@ -96,18 +101,23 @@ const InfoSection: React.FC = () => {
         </div>
         
         {/* Google Maps embed */}
-        <div className="mt-8 mb-12 w-full" ref={mapContainerRef}>
+        <div className="mt-8 mb-12 w-full">
           <div className="bg-black border border-gray-800 hover:border-bar-accent/30 rounded-lg overflow-hidden holographic-border">
             <div className="p-4 md:p-6 pb-2">
               <h3 className="font-display text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 text-center">Find Us</h3>
-              <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md map-container" style={{ minHeight: "300px" }}>
+              <div className="relative overflow-hidden rounded-md" style={{ minHeight: "300px", paddingTop: "56.25%" }}>
                 {!mapLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white text-center p-4">
                     Loading map...
                   </div>
                 )}
-                {selectedLocation === 'portland' ? portlandMapEmbed : salemMapEmbed}
-              </AspectRatio>
+                <div 
+                  className="absolute inset-0"
+                  dangerouslySetInnerHTML={{ 
+                    __html: selectedLocation === 'portland' ? portlandMapHtml : salemMapHtml 
+                  }}
+                />
+              </div>
               {/* Direct link to Google Maps */}
               <div className="text-center mt-2">
                 <a 
