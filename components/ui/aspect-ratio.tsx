@@ -7,21 +7,12 @@ interface AspectRatioProps extends React.HTMLAttributes<HTMLDivElement> {
 export const AspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
   ({ ratio, className, children, ...props }, ref) => {
     return (
-      <div ref={ref} className={className} style={{ position: 'relative' }} {...props}>
+      <div ref={ref} className={`aspect-ratio-wrapper ${className || ''}`} {...props}>
         <div
-          style={{
-            paddingBottom: `${(1 / ratio) * 100}%`,
-          }}
+          className="aspect-ratio-spacer"
+          style={{ paddingBottom: `${(1 / ratio) * 100}%` }}
         />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          }}
-        >
+        <div className="aspect-ratio-content">
           {children}
         </div>
       </div>

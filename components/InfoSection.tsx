@@ -65,14 +65,10 @@ const InfoSection: React.FC = () => {
               <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md">
                 <iframe 
                   src={mapEmbedUrl}
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0 }} 
+                  className="map-iframe w-full h-full"
                   allowFullScreen 
-                  loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
                   title={`${currentLocation.name} Map`}
-                  className="w-full h-full"
                 ></iframe>
               </AspectRatio>
             </div>
