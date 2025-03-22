@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Bell } from 'lucide-react';
 import { useLocationData } from '@/hooks/useLocationData';
 import { useLocation } from '@/contexts/LocationContext';
@@ -16,10 +16,10 @@ const InfoSection: React.FC = () => {
   const [mapLoaded, setMapLoaded] = useState(false);
   const iframeContainerRef = useRef<HTMLDivElement>(null);
   
-  // Google Maps URLs
+  // Google Maps URLs - using simpler URLs that are less likely to have issues
   const mapUrls = {
-    portland: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus",
-    salem: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742618818338!5m2!1sen!2sus"
+    portland: "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&output=embed",
+    salem: "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&output=embed"
   };
   
   // Direct Google Maps links
@@ -28,58 +28,10 @@ const InfoSection: React.FC = () => {
     salem: "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15"
   };
 
-  // Manual DOM manipulation approach for iframes
+  // Reset map loaded state when location changes
   useEffect(() => {
-    // Clear any loading indicators
     setMapLoaded(false);
-    
-    // Wait for the container to be available
-    if (!iframeContainerRef.current) return;
-    
-    // Clear existing iframe content
-    if (iframeContainerRef.current) {
-      iframeContainerRef.current.innerHTML = '';
-    }
-    
-    // Create new iframe element
-    const iframe = document.createElement('iframe');
-    iframe.src = mapUrls[selectedLocation];
-    iframe.className = 'map-iframe';
-    iframe.setAttribute('allowFullScreen', '');
-    iframe.setAttribute('loading', 'lazy');
-    iframe.setAttribute('referrerPolicy', 'no-referrer-when-downgrade');
-    
-    // Add load event handler
-    iframe.onload = () => {
-      setMapLoaded(true);
-      console.log('Map iframe loaded successfully');
-    };
-    
-    // Add error handler
-    iframe.onerror = (e) => {
-      console.error('Error loading map iframe:', e);
-      // Fallback to direct link
-      const fallbackLink = document.createElement('a');
-      fallbackLink.href = directMapsUrls[selectedLocation];
-      fallbackLink.target = '_blank';
-      fallbackLink.innerText = 'View map on Google Maps';
-      fallbackLink.className = 'flex items-center justify-center w-full h-full text-white bg-gray-900 no-underline';
-      
-      if (iframeContainerRef.current) {
-        iframeContainerRef.current.innerHTML = '';
-        iframeContainerRef.current.appendChild(fallbackLink);
-      }
-    };
-    
-    // Append to container
-    if (iframeContainerRef.current) {
-      iframeContainerRef.current.appendChild(iframe);
-    }
-    
-    // Add a debug message
-    console.log(`Loading ${selectedLocation} map from URL: ${mapUrls[selectedLocation]}`);
-    
-  }, [selectedLocation, mapUrls, directMapsUrls]);
+  }, [selectedLocation]);
   
   return (
     <section className="py-12 md:py-16 bg-black w-full">
@@ -137,14 +89,14 @@ const InfoSection: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Container for the dynamically created iframe */}
+                {/* Use the ID-based approach for the map-fix.js script to find */}
                 <div 
                   ref={iframeContainerRef}
                   className="map-iframe-container"
                   id={`map-container-${selectedLocation}`}
                 />
               </div>
-              {/* Direct link to Google Maps */}
+              {/* Direct link to Google Maps - always reliable */}
               <div className="text-center mt-2">
                 <a 
                   href={directMapsUrls[selectedLocation]}
