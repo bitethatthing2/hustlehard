@@ -15,46 +15,30 @@ const InfoSection: React.FC = () => {
   const { currentLocation } = useLocationData();
   const { selectedLocation } = useLocation();
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapKey, setMapKey] = useState(Date.now()); // Key to force re-render
+
+  // Google Maps URLs
+  const mapUrls = {
+    portland: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus",
+    salem: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742618818338!5m2!1sen!2sus"
+  };
   
-  // Raw HTML for maps - using dangerouslySetInnerHTML to preserve exact formatting
-  const portlandMapHtml = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5591.159563601747!2d-122.67878942359386!3d45.518537171074875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1742617552675!5m2!1sen!2sus" width="100%" height="100%" style="border:0; display:block; min-height:300px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-iframe"></iframe>`;
+  // Direct Google Maps links
+  const directMapsUrls = {
+    portland: "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&z=15",
+    salem: "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15"
+  };
   
-  const salemMapHtml = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.156024280599!2d-123.0413951236238!3d44.940496071070314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1742618818338!5m2!1sen!2sus" width="100%" height="100%" style="border:0; display:block; min-height:300px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-iframe"></iframe>`;
-  
-  // Direct link to maps
-  const directMapsUrl = selectedLocation === 'portland' 
-    ? "https://maps.google.com/maps?q=Side+Hustle+Portland+OR&z=15"
-    : "https://maps.google.com/maps?q=Side+Hustle+Bar+Salem+OR&z=15";
-  
-  // Handle iframe load event
+  // Reset map state and force re-render when location changes
   useEffect(() => {
-    const handleIframeLoad = () => {
-      setMapLoaded(true);
-    };
-    
-    // Add event listener after component mounts
-    window.addEventListener('message', (event) => {
-      if (event.data && event.data.type === 'GOOGLE_MAPS_LOADED') {
-        setMapLoaded(true);
-      }
-    });
-    
-    // Find iframe after rendering and add load listener
-    setTimeout(() => {
-      const iframe = document.querySelector('.map-iframe');
-      if (iframe) {
-        iframe.addEventListener('load', handleIframeLoad);
-      }
-    }, 500);
-    
-    return () => {
-      // Clean up event listeners
-      const iframe = document.querySelector('.map-iframe');
-      if (iframe) {
-        iframe.removeEventListener('load', handleIframeLoad);
-      }
-    };
+    setMapLoaded(false);
+    setMapKey(Date.now()); // Generate new key to force iframe remount
   }, [selectedLocation]);
+  
+  // Handle map load
+  const handleMapLoad = () => {
+    setMapLoaded(true);
+  };
   
   return (
     <section className="py-12 md:py-16 bg-black w-full">
@@ -108,20 +92,30 @@ const InfoSection: React.FC = () => {
               <div className="relative overflow-hidden rounded-md" style={{ minHeight: "300px", paddingTop: "56.25%" }}>
                 {!mapLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white text-center p-4">
-                    Loading map...
+                    Loading map for {selectedLocation === 'portland' ? 'Portland' : 'Salem'}...
                   </div>
                 )}
-                <div 
-                  className="absolute inset-0"
-                  dangerouslySetInnerHTML={{ 
-                    __html: selectedLocation === 'portland' ? portlandMapHtml : salemMapHtml 
-                  }}
-                />
+                
+                {/* The key attribute forces React to remount this component when the location changes */}
+                <div className="absolute inset-0" key={mapKey}>
+                  <iframe 
+                    src={mapUrls[selectedLocation]} 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} 
+                    allowFullScreen 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    onLoad={handleMapLoad}
+                    className="map-iframe"
+                    title={`${currentLocation.name} Map`}
+                  />
+                </div>
               </div>
               {/* Direct link to Google Maps */}
               <div className="text-center mt-2">
                 <a 
-                  href={directMapsUrl}
+                  href={directMapsUrls[selectedLocation]}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-bar-accent text-sm hover:underline"
