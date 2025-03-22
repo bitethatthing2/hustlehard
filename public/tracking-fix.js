@@ -11,17 +11,22 @@
     return img;
   };
 
-  // Suppress -ms-high-contrast deprecation warnings
-  const originalConsoleWarn = console.warn;
+  // Silence the specific -ms-high-contrast deprecation warnings
+  const originalWarn = console.warn;
+  
+  // Override console.warn to filter out specific deprecation messages
   console.warn = function(...args) {
-    // Filter out specific deprecation warnings
-    if (typeof args[0] === 'string') {
-      if (args[0].includes('-ms-high-contrast') || 
-          args[0].includes('Tracking Prevention')) {
-        return;
-      }
+    // Check if the warning is about -ms-high-contrast
+    if (args.length > 0 && 
+        typeof args[0] === 'string' && 
+        args[0].includes('-ms-high-contrast') && 
+        args[0].includes('deprecated')) {
+      // Silently ignore these specific warnings
+      return;
     }
-    return originalConsoleWarn.apply(console, args);
+    
+    // Pass other warnings through to the original console.warn
+    return originalWarn.apply(console, args);
   };
   
   // Monitor for errors related to tracking prevention

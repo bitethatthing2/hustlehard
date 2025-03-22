@@ -308,6 +308,22 @@
   }
 }
 
+/* Fix for deprecated -ms-high-contrast media query */
+@media (-ms-high-contrast: active), (-ms-high-contrast: black-on-white), (-ms-high-contrast: white-on-black) {
+  .eapps-instagram-feed-posts-item,
+  .eapps-instagram-feed-posts-item-image,
+  .eapps-instagram-feed-posts-item-content,
+  .eapps-instagram-feed-posts-item-overlay,
+  [class*="eapps-instagram-"] {
+    forced-color-adjust: none;
+    -webkit-appearance: none;
+    -webkit-font-smoothing: antialiased;
+    color-scheme: light;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
 /* Google Reviews Styles */
 .elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe {
   width: 100%;
