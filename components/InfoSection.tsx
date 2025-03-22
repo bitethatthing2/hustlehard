@@ -44,12 +44,7 @@ const InfoSection: React.FC = () => {
     // Create new iframe element
     const iframe = document.createElement('iframe');
     iframe.src = mapUrls[selectedLocation];
-    iframe.style.border = 'none';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
+    iframe.className = 'map-iframe';
     iframe.setAttribute('allowFullScreen', '');
     iframe.setAttribute('loading', 'lazy');
     iframe.setAttribute('referrerPolicy', 'no-referrer-when-downgrade');
@@ -68,14 +63,7 @@ const InfoSection: React.FC = () => {
       fallbackLink.href = directMapsUrls[selectedLocation];
       fallbackLink.target = '_blank';
       fallbackLink.innerText = 'View map on Google Maps';
-      fallbackLink.style.display = 'flex';
-      fallbackLink.style.alignItems = 'center';
-      fallbackLink.style.justifyContent = 'center';
-      fallbackLink.style.width = '100%';
-      fallbackLink.style.height = '100%';
-      fallbackLink.style.textDecoration = 'none';
-      fallbackLink.style.color = 'white';
-      fallbackLink.style.background = '#1e1e1e';
+      fallbackLink.className = 'flex items-center justify-center w-full h-full text-white bg-gray-900 no-underline';
       
       if (iframeContainerRef.current) {
         iframeContainerRef.current.innerHTML = '';
@@ -142,9 +130,9 @@ const InfoSection: React.FC = () => {
           <div className="bg-black border border-gray-800 hover:border-bar-accent/30 rounded-lg overflow-hidden holographic-border">
             <div className="p-4 md:p-6 pb-2">
               <h3 className="font-display text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 text-center">Find Us</h3>
-              <div className="relative overflow-hidden rounded-md" style={{ minHeight: "300px", paddingTop: "56.25%" }}>
+              <div className="map-container">
                 {!mapLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white text-center p-4">
+                  <div className="map-loading-indicator">
                     Loading map for {selectedLocation === 'portland' ? 'Portland' : 'Salem'}...
                   </div>
                 )}
@@ -152,7 +140,7 @@ const InfoSection: React.FC = () => {
                 {/* Container for the dynamically created iframe */}
                 <div 
                   ref={iframeContainerRef}
-                  className="absolute inset-0 bg-gray-900"
+                  className="map-iframe-container"
                   id={`map-container-${selectedLocation}`}
                 />
               </div>
