@@ -1,3 +1,6 @@
+// Import service worker fix for navigation preload
+importScripts("./service-worker-fix.js");
+
 // Self-registration for the service worker
 self.addEventListener('install', function(event) {
   console.log('[firebase-messaging-sw.js] Service Worker installed');
