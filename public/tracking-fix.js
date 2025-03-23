@@ -1,105 +1,80 @@
-// Script to handle tracking prevention warnings
+// Optimized tracking prevention and performance fixes
 (function() {
-  // Create a proxy image loader
-  window.proxyImageLoader = function(src, fallbackSrc) {
-    const img = new Image();
-    img.onerror = function() {
-      console.warn('Image load error, using fallback:', src);
-      this.src = fallbackSrc || '/only_these/logos/logo.png';
-    };
-    img.src = src;
-    return img;
-  };
+  // Cache DOM queries and use WeakMap for memory efficiency
+  const imageCache = new WeakMap();
+  const handledErrors = new Set();
 
-  // Silence the specific -ms-high-contrast deprecation warnings
-  const originalWarn = console.warn;
-  
-  // Override console.warn to filter out specific deprecation messages
-  console.warn = function(...args) {
-    // Check if the warning is about -ms-high-contrast
-    if (args.length > 0 && 
-        typeof args[0] === 'string' && 
-        (args[0].includes('-ms-high-contrast') && args[0].includes('deprecated') ||
-         args[0].includes('Google Maps JavaScript API') ||
-         args[0].includes('google.maps'))) {
-      // Silently ignore these specific warnings
-      return;
+  // Proxy image loader with caching
+  function createImageProxy(originalImage) {
+    if (imageCache.has(originalImage)) {
+      return imageCache.get(originalImage);
     }
-    
-    // Pass other warnings through to the original console.warn
-    return originalWarn.apply(console, args);
-  };
-  
-  // Monitor for errors related to tracking prevention
-  window.addEventListener('error', function(event) {
-    if (event.message && 
-        (event.message.includes('Tracking Prevention') || 
-         event.message.includes('googleusercontent.com') ||
-         event.message.includes('instagram.com') ||
-         event.message.includes('google.com/maps') ||
-         event.message.includes('maps.google.com'))) {
-      console.info('Suppressed third-party resource error');
-      event.preventDefault();
-      return true;
-    }
-  }, true);
 
-  // Helper for iframe loading
-  window.ensureIframeLoads = function(iframe) {
-    if (!iframe) return;
-    
-    // Force reload iframe if it doesn't load within a reasonable time
-    const timeout = setTimeout(() => {
-      const currentSrc = iframe.src;
-      iframe.src = 'about:blank';
-      setTimeout(() => {
-        iframe.src = currentSrc;
-      }, 50);
-    }, 3000);
-    
-    iframe.addEventListener('load', () => clearTimeout(timeout));
-  };
-  
-  // Add helper for Google Maps iframes when DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
-    const mapIframes = document.querySelectorAll('iframe[src*="google.com/maps"]');
-    mapIframes.forEach(iframe => window.ensureIframeLoads(iframe));
-  });
-})();
+    const proxy = new Image();
+    imageCache.set(originalImage, proxy);
 
-// Add passive event listener patch for performance
-(function() {
-  // Store the original addEventListener method
-  const originalAddEventListener = EventTarget.prototype.addEventListener;
-  
-  // Override addEventListener method
-  EventTarget.prototype.addEventListener = function(type, listener, options) {
-    // Force passive true for touchstart and touchmove events
-    if (type === 'touchstart' || type === 'touchmove') {
-      let newOptions = options;
-      
-      // Convert options to object if it's a boolean
-      if (typeof options === 'boolean') {
-        newOptions = {
-          capture: options,
-          passive: true
-        };
-      } else if (typeof options === 'object') {
-        newOptions = {
-          ...options,
-          passive: true
-        };
-      } else {
-        newOptions = {
-          passive: true
-        };
+    // Copy properties
+    ['src', 'srcset', 'sizes'].forEach(prop => {
+      if (originalImage[prop]) {
+        proxy[prop] = originalImage[prop];
       }
-      
-      // Call the original method with the modified options
-      return originalAddEventListener.call(this, type, listener, newOptions);
+    });
+
+    return proxy;
+  }
+
+  // Optimized error monitoring with debouncing
+  let errorTimeout;
+  function monitorTrackingPrevention(event) {
+    if (event.message?.includes('Tracking Prevention')) {
+      const errorKey = `${event.filename}:${event.message}`;
+      if (!handledErrors.has(errorKey)) {
+        handledErrors.add(errorKey);
+        clearTimeout(errorTimeout);
+        errorTimeout = setTimeout(() => {
+          console.warn('Tracking prevention detected - using fallback mechanisms');
+        }, 100);
+      }
     }
-    
-    // For other events, use the original behavior
-    return originalAddEventListener.call(this, type, listener, options);
+  }
+
+  // Passive event listener patch with feature detection
+  function patchEventListener() {
+    if (window.EventTarget) {
+      const originalAddEventListener = EventTarget.prototype.addEventListener;
+      const supportsPassive = (() => {
+        let support = false;
+        try {
+          window.addEventListener('test', null, {
+            get passive() { support = true; return true; }
+          });
+        } catch (e) {}
+        return support;
+      })();
+
+      EventTarget.prototype.addEventListener = function(type, listener, options) {
+        const isObject = typeof options === 'object';
+        const usePassive = supportsPassive && 
+          (type.startsWith('touch') || type === 'wheel' || type === 'mousewheel');
+
+        const newOptions = isObject ? options : {
+          capture: options,
+          passive: usePassive,
+          once: false
+        };
+
+        return originalAddEventListener.call(this, type, listener, newOptions);
+      };
+    }
+  }
+
+  // Initialize optimizations
+  window.addEventListener('error', monitorTrackingPrevention, { passive: true });
+  patchEventListener();
+
+  // Export utilities if needed
+  window.trackingFix = {
+    createImageProxy,
+    monitorTrackingPrevention
   };
 })(); 

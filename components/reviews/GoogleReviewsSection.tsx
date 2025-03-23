@@ -1,34 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 
 const GoogleReviewsSection: React.FC = () => {
   const [elfsightLoaded, setElfsightLoaded] = useState(true);
 
-  // Check if Elfsight failed to load after a timeout
+  // More efficient loading check using MutationObserver
   useEffect(() => {
-    // Wait 5 seconds to see if Elfsight loads
+    const container = document.querySelector('.elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe');
+    if (!container) return;
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList' && mutation.target.childNodes.length === 0) {
+          setElfsightLoaded(false);
+          observer.disconnect();
+          break;
+        }
+      }
+    });
+
+    observer.observe(container, { childList: true, subtree: true });
+
+    // Fallback timeout reduced to 3 seconds
     const timer = setTimeout(() => {
-      // Check if the Elfsight container has content
-      const container = document.querySelector('.elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe');
-      if (container && container.children.length === 0) {
-        console.warn('Elfsight widget failed to load, showing fallback');
+      if (container.children.length === 0) {
         setElfsightLoaded(false);
       }
-    }, 5000);
+      observer.disconnect();
+    }, 3000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, []);
 
-  // Handle tracking prevention errors for Google userContent images
+  // Optimized error handling for tracking prevention
   useEffect(() => {
-    const handleErrors = (event: ErrorEvent) => {
-      if (event.message && event.message.includes('Tracking Prevention') && 
-          event.message.includes('googleusercontent.com')) {
-        console.warn('Tracking prevention for Google User Images - using fallback');
+    const handleErrors = useCallback((event: ErrorEvent) => {
+      if (event.message?.includes('Tracking Prevention') && 
+          event.message?.includes('googleusercontent.com')) {
+        // Only log once per session using sessionStorage
+        if (!sessionStorage.getItem('tracking-warning-logged')) {
+          console.warn('Tracking prevention for Google User Images - using fallback');
+          sessionStorage.setItem('tracking-warning-logged', 'true');
+        }
       }
-    };
+    }, []);
 
-    window.addEventListener('error', handleErrors);
+    window.addEventListener('error', handleErrors, { passive: true });
     return () => window.removeEventListener('error', handleErrors);
   }, []);
 

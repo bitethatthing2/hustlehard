@@ -1,23 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Instagram, Camera, Heart, MessageCircle } from 'lucide-react';
 import Head from 'next/head';
 
 const InstagramFeedSection: React.FC = () => {
   const [elfsightLoaded, setElfsightLoaded] = useState(true);
 
-  // Check if Elfsight failed to load after a timeout
+  // More efficient loading check using MutationObserver
   useEffect(() => {
-    // Wait 5 seconds to see if Elfsight loads
+    const container = document.querySelector('.elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c');
+    if (!container) return;
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList' && mutation.target.childNodes.length === 0) {
+          setElfsightLoaded(false);
+          observer.disconnect();
+          break;
+        }
+      }
+    });
+
+    observer.observe(container, { childList: true, subtree: true });
+
+    // Fallback timeout reduced to 3 seconds
     const timer = setTimeout(() => {
-      // Check if the Elfsight container has content
-      const container = document.querySelector('.elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c');
-      if (container && container.children.length === 0) {
-        console.warn('Elfsight Instagram widget failed to load, showing fallback');
+      if (container.children.length === 0) {
         setElfsightLoaded(false);
       }
-    }, 5000);
+      observer.disconnect();
+    }, 3000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, []);
 
   // Suppress deprecation warnings for -ms-high-contrast

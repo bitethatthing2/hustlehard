@@ -1,7 +1,7 @@
 export default function ProductInfo() {
   return (
     <div className="w-full max-w-2xl mx-auto mb-12">
-      <div className="backdrop-blur-lg p-8 rounded-lg border border-white/10 bg-black/70 holographic-card">
+      <div className="backdrop-blur-lg p-8 rounded-lg border border-white/10 bg-black/70 holographic-card relative z-20">
         {/* Price display */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <span className="text-4xl font-extrabold text-white">$79.99</span>
@@ -19,16 +19,20 @@ export default function ProductInfo() {
           </div>
         </div>
         
-        {/* BE A WOLF button */}
-        <button 
-          className="w-full bg-gradient-to-r from-bar-accent via-bar-accent/90 to-bar-accent px-8 py-5 rounded-lg font-extrabold text-2xl text-black hover:brightness-110 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl transform hover:scale-[1.02]"
-        >
-          <span className="text-2xl">🐺</span>
-          <span>BE A WOLF</span>
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </button>
+        {/* BE A WOLF button with enhanced styling */}
+        <div className="relative">
+          {/* Button glow effect */}
+          <div className="absolute inset-0 bg-bar-accent/20 blur-xl rounded-lg"></div>
+          <button 
+            className="relative w-full bg-gradient-to-r from-bar-accent via-bar-accent/90 to-bar-accent px-8 py-5 rounded-lg font-extrabold text-2xl text-black hover:brightness-110 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl transform hover:scale-[1.02] hover:shadow-bar-accent/50"
+          >
+            <span className="text-2xl">🐺</span>
+            <span>BE A WOLF</span>
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
+        </div>
         
         {/* Secure checkout indicator */}
         <div className="flex items-center justify-center gap-2 mt-4 text-white/60">
