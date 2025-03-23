@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useLocation } from '@/contexts/LocationContext';
 
 // Define location data types
@@ -32,13 +31,10 @@ const locationData = {
 };
 
 export const useLocationData = () => {
-  const { selectedLocation } = useLocation();
-  const [currentLocation, setCurrentLocation] = useState<LocationData>(locationData.portland);
+  const { selectedLocation, locationData } = useLocation();
   
-  useEffect(() => {
-    // Update location data when the selected location changes
-    setCurrentLocation(locationData[selectedLocation]);
-  }, [selectedLocation]);
-  
-  return { currentLocation };
+  return {
+    currentLocation: locationData[selectedLocation],
+    locationData
+  };
 }; 

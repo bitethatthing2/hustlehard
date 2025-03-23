@@ -58,6 +58,8 @@ export default function RootLayout({
         <Script src="/tracking-fix.js" strategy="beforeInteractive" />
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
+        {/* Load PWA installation fix */}
+        <Script src="/pwa-fix.js" strategy="afterInteractive" />
         {/* Load Elfsight Widget */}
         <Script 
           src="https://static.elfsight.com/platform/platform.js" 
@@ -72,6 +74,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://scontent.cdninstagram.com" crossOrigin="anonymous" />
         {/* Add referrer policy to enable third-party content loading */}
         <meta name="referrer" content="no-referrer-when-downgrade" />
+        <Script 
+          src="https://unpkg.com/@splinetool/viewer@1.9.80/build/spline-viewer.js"
+          strategy="beforeInteractive"
+          type="module"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${inter.className} bg-black min-h-screen`}>
         <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
@@ -82,7 +90,8 @@ export default function RootLayout({
                 alt="Side Hustle Bar Logo"
                 width={48}
                 height={48}
-                className="h-full w-auto object-contain"
+                className="object-contain"
+                style={{ width: 'auto', height: '100%' }}
                 priority
                 unoptimized
               />

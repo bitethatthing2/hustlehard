@@ -2,40 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base layer elements */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    /* Custom colors for bar elements */
-    --bar-accent: 280 75% 60%;
+    /* Modern color palette */
+    --color-primary: 280, 75%, 60%;
+    --color-secondary: 260, 70%, 55%;
+    --color-accent: 0, 0%, 90%;
+    --color-background: 240, 10%, 4%;
+    --color-surface: 240, 10%, 8%;
+    --color-text: 0, 0%, 100%;
+    --color-text-secondary: 240, 10%, 80%;
+    
+    /* Bar specific colors */
+    --bar-accent: var(--color-accent);
+    --bar-dark: hsl(var(--color-background));
+    --bar-surface: hsl(var(--color-surface));
+    --bar-muted: hsl(var(--color-surface) / 0.8);
+    
+    /* Glass effect variables */
+    --glass-background: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shine: rgba(255, 255, 255, 0.15);
+    
+    /* Animation speeds */
+    --animation-slow: 700ms;
+    --animation-medium: 400ms;
+    --animation-fast: 250ms;
+    
+    /* Elevation levels */
+    --elevation-1: 0 2px 4px rgba(0,0,0,0.2);
+    --elevation-2: 0 4px 8px rgba(0,0,0,0.3);
+    --elevation-3: 0 8px 16px rgba(0,0,0,0.4);
+    
+    /* Border radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
   }
 
   .dark {
@@ -69,12 +81,16 @@
   }
 }
 
-@layer base {
+/* Component layer styles */
+@layer components {
+  /* Base styles */
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
+  
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
@@ -158,45 +174,186 @@
 /* Custom pulse animation for neon effects */
 @keyframes pulse-subtle {
   0%, 100% {
-    opacity: 0.8;
+    opacity: 1;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.7;
   }
 }
 
 .animate-pulse-subtle {
-  animation: pulse-subtle 3s ease-in-out infinite;
+  animation: pulse-subtle 2s ease-in-out infinite;
 }
 
-/* Holographic border effect */
+/* Animation for bounce subtle */
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 1.5s ease-in-out infinite;
+}
+
+/* Glass morphism effects */
+.glass {
+  background: var(--glass-background);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-hover {
+  transition: all var(--animation-medium) ease-in-out;
+}
+
+.glass-hover:hover {
+  background: var(--glass-shine);
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-2);
+}
+
+/* Enhanced holographic effect */
 .holographic-border {
   position: relative;
   overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    rgba(255, 255, 255, 0.2)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.holographic-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.12) 75%,
+    rgba(255, 255, 255, 0.15)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.35);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.holographic-mini {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 75%,
+    rgba(255, 255, 255, 0.15)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 16px 0 rgba(31, 38, 135, 0.3);
+}
+
+.holographic-btn {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.35);
 }
 
 .holographic-border::before {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, 
-    rgba(255, 0, 255, 0.1) 0%, 
-    rgba(0, 255, 255, 0.1) 25%, 
-    rgba(255, 255, 0, 0.1) 50%, 
-    rgba(255, 0, 255, 0.1) 75%, 
-    rgba(0, 255, 255, 0.1) 100%);
-  z-index: -1;
-  border-radius: inherit;
-  animation: rotate 3s linear infinite;
+  inset: -50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.15),
+    transparent 50%
+  );
+  animation: hologram-shine 6s linear infinite;
+  pointer-events: none;
 }
 
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
+.holographic-card::before,
+.holographic-mini::before,
+.holographic-btn::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.15),
+    transparent 50%
+  );
+  animation: hologram-shine 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes hologram-shine {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.6;
   }
+  50% {
+    transform: rotate(180deg) scale(1.5);
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.6;
+  }
+}
+
+/* Modern card styles */
+.card {
+  background: var(--glass-background);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  transition: all var(--animation-medium) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--elevation-3);
+  border-color: hsl(var(--color-accent) / 0.5);
+}
+
+/* Animated gradient backgrounds */
+.gradient-animate {
+  background: linear-gradient(
+    270deg,
+    hsl(var(--color-primary)),
+    hsl(var(--color-secondary)),
+    hsl(var(--color-accent))
+  );
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Animation for gradient movement */
+@keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-x {
+  background-size: 200% 100%;
+  animation: gradient-x 15s ease infinite;
 }
 
 /* Section title styling */
@@ -282,13 +439,13 @@
   .eapps-instagram-feed-posts-item,
   .eapps-instagram-feed-posts-item-image,
   .eapps-instagram-feed-posts-item-content,
-  .eapps-instagram-feed-posts-item-overlay {
+  .eapps-instagram-feed-posts-item-overlay,
+  .elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c,
+  .elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe,
+  .elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe img {
     -webkit-appearance: none;
-    -webkit-font-smoothing: antialiased;
-    color-scheme: light;
-    /* Safari/iOS compatible alternatives */
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    appearance: none;
+    forced-color-adjust: none;
   }
 }
 
@@ -320,4 +477,52 @@
   height: auto;
   max-width: 100%;
   border-radius: 50%;
+}
+
+/* Performance optimizations */
+@media (pointer: fine) {
+  .elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c,
+  .elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    overflow: hidden;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  html, body {
+    -webkit-overscroll-behavior-y: none;
+    overscroll-behavior-y: none;
+  }
+  
+  .elfsight-app-3e805b8a-5eab-4485-93cc-489d1122c66c,
+  .elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe {
+    touch-action: pan-x pan-y;
+  }
+}
+
+/* Preload critical images to improve LCP */
+body::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+  background-image: 
+    url('/only_these/logos/menu_icon.png'),
+    url('/only_these/logos/logo.png'),
+    url('/only_these/logos/SHB_Logo_WhiteonBlackBG.png');
+}
+
+/* Override Elfsight touch behaviors - attempt to fix non-passive warnings */
+.eapps-instagram-feed,
+.eapps-google-reviews {
+  touch-action: manipulation;
+}
+
+.scrolling-touch {
+    overflow-y: auto;
 }

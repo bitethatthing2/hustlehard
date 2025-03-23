@@ -65,4 +65,41 @@
     const mapIframes = document.querySelectorAll('iframe[src*="google.com/maps"]');
     mapIframes.forEach(iframe => window.ensureIframeLoads(iframe));
   });
+})();
+
+// Add passive event listener patch for performance
+(function() {
+  // Store the original addEventListener method
+  const originalAddEventListener = EventTarget.prototype.addEventListener;
+  
+  // Override addEventListener method
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    // Force passive true for touchstart and touchmove events
+    if (type === 'touchstart' || type === 'touchmove') {
+      let newOptions = options;
+      
+      // Convert options to object if it's a boolean
+      if (typeof options === 'boolean') {
+        newOptions = {
+          capture: options,
+          passive: true
+        };
+      } else if (typeof options === 'object') {
+        newOptions = {
+          ...options,
+          passive: true
+        };
+      } else {
+        newOptions = {
+          passive: true
+        };
+      }
+      
+      // Call the original method with the modified options
+      return originalAddEventListener.call(this, type, listener, newOptions);
+    }
+    
+    // For other events, use the original behavior
+    return originalAddEventListener.call(this, type, listener, options);
+  };
 })(); 
