@@ -48,14 +48,18 @@ const products: ProductItem[] = [
   }
 ];
 
-interface ProductPageProps {
-  params: {
-    productId: string;
-  };
+// Define params type for Netlify Edge
+interface Params {
+  productId: string;
 }
 
-export default function ProductPage({ params }: ProductPageProps): React.ReactElement {
-  const { productId } = params;
+// Props type for Netlify Edge functions
+interface ProductPageProps {
+  params: Promise<Params>;
+}
+
+// Client component for the product display
+function ProductDisplay({ productId }: { productId: string }): React.ReactElement {
   const searchParams = useSearchParams();
   const [product, setProduct] = useState<ProductItem | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -175,4 +179,18 @@ export default function ProductPage({ params }: ProductPageProps): React.ReactEl
       </div>
     </main>
   );
-} 
+}
+
+// Server Component with Netlify Edge compatibility
+export default async function ProductPage({ params }: ProductPageProps): Promise<React.ReactElement> {
+  // Await the params since they're a Promise in Netlify Edge
+  const resolvedParams = await params;
+  
+  // Destructure productId from resolved params
+  const { productId } = resolvedParams;
+
+  return <ProductDisplay productId={productId} />;
+}
+
+// Configure for Netlify Edge
+export const runtime = 'edge'; 

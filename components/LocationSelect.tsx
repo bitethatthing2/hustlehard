@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { useLocation } from '@/contexts/LocationContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -53,13 +54,17 @@ export const LocationSelect: React.FC = () => {
       <Card className="card glass glass-hover border-bar-accent/30 overflow-hidden">
         <div className="relative h-40 overflow-hidden">
           <div className="absolute inset-0">
-            <img 
+            <Image 
               src={location === 'salem' 
                 ? 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80'
                 : 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80'
               }
               alt={currentLocation.name}
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+              className="transition-transform duration-700 hover:scale-110"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

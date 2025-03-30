@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface ModelViewerProps {
   isModelLoaded: boolean;
   showTooltip: boolean;
@@ -15,14 +17,17 @@ export default function ModelViewer({ isModelLoaded, showTooltip, onLoad, onErro
             <p className="text-white/70 text-sm">Loading Preview...</p>
           </div>
         )}
-        <img
-          src="/product-preview.jpg"
-          alt="Product Preview"
-          className="w-full h-full object-cover"
-          onLoad={onLoad}
-          onError={onError}
-          loading="lazy"
-        />
+        <div className="relative w-full h-full">
+          <Image
+            src="/product-preview.jpg"
+            alt="Product Preview"
+            fill
+            style={{ objectFit: 'cover' }}
+            onLoad={onLoad}
+            onError={onError}
+            priority
+          />
+        </div>
         {showTooltip && (
           <div className="absolute top-4 right-4 bg-black/95 text-white px-4 py-2 rounded-lg text-sm backdrop-blur-sm border border-bar-accent/20">
             <p className="flex items-center gap-2">

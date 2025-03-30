@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import ModelViewer from './ModelViewer';
 
 interface ProductImage {
@@ -39,12 +40,18 @@ export default function ProductDisplay({ isModelLoaded, showTooltip, onModelLoad
                     ? 'border-bar-accent scale-105 shadow-lg shadow-bar-accent/20'
                     : 'border-white/10 hover:border-bar-accent/50'
                 }`}
+                title={`View ${image.alt}`}
+                aria-label={`View ${image.alt}`}
               >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-16 h-16 object-cover"
-                />
+                <div className="relative w-16 h-16">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="64px"
+                  />
+                </div>
               </button>
             ))}
             <button
@@ -54,6 +61,8 @@ export default function ProductDisplay({ isModelLoaded, showTooltip, onModelLoad
                   ? 'border-bar-accent scale-105 shadow-lg shadow-bar-accent/20'
                   : 'border-white/10 hover:border-bar-accent/50'
               }`}
+              title="View 3D model"
+              aria-label="View 3D model"
             >
               <div className="w-16 h-16 bg-black/40 backdrop-blur-sm flex items-center justify-center">
                 <span className="text-2xl">🎮</span>
@@ -75,11 +84,16 @@ export default function ProductDisplay({ isModelLoaded, showTooltip, onModelLoad
                 />
               </div>
             ) : (
-              <img
-                src={productImages[selectedImage].src}
-                alt={productImages[selectedImage].alt}
-                className="w-full h-full object-cover"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={productImages[selectedImage].src}
+                  alt={productImages[selectedImage].alt}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  priority={selectedImage === 0}
+                />
+              </div>
             )}
 
             {/* Interactive Elements */}
