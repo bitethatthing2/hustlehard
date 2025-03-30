@@ -382,7 +382,7 @@ export default function MainMenuButton() {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-4 py-2.5 bg-black/80 backdrop-blur-md border-2 border-gray-800 hover:border-bar-accent rounded-lg shadow-lg holographic-border transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-xl"
+        className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 bg-black/80 backdrop-blur-md border-2 border-gray-800 hover:border-bar-accent rounded-lg shadow-lg holographic-border transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-xl"
         aria-label="Open main menu"
         {...(isOpen ? {'aria-expanded': 'true'} : {'aria-expanded': 'false'})}
       >
@@ -391,7 +391,7 @@ export default function MainMenuButton() {
           alt="Menu" 
           width={32} 
           height={32}
-          className="object-contain w-8 h-auto drop-shadow-glow"
+          className="object-contain w-6 h-auto sm:w-8 drop-shadow-glow"
           priority
         />
         <span className="text-bar-accent font-bold text-sm tracking-wide">MENU</span>

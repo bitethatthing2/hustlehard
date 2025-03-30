@@ -92,22 +92,24 @@ export default function Home(): React.ReactElement {
 
   return (
     <LocationProvider>
-      <main className="flex min-h-screen flex-col items-center justify-between bg-black">
+      <div className="flex flex-col items-center justify-between w-full bg-black">
         {/* Hero Section with App Installation */}
         <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center bg-black">Loading...</div>}>
           <HeroSection />
         </Suspense>
         
-        {/* Instagram Feed Section */}
-        <Suspense fallback={<div className="py-12 flex items-center justify-center bg-black">Loading Instagram feed...</div>}>
-          <InstagramFeedSection />
-        </Suspense>
-        
-        {/* Google Reviews Section */}
-        <Suspense fallback={<div className="py-12 flex items-center justify-center bg-black">Loading reviews...</div>}>
-          <GoogleReviewsSection />
-        </Suspense>
-      </main>
+        <div className="w-full max-w-7xl mx-auto px-4">
+          {/* Instagram Feed Section */}
+          <Suspense fallback={<div className="py-12 flex items-center justify-center bg-black">Loading Instagram feed...</div>}>
+            <InstagramFeedSection />
+          </Suspense>
+          
+          {/* Google Reviews Section */}
+          <Suspense fallback={<div className="py-12 flex items-center justify-center bg-black">Loading reviews...</div>}>
+            <GoogleReviewsSection />
+          </Suspense>
+        </div>
+      </div>
     </LocationProvider>
   );
 }
