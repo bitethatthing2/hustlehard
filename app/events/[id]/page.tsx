@@ -2,16 +2,16 @@ import { notFound } from 'next/navigation';
 import { eventsData, EventType } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
-export default async function EventPage({ params, searchParams }: PageProps) {
+export default async function EventPage({ params }: Props) {
+  const { id } = await params;
+  
   // Find the current event
-  const event = eventsData.find(e => e.id === params.id);
+  const event = eventsData.find(e => e.id === id);
 
   // If event not found, show 404
   if (!event) {
@@ -20,7 +20,7 @@ export default async function EventPage({ params, searchParams }: PageProps) {
 
   // Get related events (excluding current event)
   const relatedEvents = eventsData
-    .filter(e => e.id !== params.id)
+    .filter(e => e.id !== id)
     .slice(0, 3); // Limit to 3 related events
 
   return <EventPageClient event={event} relatedEvents={relatedEvents} />;
