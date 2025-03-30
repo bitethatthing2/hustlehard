@@ -205,7 +205,7 @@ const OrderOptions = () => {
                 alt="Delivery" 
                 width={24} 
                 height={24}
-                className="text-current" 
+                className="text-current filter brightness-0 invert" 
               />
             </div>
             <span className="font-semibold">Delivery</span>
@@ -229,7 +229,7 @@ const OrderOptions = () => {
                 alt="Pickup" 
                 width={24} 
                 height={24}
-                className="text-current" 
+                className="text-current filter brightness-0 invert" 
               />
             </div>
             <span className="font-semibold">Pickup</span>
