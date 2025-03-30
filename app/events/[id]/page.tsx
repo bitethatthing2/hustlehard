@@ -2,18 +2,19 @@ import { notFound } from 'next/navigation';
 import { eventsData } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-// Define params type according to Netlify Edge function specs
-type Params = {
+// Define params type for Netlify Edge
+interface Params {
   id: string;
-};
-
-// Use Next.js standard props pattern
-interface PageProps {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default function EventPage({ params }: PageProps) {
+// Props type following Next.js + Netlify Edge pattern
+interface PageProps {
+  params: Params;
+}
+
+// Server Component for Edge runtime
+export default async function EventPage({ params }: PageProps) {
+  // Destructure id from params
   const { id } = params;
 
   // Find the current event
@@ -33,11 +34,17 @@ export default function EventPage({ params }: PageProps) {
 }
 
 // Generate static params for all events
-export function generateStaticParams() {
+export async function generateStaticParams(): Promise<Params[]> {
   return eventsData.map((event) => ({
     id: event.id,
   }));
 }
 
-// Configure for Netlify Edge with latest format
-export const runtime = 'edge'; 
+// Configure for Netlify Edge
+export const runtime = 'edge';
+
+// Add Netlify Edge specific config
+export const config = {
+  runtime: 'edge',
+  regions: ['all'], // Deploy to all regions
+}; 
