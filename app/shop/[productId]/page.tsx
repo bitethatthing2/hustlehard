@@ -94,18 +94,18 @@ function ProductDisplay({ productId }: { productId: string }): React.ReactElemen
   
   return (
     <main className="min-h-screen bg-black text-white pt-16">
-      <div className="container mx-auto max-w-6xl px-4">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <Link 
           href="/shop" 
-          className="inline-flex items-center gap-2 text-gray-300 hover:text-bar-accent transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-gray-300 hover:text-bar-accent transition-colors mb-4 sm:mb-6 md:mb-8"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Shop</span>
         </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
           {/* Product Video Showcase */}
-          <div className="rounded-xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10 video-showcase animate-fade-in">
+          <div className="rounded-xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10 video-showcase animate-fade-in h-auto aspect-video md:aspect-square">
             <video
               src={product.videoUrl}
               className="w-full h-full object-cover"
@@ -113,29 +113,32 @@ function ProductDisplay({ productId }: { productId: string }): React.ReactElemen
               muted
               loop
               playsInline
+              poster="/images/shop/product-poster.jpg" 
+              preload="auto"
             />
           </div>
 
           {/* Product Details */}
-          <div className="animate-fade-in animation-delay-300">
-            <h1 className="text-3xl font-display mb-2">{product.name}</h1>
-            <p className="text-gray-300 mb-4">{product.description}</p>
-            <p className="text-bar-accent text-2xl mb-6">${product.price}</p>
-            <p className="text-gray-400 text-sm mb-8">{product.trademark}</p>
+          <div className="animate-fade-in animation-delay-300 pt-2">
+            <h1 className="text-2xl sm:text-3xl font-display mb-1 sm:mb-2">{product.name}</h1>
+            <p className="text-gray-300 mb-3 sm:mb-4">{product.description}</p>
+            <p className="text-bar-accent text-xl sm:text-2xl mb-4 sm:mb-6">${product.price}</p>
+            <p className="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-8">{product.trademark}</p>
             
             {/* Size Selection */}
-            <div className="mb-8">
-              <h3 className="text-lg mb-4">Select Size</h3>
-              <div className="grid grid-cols-3 gap-2">
+            <div className="mb-6 sm:mb-8">
+              <h3 className="text-base sm:text-lg mb-3 sm:mb-4">Select Size</h3>
+              <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-6 md:grid-cols-3 lg:grid-cols-6 gap-2">
                 {product.availableSizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`py-2 px-4 border rounded-lg transition-colors ${
+                    className={`py-2 px-3 sm:px-4 border rounded-lg transition-colors ${
                       selectedSize === size
                         ? 'bg-bar-accent border-bar-accent text-white'
                         : 'border-white/10 hover:bg-bar-accent/20 hover:border-bar-accent'
                     }`}
+                    aria-label={`Select size ${size}`}
                   >
                     {size}
                   </button>
@@ -144,33 +147,36 @@ function ProductDisplay({ productId }: { productId: string }): React.ReactElemen
             </div>
 
             {/* Quantity Selection */}
-            <div className="mb-8">
-              <h3 className="text-lg mb-4">Quantity</h3>
+            <div className="mb-6 sm:mb-8">
+              <h3 className="text-base sm:text-lg mb-3 sm:mb-4">Quantity</h3>
               <div className="flex items-center gap-4">
                 <button
                   onClick={decrementQuantity}
-                  className="w-10 h-10 rounded-lg border border-white/10 hover:bg-bar-accent/20 hover:border-bar-accent transition-colors"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border border-white/10 hover:bg-bar-accent/20 hover:border-bar-accent transition-colors flex items-center justify-center touch-manipulation"
+                  aria-label="Decrease quantity"
                 >
-                  -
+                  <span className="text-xl">-</span>
                 </button>
-                <span className="text-xl">{quantity}</span>
+                <span className="text-lg sm:text-xl w-6 text-center">{quantity}</span>
                 <button
                   onClick={incrementQuantity}
-                  className="w-10 h-10 rounded-lg border border-white/10 hover:bg-bar-accent/20 hover:border-bar-accent transition-colors"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg border border-white/10 hover:bg-bar-accent/20 hover:border-bar-accent transition-colors flex items-center justify-center touch-manipulation"
+                  aria-label="Increase quantity"
                 >
-                  +
+                  <span className="text-xl">+</span>
                 </button>
               </div>
             </div>
 
             {/* Add to Cart Button */}
             <button 
-              className={`w-full py-3 rounded-lg transition-colors ${
+              className={`w-full py-3 sm:py-4 text-base sm:text-lg rounded-lg transition-colors ${
                 selectedSize
                   ? 'bg-bar-accent hover:bg-bar-accent/90'
                   : 'bg-gray-600 cursor-not-allowed'
               }`}
               disabled={!selectedSize}
+              aria-label={selectedSize ? 'Add to Cart' : 'Select a Size'}
             >
               {selectedSize ? 'Add to Cart' : 'Select a Size'}
             </button>
