@@ -2,11 +2,16 @@ import { notFound } from 'next/navigation';
 import { eventsData, EventType } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-interface PageProps {
-  params: { id: string };
-}
+// Define the params type separately for better reusability
+type Params = { id: string };
 
-export default async function EventPage({ params }: PageProps) {
+// Use the standard Next.js page props pattern
+type PageProps = {
+  params: Params;
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default function EventPage({ params, searchParams }: PageProps) {
   // Find the current event
   const event = eventsData.find(e => e.id === params.id);
 
@@ -24,7 +29,7 @@ export default async function EventPage({ params }: PageProps) {
 }
 
 // Generate static params for all events
-export async function generateStaticParams() {
+export function generateStaticParams(): Array<Params> {
   return eventsData.map((event) => ({
     id: event.id,
   }));
