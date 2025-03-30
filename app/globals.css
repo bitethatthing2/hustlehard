@@ -97,14 +97,25 @@
 
 /* Mobile-specific enhancements */
 @layer utilities {
-  /* Hide scrollbars but keep functionality */
+  /* Hide scrollbars but keep functionality - cross-browser compatible version */
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */
+    -webkit-scrollbar-width: none; /* Older Chrome/WebKit */
     scrollbar-width: none; /* Firefox */
   }
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
+  }
+  
+  /* For browsers that don't support any of the above */
+  @supports not ((scrollbar-width: none) or (-ms-overflow-style: none)) {
+    .scrollbar-hide {
+      overflow-x: auto;
+      /* Use padding to prevent content from appearing under the scrollbar */
+      padding-bottom: 20px;
+      margin-bottom: -20px;
+    }
   }
   
   /* Touch-friendly interactive elements */
