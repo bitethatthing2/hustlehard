@@ -53,7 +53,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
             <div className="bg-bar-muted/30 border border-bar-accent/20 rounded-xl p-6">
               <h2 className="text-2xl font-bold text-white mb-4">Gallery</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {event.gallery.map((image, index) => (
+                {event.gallery.map((image: string, index: number) => (
                   <div key={index} className="aspect-square relative rounded-lg overflow-hidden">
                     <Image
                       src={image}
