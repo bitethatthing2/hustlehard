@@ -48,7 +48,7 @@
     "postcss": "^8",
     "postcss-nested": "^7.0.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "5.8.2"
   },
   "description": "This project demonstrates how to implement web push notifications using Firebase Cloud Messaging (FCM) in a Next.js 14 application. It includes both client-side and service worker implementations for handling notifications in the foreground and background.",
   "main": "apply-rls-update.js",

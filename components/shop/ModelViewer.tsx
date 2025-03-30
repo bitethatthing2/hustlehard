@@ -15,20 +15,19 @@ export default function ModelViewer({ isModelLoaded, showTooltip, onLoad, onErro
             <p className="text-white/70 text-sm">Loading Preview...</p>
           </div>
         )}
-        <spline-viewer 
-          url="https://prod.spline.design/Mh91AUmppB4ru-9h/scene.splinecode"
-          className="w-full h-full"
+        <img
+          src="/product-preview.jpg"
+          alt="Product Preview"
+          className="w-full h-full object-cover"
           onLoad={onLoad}
           onError={onError}
           loading="lazy"
-          events-target="global"
-          cross-origin="anonymous"
         />
         {showTooltip && (
           <div className="absolute top-4 right-4 bg-black/95 text-white px-4 py-2 rounded-lg text-sm backdrop-blur-sm border border-bar-accent/20">
             <p className="flex items-center gap-2">
               <span className="text-bar-accent">👆</span>
-              Rotate to preview
+              Click to view details
             </p>
           </div>
         )}

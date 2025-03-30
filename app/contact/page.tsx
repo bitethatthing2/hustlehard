@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/router";
+import PageHeader from "@/components/shared/PageHeader";
 
 function Contact() {
   const router = useRouter();
@@ -11,18 +12,17 @@ function Contact() {
   };
 
   return (
-    <div className="p-10">
-      <h1 className="text-4xl mb-4 font-bold">
-        Woohoo! You&apos;re on the Contact page!
-      </h1>
+    <div className="container mx-auto">
+      <PageHeader 
+        title="Contact Us"
+        subtitle="Looks like the redirect worked! (You came here from the notification)"
+      />
 
-      <h2 className="text-xl mb-6">
-        Looks like the redirect worked! (You came here from the notification)
-      </h2>
-
-      <Button onClick={navigateToHome}>
-        Go back to Home
-      </Button>
+      <div className="max-w-xl mx-auto px-4">
+        <Button onClick={navigateToHome} className="w-full">
+          Go back to Home
+        </Button>
+      </div>
     </div>
   );
 }

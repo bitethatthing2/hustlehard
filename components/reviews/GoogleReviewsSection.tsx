@@ -35,22 +35,23 @@ const GoogleReviewsSection: React.FC = () => {
     };
   }, []);
 
+  // Define the callback outside of useEffect
+  const handleErrors = useCallback((event: ErrorEvent) => {
+    if (event.message?.includes('Tracking Prevention') && 
+        event.message?.includes('googleusercontent.com')) {
+      // Only log once per session using sessionStorage
+      if (!sessionStorage.getItem('tracking-warning-logged')) {
+        console.warn('Tracking prevention for Google User Images - using fallback');
+        sessionStorage.setItem('tracking-warning-logged', 'true');
+      }
+    }
+  }, []);
+
   // Optimized error handling for tracking prevention
   useEffect(() => {
-    const handleErrors = useCallback((event: ErrorEvent) => {
-      if (event.message?.includes('Tracking Prevention') && 
-          event.message?.includes('googleusercontent.com')) {
-        // Only log once per session using sessionStorage
-        if (!sessionStorage.getItem('tracking-warning-logged')) {
-          console.warn('Tracking prevention for Google User Images - using fallback');
-          sessionStorage.setItem('tracking-warning-logged', 'true');
-        }
-      }
-    }, []);
-
     window.addEventListener('error', handleErrors, { passive: true });
     return () => window.removeEventListener('error', handleErrors);
-  }, []);
+  }, [handleErrors]); // Include handleErrors in the dependency array
 
   return (
     <>

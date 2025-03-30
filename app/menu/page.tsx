@@ -3,21 +3,21 @@ import MenuGroup from '@/components/menu/MenuGroup';
 import MenuItem from '@/components/menu/MenuItem';
 import MenuCategory from '@/components/menu/MenuCategory';
 import { Separator } from '@/components/ui/separator';
+import OrderOptions from '@/components/menu/OrderOptions';
+import Link from 'next/link';
+import InstallAppPromo from '@/components/shared/InstallAppPromo';
+import PageHeader from '@/components/shared/PageHeader';
 
 // Icon placeholder imports
 // Import these icons later: Coffee, Flame, Utensils, Fish, Egg, ChefHat, Droplet
 
 const Menu: FC = () => {
   return (
-    <div className="py-16 px-4 max-w-4xl mx-auto">
-      <div className="text-center mb-12">
-        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
-          Our Menu
-        </h1>
-        <p className="text-gray-300 max-w-2xl mx-auto">
-          Enjoy our selection of crafted beverages and delicious food options
-        </p>
-      </div>
+    <div className="max-w-4xl mx-auto">
+      <PageHeader 
+        title="Our Menu"
+        subtitle="Enjoy our selection of crafted beverages and delicious food options"
+      />
       
       {/* Non-Alcoholic Beverages Section */}
       <section className="mb-12">
@@ -359,6 +359,31 @@ const Menu: FC = () => {
           </div>
         </div>
       </section>
+      
+      {/* Add Order Options component at the bottom */}
+      <Separator className="my-12 bg-bar-accent/20" />
+      
+      <div className="text-center mb-8">
+        <h2 className="font-display text-2xl md:text-3xl font-bold text-white mb-4">
+          Ready to Order?
+        </h2>
+        <p className="text-gray-300 max-w-2xl mx-auto mb-6">
+          Choose how you'd like to receive your delicious Side Hustle Bar experience or view all ordering options.
+        </p>
+        <div className="flex justify-center">
+          <Link 
+            href="/order" 
+            className="bg-bar-accent text-black font-medium px-6 py-3 rounded-lg hover:bg-bar-accent/80 transition-colors"
+          >
+            View All Ordering Options
+          </Link>
+        </div>
+      </div>
+      
+      {/* App Installation Promo */}
+      <Separator className="my-12 bg-bar-accent/20" />
+      
+      <InstallAppPromo />
     </div>
   );
 };

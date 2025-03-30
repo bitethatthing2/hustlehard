@@ -1,158 +1,55 @@
-# Firebase Cloud Messaging Web Push Notifications Project Organization
+#!/bin/bash
 
-This document provides a comprehensive overview of the project structure, key files, and their responsibilities.
+# --- Create Root Configuration Files ---
+echo "Creating root configuration files..."
+touch package.json tailwind.config.ts next.config.mjs tsconfig.json .eslintrc.json postcss.config.mjs .gitignore README.md TROUBLESHOOTING.md HTTPS-SETUP.md PROJECT-ORGANIZATION.md ENVIRONMENT-VARIABLES.md supabase-instructions.md firebase.ts netlify.toml netlify-build.js server.js generate-certs.js apply-rls-update.js next-env.d.ts
 
-## Project Structure
+# --- Create App Directory and Core Files/Routes ---
+echo "Creating app directory structure..."
+mkdir -p app/api app/contact app/instructions/ios app/instructions/android app/menu app/order app/shop app/events
+touch app/layout.tsx app/globals.css app/page.tsx
+touch app/api/route.ts # Placeholder for API endpoint
+touch app/contact/page.tsx
+touch app/instructions/ios/page.tsx
+touch app/instructions/android/page.tsx
+touch app/menu/page.tsx
+touch app/order/page.tsx
+touch app/shop/page.tsx
+touch app/events/page.tsx # Added based on menu links
 
-```
-firebase-cloud-messaging-web-push-notifications-with-nextjs-14-tutorial/
-├── app/                       # Next.js application pages and API routes
-│   ├── api/                   # Server-side API endpoints
-│   │   └── send-simple-notification/  # Simple notification API endpoint
-│   ├── contact/               # Contact page
-│   ├── test-supabase/         # Test page for Supabase
-│   ├── favicon.ico            # Site favicon
-│   ├── globals.css            # Global CSS styles
-│   ├── layout.tsx             # Root layout component
-│   └── page.tsx               # Home page component
-├── certificates/              # SSL certificates for local HTTPS development
-├── components/                # Reusable UI components
-│   └── ui/                    # UI component library
-├── hooks/                     # Custom React hooks
-│   └── useFcmToken.tsx        # Hook for FCM token management
-├── lib/                       # Utility libraries
-│   ├── router.ts              # Navigation utilities
-│   └── supabase.ts            # Supabase client and utilities
-├── public/                    # Static assets
-│   ├── firebase-messaging-sw.js  # Service worker for FCM background notifications
-│   ├── ic_stat_barber_1024/   # Notification icons for different resolutions
-│   └── manifest.json          # Web app manifest
-├── supabase/                  # Supabase configuration and migrations
-├── types/                     # TypeScript type definitions
-├── .env                       # Environment variables template
-├── .env.local                 # Local environment variables (gitignored)
-├── firebase.ts                # Firebase client configuration and utilities
-├── netlify.toml               # Netlify deployment configuration
-├── next.config.mjs            # Next.js configuration
-├── package.json               # NPM dependencies and scripts
-└── tailwind.config.ts         # Tailwind CSS configuration
-```
+# --- Create Components Directory Structure (with refinements) ---
+echo "Creating components directory structure..."
+mkdir -p components/Navigation components/Hero components/ui components/social components/reviews components/location components/menu components/shop
+# Place components in refined locations
+touch components/Navigation/MainMenuButton.tsx
+touch components/Hero/HeroSection.tsx
+# Other listed components
+touch components/VideoCarousel.tsx components/InstallAppPromo.tsx components/LocationInfo.tsx components/LocationSelect.tsx components/InfoSection.tsx
+# Placeholders based on imports
+touch components/ui/button.tsx
+touch components/location/LocationToggle.tsx
 
-## Key Files and Their Responsibilities
+# --- Create Public Directory Structure ---
+echo "Creating public directory structure..."
+# Creating the potentially unusual 'only_these' structure as described
+mkdir -p public/images public/only_these/logos public/pwa/icons public/svg public/service_logos
+# Service Worker and PWA files
+touch public/firebase-messaging-sw.js public/service-worker-fix.js public/sw.js public/manifest.json
+# Placeholder icons and assets mentioned
+touch public/pwa/icons/icon-192x192.png public/pwa/icons/icon-512x512.png
+# Specific files mentioned (adjust paths if 'only_these' isn't desired)
+touch public/only_these/logos/menu_icon.png public/only_these/logos/SHB_Logo_WhiteonBlackBG.png public/only_these/logos/salem_location.png public/only_these/logos/icon_enable_notifications.png public/only_these/ios_pwa_install.png public/only_these/android_pwa_install.png
+touch public/delivery-icon.svg public/pickup-icon.svg public/menu_icon.png public/salem_location.png
 
-### Firebase Configuration
+# --- Create Backend, Lib, State, Types, and Dev Tools Dirs ---
+echo "Creating supporting directories..."
+mkdir -p lib supabase contexts hooks types .vscode certificates
+touch lib/.gitkeep # Add .gitkeep to keep empty dir in git
+touch supabase/client.ts supabase/config.ts # Common Supabase placeholders
+touch contexts/LocationContext.tsx # Based on import
+touch hooks/.gitkeep
+touch types/.gitkeep
+touch .vscode/settings.json
+touch certificates/.gitkeep
 
-1. **firebase.ts**
-   - Initializes Firebase client
-   - Provides utilities for FCM token management
-   - Sets up foreground message handler
-   - Contains iOS detection and notification handling logic
-   - Version: 2.0.0
-
-2. **public/firebase-messaging-sw.js**
-   - Service worker for handling background notifications
-   - Processes push events
-   - Manages notification display and click handling
-   - Implements duplicate prevention logic
-   - Version: 2.0.0
-
-### React Hooks
-
-3. **hooks/useFcmToken.tsx**
-   - Manages FCM token retrieval
-   - Handles notification permission requests
-   - Sets up foreground message handlers
-   - Provides iOS-specific handling
-   - Version: 2.0.0
-
-### API Routes
-
-4. **app/api/send-simple-notification/route.ts**
-   - Server-side endpoint for sending notifications
-   - Initializes Firebase Admin SDK
-   - Validates request parameters
-   - Handles development mode simulation
-   - Formats and sends FCM messages
-
-### UI Components
-
-5. **app/page.tsx**
-   - Main application page
-   - User interface for notification testing
-   - Displays notification permission status
-   - Handles test notification sending
-   - Provides user feedback via toast notifications
-
-6. **app/layout.tsx**
-   - Root layout component
-   - Sets up metadata and viewport
-   - Loads environment variables
-   - Configures toast notifications
-
-### Configuration Files
-
-7. **netlify.toml**
-   - Configures Netlify deployment
-   - Sets up build commands
-   - Defines environment variables
-   - Configures Next.js plugin
-
-8. **next.config.mjs**
-   - Configures Next.js
-   - Sets up headers for security
-   - Configures image optimization
-
-## Key Features
-
-1. **Cross-Platform Notification Handling**
-   - Specific handling for iOS devices
-   - Service worker for background notifications
-   - Client-side handling for foreground notifications
-
-2. **Duplicate Prevention**
-   - Tracks notification IDs across components
-   - Prevents duplicate notifications from service worker and client
-   - Coordinates between foreground and background handling
-
-3. **Development Mode Support**
-   - Simulates notifications in development
-   - Handles self-signed certificates
-   - Provides test tokens for local development
-
-4. **Error Handling**
-   - Comprehensive error logging
-   - User feedback via toast notifications
-   - Graceful degradation when features are unavailable
-
-## Versioning
-
-All major components are versioned at 2.0.0, ensuring consistent behavior across:
-- Service worker
-- Client-side Firebase implementation
-- FCM token hook
-
-## Recent Fixes
-
-1. Fixed duplicate notifications issue by implementing notification ID tracking
-2. Corrected icon paths to ensure consistent display across platforms
-3. Improved error handling in the notification API route
-4. Fixed unescaped quotes in JSX that caused build failures on Netlify
-5. Enhanced iOS detection and handling for better cross-platform support
-
-## Development Workflow
-
-1. **Local Development**
-   - Run `npm run dev:trusted` for HTTPS with trusted certificates
-   - Development mode simulates notifications without FCM
-
-2. **Deployment**
-   - Netlify automatically builds and deploys on push to main
-   - Environment variables must be set in Netlify UI
-
-## Recommended Next Steps
-
-1. Consider implementing server-side scheduling of notifications
-2. Add analytics tracking for notification engagement
-3. Create notification preference management for users
-4. Add support for rich notifications with images and actions
-5. Implement notification categories and filtering 
+echo "Project structure created successfully!"

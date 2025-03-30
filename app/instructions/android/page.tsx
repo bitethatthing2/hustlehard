@@ -27,11 +27,23 @@ export default function AndroidInstructionsPage() {
           <div className="space-y-6">
             <section>
               <h2 className="text-xl font-semibold text-bar-accent mb-3">Step 1: Add to Home Screen</h2>
-              <div className="space-y-2 text-white/90">
-                <p>1. Open Chrome and visit our website</p>
-                <p>2. Tap the menu icon (⋮) in the top right</p>
-                <p>3. Select "Install app" or "Add to Home Screen"</p>
-                <p>4. Tap "Install" when prompted</p>
+              <div className="flex flex-col sm:flex-row gap-6 items-center">
+                <div className="space-y-2 text-white/90">
+                  <p>1. Open Chrome and visit our website</p>
+                  <p>2. Tap the menu icon (⋮) in the top right</p>
+                  <p>3. Select "Install app" or "Add to Home Screen"</p>
+                  <p>4. Tap "Install" when prompted</p>
+                </div>
+                <div className="relative w-full sm:w-1/2 h-auto rounded-lg overflow-hidden border border-white/10 shadow-lg">
+                  <Image 
+                    src="/only_these/android_pwa_install.png" 
+                    alt="Android Installation Guide" 
+                    width={300} 
+                    height={600}
+                    priority
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
               </div>
             </section>
 
