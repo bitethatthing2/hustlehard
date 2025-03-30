@@ -2,14 +2,11 @@ import { notFound } from 'next/navigation';
 import { eventsData, EventType } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-type Props = {
-  params: {
-    id: string;
-  };
-  searchParams: Record<string, string | string[] | undefined>;
-};
+interface PageProps {
+  params: { id: string };
+}
 
-export default function EventPage({ params }: Props) {
+export default async function EventPage({ params }: PageProps) {
   // Find the current event
   const event = eventsData.find(e => e.id === params.id);
 
@@ -27,7 +24,7 @@ export default function EventPage({ params }: Props) {
 }
 
 // Generate static params for all events
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return eventsData.map((event) => ({
     id: event.id,
   }));
