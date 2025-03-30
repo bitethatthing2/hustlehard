@@ -99,7 +99,7 @@ const OrderOptions = () => {
       serviceFee: 'Fees may apply',
       fee: '',
       time: 'Delivers in 26–41 min',
-      logo: '/service-logos/ubereats.png',
+      logo: '/only_these/logos/uber_eats.png',
       url: 'https://www.ubereats.com/store/side-hustle-bar/n5ak1cjlRvuf0Hefn7Iddw?diningMode=PICKUP&utm_campaign=CM2508147-search-free-nonbrand-google-pas_e_all_acq_Global&utm_medium=search-free-nonbrand&utm_source=google-pas'
     }
   ];
@@ -130,7 +130,7 @@ const OrderOptions = () => {
       name: 'UberEats',
       fee: 'No fee',
       time: 'Ready in 6–21 min',
-      logo: '/service-logos/ubereats.png',
+      logo: '/only_these/logos/uber_eats.png',
       url: 'https://www.ubereats.com/store/side-hustle-bar/n5ak1cjlRvuf0Hefn7Iddw?diningMode=PICKUP&utm_campaign=CM2508147-search-free-nonbrand-google-pas_e_all_acq_Global&utm_medium=search-free-nonbrand&utm_source=google-pas'
     }
   ];

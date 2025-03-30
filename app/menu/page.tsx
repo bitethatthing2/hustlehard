@@ -5,7 +5,6 @@ import MenuCategory from '@/components/menu/MenuCategory';
 import { Separator } from '@/components/ui/separator';
 import OrderOptions from '@/components/menu/OrderOptions';
 import Link from 'next/link';
-import InstallAppPromo from '@/components/shared/InstallAppPromo';
 import PageHeader from '@/components/shared/PageHeader';
 
 // Icon placeholder imports
@@ -379,11 +378,6 @@ const Menu: FC = () => {
           </Link>
         </div>
       </div>
-      
-      {/* App Installation Promo */}
-      <Separator className="my-12 bg-bar-accent/20" />
-      
-      <InstallAppPromo />
     </div>
   );
 };
