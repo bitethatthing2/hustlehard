@@ -7,7 +7,7 @@ import { ArrowLeft } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 // Import components dynamically to avoid hydration issues
-const HeroSection = dynamic(() => import('@/components/HeroSection'), {
+const HeroSection = dynamic(() => import('@/components/hero/HeroSection'), {
   ssr: false,
   loading: () => <div className="min-h-[80vh] flex items-center justify-center bg-black">Loading...</div>
 });
