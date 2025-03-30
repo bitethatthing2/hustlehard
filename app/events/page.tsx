@@ -1,7 +1,7 @@
 import EventCard from '@/components/events/EventCard';
 import { eventsData } from './eventsData';
 import Link from 'next/link';
-import BackButton from '@/components/BackButton';
+import BackButton from '@/components/navigation/BackButton';
 
 export default function EventsPage() {
   // Filter upcoming and past events

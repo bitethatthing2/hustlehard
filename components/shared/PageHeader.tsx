@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import BackButton from '@/components/BackButton';
+import BackButton from '@/components/navigation/BackButton';
 
 interface PageHeaderProps {
   title: string;

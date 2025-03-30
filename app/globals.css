@@ -97,25 +97,31 @@
 
 /* Mobile-specific enhancements */
 @layer utilities {
-  /* Hide scrollbars but keep functionality - cross-browser compatible version */
+  /* Hide scrollbars but keep functionality */
   .scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    -webkit-scrollbar-width: none; /* Older Chrome/WebKit */
-    scrollbar-width: none; /* Firefox */
+    /* Basic scrolling functionality */
+    overflow: auto;
+    
+    /* IE and Edge */
+    -ms-overflow-style: none;
   }
   
+  /* WebKit browsers (Chrome, Safari, Opera) */
   .scrollbar-hide::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    width: 0px;
+    height: 0px;
+    display: none;
   }
   
-  /* For browsers that don't support any of the above */
-  @supports not ((scrollbar-width: none) or (-ms-overflow-style: none)) {
-    .scrollbar-hide {
-      overflow-x: auto;
-      /* Use padding to prevent content from appearing under the scrollbar */
-      padding-bottom: 20px;
-      margin-bottom: -20px;
-    }
+  /* Additional universal approach */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: scroll;
+  }
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
   
   /* Touch-friendly interactive elements */
@@ -872,6 +878,24 @@ button {
 
 button:active {
   transform: translateY(1px);
+}
+
+/* Force vertical stacking for action buttons */
+.hero-action-buttons {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  align-items: center !important;
+}
+
+.hero-action-buttons > * {
+  width: 100% !important;
+  max-width: 250px !important;
+  margin-bottom: 12px !important;
+}
+
+.hero-action-buttons > *:last-child {
+  margin-bottom: 0 !important;
 }
 
 /* Enhance general button appearance */

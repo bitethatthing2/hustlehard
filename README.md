@@ -1,55 +1,106 @@
-#!/bin/bash
+# The Side Hustle Bar
 
-# --- Create Root Configuration Files ---
-echo "Creating root configuration files..."
-touch package.json tailwind.config.ts next.config.mjs tsconfig.json .eslintrc.json postcss.config.mjs .gitignore README.md TROUBLESHOOTING.md HTTPS-SETUP.md PROJECT-ORGANIZATION.md ENVIRONMENT-VARIABLES.md supabase-instructions.md firebase.ts netlify.toml netlify-build.js server.js generate-certs.js apply-rls-update.js next-env.d.ts
+A progressive web application (PWA) for The Side Hustle Bar, providing location-based services, menu browsing, ordering options, and promotional content.
 
-# --- Create App Directory and Core Files/Routes ---
-echo "Creating app directory structure..."
-mkdir -p app/api app/contact app/instructions/ios app/instructions/android app/menu app/order app/shop app/events
-touch app/layout.tsx app/globals.css app/page.tsx
-touch app/api/route.ts # Placeholder for API endpoint
-touch app/contact/page.tsx
-touch app/instructions/ios/page.tsx
-touch app/instructions/android/page.tsx
-touch app/menu/page.tsx
-touch app/order/page.tsx
-touch app/shop/page.tsx
-touch app/events/page.tsx # Added based on menu links
+## Project Overview
 
-# --- Create Components Directory Structure (with refinements) ---
-echo "Creating components directory structure..."
-mkdir -p components/Navigation components/Hero components/ui components/social components/reviews components/location components/menu components/shop
-# Place components in refined locations
-touch components/Navigation/MainMenuButton.tsx
-touch components/Hero/HeroSection.tsx
-# Other listed components
-touch components/VideoCarousel.tsx components/InstallAppPromo.tsx components/LocationInfo.tsx components/LocationSelect.tsx components/InfoSection.tsx
-# Placeholders based on imports
-touch components/ui/button.tsx
-touch components/location/LocationToggle.tsx
+This application enables users to:
+- Install the app on their device as a PWA
+- Enable notifications for updates and promotions
+- Browse menu items and place orders for delivery or pickup
+- View location-specific information
+- Access exclusive content and merchandise
 
-# --- Create Public Directory Structure ---
-echo "Creating public directory structure..."
-# Creating the potentially unusual 'only_these' structure as described
-mkdir -p public/images public/only_these/logos public/pwa/icons public/svg public/service_logos
-# Service Worker and PWA files
-touch public/firebase-messaging-sw.js public/service-worker-fix.js public/sw.js public/manifest.json
-# Placeholder icons and assets mentioned
-touch public/pwa/icons/icon-192x192.png public/pwa/icons/icon-512x512.png
-# Specific files mentioned (adjust paths if 'only_these' isn't desired)
-touch public/only_these/logos/menu_icon.png public/only_these/logos/SHB_Logo_WhiteonBlackBG.png public/only_these/logos/salem_location.png public/only_these/logos/icon_enable_notifications.png public/only_these/ios_pwa_install.png public/only_these/android_pwa_install.png
-touch public/delivery-icon.svg public/pickup-icon.svg public/menu_icon.png public/salem_location.png
+## Project Structure
 
-# --- Create Backend, Lib, State, Types, and Dev Tools Dirs ---
-echo "Creating supporting directories..."
-mkdir -p lib supabase contexts hooks types .vscode certificates
-touch lib/.gitkeep # Add .gitkeep to keep empty dir in git
-touch supabase/client.ts supabase/config.ts # Common Supabase placeholders
-touch contexts/LocationContext.tsx # Based on import
-touch hooks/.gitkeep
-touch types/.gitkeep
-touch .vscode/settings.json
-touch certificates/.gitkeep
+The project follows a modular organization with components grouped by functionality:
 
-echo "Project structure created successfully!"
+```
+├── app/                    # Next.js App Router pages
+│   ├── api/                # API routes
+│   ├── contact/            # Contact page
+│   ├── events/             # Events page
+│   ├── instructions/       # Installation instructions
+│   ├── menu/               # Menu page
+│   ├── order/              # Order page
+│   ├── shop/               # Shop page
+│   ├── globals.css         # Global styles
+│   ├── layout.tsx          # Root layout
+│   └── page.tsx            # Homepage
+│
+├── components/             # React components organized by functionality
+│   ├── hero/               # Hero section components
+│   ├── location/           # Location-related components
+│   ├── menu/               # Menu-related components
+│   ├── navigation/         # Navigation components
+│   ├── reviews/            # Review components
+│   ├── shared/             # Shared/reusable components
+│   ├── shop/               # Shop components
+│   ├── social/             # Social media components
+│   └── ui/                 # UI components (buttons, cards, etc.)
+│
+├── contexts/               # React context providers
+│
+├── hooks/                  # Custom React hooks
+│
+├── lib/                    # Utility libraries and services
+│
+├── public/                 # Static assets
+│   ├── images/             # Image assets
+│   ├── only_these/         # Special assets with specific paths
+│   │   └── logos/          # Logo assets
+│   ├── service-logos/      # Service provider logos
+│   └── manifest.json       # PWA manifest
+│
+├── supabase/               # Supabase configuration
+│
+└── types/                  # TypeScript type definitions
+```
+
+## Recent Changes
+
+### Code Organization Improvements (March 30, 2024)
+
+1. **Component Reorganization**:
+   - Moved navigation components to a dedicated `/components/navigation/` directory
+   - Ensured all component imports are updated to reflect new locations
+   - Created a more consistent directory structure
+
+2. **Duplicate Removal**:
+   - Removed duplicate HeroSection components
+   - Removed duplicate navigation components
+   - Consolidated shared components
+
+3. **Unused Code Cleanup**:
+   - Removed unused LocationInfo and LocationSelect components
+   - Removed unused InfoSection component
+   - Removed unused image assets
+
+4. **Style Improvements**:
+   - Enhanced cross-browser compatibility for scrollbar styling
+   - Fixed vertical button stacking in the hero section
+
+## Development Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+## PWA Features
+
+The application supports Progressive Web App features, including:
+
+- Installable on iOS and Android devices
+- Push notifications (requires permission)
+- Offline functionality
+- App-like experience
+
+## Contact
+
+For questions or support regarding this project, please contact the development team.

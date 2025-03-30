@@ -37,18 +37,17 @@ export default function VideoCarousel() {
           }}
           src={url}
           className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${
-            index === currentVideoIndex ? 'opacity-100' : 'opacity-0'
+            index === currentVideoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
           autoPlay={index === 0}
           muted
           playsInline
           onEnded={handleVideoEnd}
-          style={{ zIndex: index === currentVideoIndex ? 1 : 0 }}
         />
       ))}
       
       {/* Video Controls */}
-      <div className="absolute bottom-4 left-0 right-0 mx-auto flex justify-center items-center gap-2 z-10 px-4">
+      <div className="absolute bottom-4 left-0 right-0 mx-auto flex justify-center items-center gap-2 z-20 px-4">
         {videos.map((_, index) => (
           <button
             key={index}
@@ -67,7 +66,7 @@ export default function VideoCarousel() {
       </div>
       
       {/* Title Overlay */}
-      <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 md:p-5 bg-gradient-to-b from-black/70 to-transparent z-10">
+      <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 md:p-5 bg-gradient-to-b from-black/70 to-transparent z-20">
         <p className="text-white text-xs sm:text-sm md:text-base font-medium flex items-center justify-between">
           <span>Lone Wolf Collection</span>
           <span className="bg-black/30 px-2 py-1 rounded-full text-xs">{currentVideoIndex + 1}/{videos.length}</span>

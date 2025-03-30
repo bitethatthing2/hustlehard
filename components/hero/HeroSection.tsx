@@ -270,11 +270,11 @@ const HeroSection: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="flex justify-center gap-4">
+                    <div className="flex flex-col justify-center items-center gap-4">
                       {deviceType === 'ios' ? (
                         <button
                           onClick={handleInstallClick}
-                          className={buttonClasses}
+                          className={buttonClasses + " w-full"}
                         >
                           <Image
                             src="/only_these/ios_pwa_install.png"
@@ -289,7 +289,7 @@ const HeroSection: React.FC = () => {
                         <>
                           <button
                             onClick={handleInstallClick}
-                            className={buttonClasses}
+                            className={buttonClasses + " w-full"}
                           >
                             <Image
                               src="/only_these/android_pwa_install.png"
@@ -300,10 +300,11 @@ const HeroSection: React.FC = () => {
                             />
                             <span className={textClasses}>Install App</span>
                           </button>
+                          
                           {notificationStatus === 'idle' && (
                             <button
                               onClick={handleNotificationRequest}
-                              className={buttonClasses}
+                              className={buttonClasses + " w-full"}
                             >
                               <Image
                                 src="/only_these/logos/icon_enable_notifications.png"
