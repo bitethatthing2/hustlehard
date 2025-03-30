@@ -169,7 +169,7 @@ const OrderOptions = () => {
               href={option.url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bar-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-lg bg-bar-accent text-black hover:bg-bar-accent hover:scale-[1.02] h-10 px-4 shadow-md group-hover:shadow-lg text-sm"
+              className="w-full inline-flex items-center justify-center font-medium transition-all duration-300 bg-black border border-gray-700 text-white hover:bg-white/10 hover:text-white hover:border-white/50 rounded-lg py-2.5 px-4 shadow-md focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white/50"
             >
               Order Now
             </Link>
@@ -190,49 +190,49 @@ const OrderOptions = () => {
       <div className="flex flex-col md:flex-row gap-6 justify-center mb-12 max-w-2xl mx-auto">
         <Button
           onClick={() => setActiveOption('delivery')}
-          className={`text-lg py-6 px-10 rounded-xl shadow-lg transition-all duration-300 ${
+          className={`min-w-[180px] text-lg py-6 px-10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white/50 ${
             activeOption === 'delivery'
-              ? 'bg-bar-accent text-black ring-2 ring-bar-accent ring-offset-4 ring-offset-black'
-              : 'bg-black/40 border border-gray-700 text-white hover:bg-black/60 hover:border-bar-accent/30 hover:scale-[1.03] hover:shadow-xl'
+              ? 'bg-white text-black border-2 border-white/70 shadow-[0_0_15px_rgba(255,255,255,0.2)]'
+              : 'bg-black/40 border border-gray-700 text-white hover:bg-white/10 hover:text-white hover:border-white/50 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'
           }`}
         >
           <div className="flex items-center gap-4">
-            <div className={`w-12 h-12 flex items-center justify-center rounded-full ${
-              activeOption === 'delivery' ? 'bg-black/30' : 'bg-bar-accent/10'
+            <div className={`w-10 h-10 flex items-center justify-center rounded-full ${
+              activeOption === 'delivery' ? 'bg-black/10' : 'bg-white/10'
             }`}>
               <Image 
                 src="/delivery-icon.svg" 
                 alt="Delivery" 
-                width={28} 
-                height={28}
+                width={24} 
+                height={24}
                 className="text-current" 
               />
             </div>
-            <span className="text-xl font-semibold">Delivery</span>
+            <span className="font-semibold">Delivery</span>
           </div>
         </Button>
         
         <Button
           onClick={() => setActiveOption('pickup')}
-          className={`text-lg py-6 px-10 rounded-xl shadow-lg transition-all duration-300 ${
+          className={`min-w-[180px] text-lg py-6 px-10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white/50 ${
             activeOption === 'pickup'
-              ? 'bg-bar-accent text-black ring-2 ring-bar-accent ring-offset-4 ring-offset-black'
-              : 'bg-black/40 border border-gray-700 text-white hover:bg-black/60 hover:border-bar-accent/30 hover:scale-[1.03] hover:shadow-xl'
+              ? 'bg-white text-black border-2 border-white/70 shadow-[0_0_15px_rgba(255,255,255,0.2)]'
+              : 'bg-black/40 border border-gray-700 text-white hover:bg-white/10 hover:text-white hover:border-white/50 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'
           }`}
         >
           <div className="flex items-center gap-4">
-            <div className={`w-12 h-12 flex items-center justify-center rounded-full ${
-              activeOption === 'pickup' ? 'bg-black/30' : 'bg-bar-accent/10'
+            <div className={`w-10 h-10 flex items-center justify-center rounded-full ${
+              activeOption === 'pickup' ? 'bg-black/10' : 'bg-white/10'
             }`}>
               <Image 
                 src="/pickup-icon.svg" 
                 alt="Pickup" 
-                width={28} 
-                height={28}
+                width={24} 
+                height={24}
                 className="text-current" 
               />
             </div>
-            <span className="text-xl font-semibold">Pickup</span>
+            <span className="font-semibold">Pickup</span>
           </div>
         </Button>
       </div>
@@ -317,33 +317,33 @@ const OrderOptions = () => {
             Install our app and be the first to know about upcoming events, new menu items, exclusive artist spotlights, and even raffles and giveaways. Don't miss out - download now for instant updates!
           </p>
 
-          {/* Bottom installation guide buttons */}
-          <div className="flex flex-col md:flex-row gap-5 justify-center max-w-3xl mx-auto">
+          {/* Bottom installation guide buttons - updated design */}
+          <div className="flex flex-col md:flex-row gap-5 justify-center mx-auto">
             <Link 
               href="/instructions/ios"
-              className="flex-1 max-w-xs bg-gradient-to-br from-gray-900 to-black border border-bar-accent/40 text-white hover:brightness-125 py-4 px-5 rounded-xl hover:border-bar-accent/70 hover:scale-[1.02] shadow-lg transition-all duration-300 flex items-center justify-center"
+              className="min-w-[240px] max-w-xs mx-auto bg-black border border-white/20 text-white hover:bg-white hover:text-black py-4 px-5 rounded-xl hover:border-white/70 shadow-md transition-all duration-300 flex items-center justify-center"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-bar-accent/20 border border-bar-accent/30">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-7 h-7 fill-current text-bar-accent">
+                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-5 h-5 fill-current">
                     <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
                   </svg>
                 </div>
-                <span className="font-medium text-lg">iOS Installation Guide</span>
+                <span className="font-medium">iOS Installation Guide</span>
               </div>
             </Link>
             
             <Link 
               href="/instructions/android"
-              className="flex-1 max-w-xs bg-gradient-to-br from-gray-900 to-black border border-bar-accent/40 text-white hover:brightness-125 py-4 px-5 rounded-xl hover:border-bar-accent/70 hover:scale-[1.02] shadow-lg transition-all duration-300 flex items-center justify-center"
+              className="min-w-[240px] max-w-xs mx-auto bg-black border border-white/20 text-white hover:bg-white hover:text-black py-4 px-5 rounded-xl hover:border-white/70 shadow-md transition-all duration-300 flex items-center justify-center"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-bar-accent/20 border border-bar-accent/30">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="w-7 h-7 fill-current text-bar-accent">
+                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="w-5 h-5 fill-current">
                     <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/>
                   </svg>
                 </div>
-                <span className="font-medium text-lg">Android Installation Guide</span>
+                <span className="font-medium">Android Installation Guide</span>
               </div>
             </Link>
           </div>
