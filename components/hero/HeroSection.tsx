@@ -130,27 +130,27 @@ const HeroSection: React.FC = () => {
   const textClasses = "text-base font-medium";
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-hidden w-full">
       <div className="relative z-10 min-h-screen bg-gradient-to-b from-black/80 via-black/50 to-black/80">
         <section className="relative min-h-[85vh] flex flex-col overflow-hidden bg-black border-b border-bar-accent/30 w-full -mt-16">
           {/* Background effects and animations */}
           <div className="absolute inset-0 bg-black z-10 overflow-hidden">
             {/* Animated light beams */}
-            <div className="absolute inset-0 opacity-15">
-              <div className="absolute top-0 left-1/5 w-[1px] h-full bg-bar-accent animate-pulse-subtle"></div>
-              <div className="absolute top-0 left-2/5 w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-700"></div>
-              <div className="absolute top-0 left-3/5 w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-1300"></div>
-              <div className="absolute top-0 left-4/5 w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-1000"></div>
+            <div className="absolute inset-0 opacity-15 overflow-hidden">
+              <div className="absolute top-0 left-[20%] w-[1px] h-full bg-bar-accent animate-pulse-subtle"></div>
+              <div className="absolute top-0 left-[40%] w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-700"></div>
+              <div className="absolute top-0 left-[60%] w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-1300"></div>
+              <div className="absolute top-0 left-[80%] w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-1000"></div>
               
               {/* Diagonal accent lines */}
               <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10">
-                <div className="absolute top-0 -left-[100%] w-[200%] h-[1px] bg-gradient-to-r from-transparent via-bar-accent to-transparent transform rotate-[30deg] translate-y-[10vh]"></div>
-                <div className="absolute bottom-0 -left-[100%] w-[200%] h-[1px] bg-gradient-to-r from-transparent via-bar-accent to-transparent transform rotate-[-30deg] -translate-y-[10vh]"></div>
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-bar-accent to-transparent transform rotate-[30deg] translate-y-[10vh]"></div>
+                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-bar-accent to-transparent transform rotate-[-30deg] -translate-y-[10vh]"></div>
               </div>
             </div>
           </div>
           
-          <div className="w-full relative z-20 text-center px-3 flex flex-col justify-center h-full pt-24 pb-8">
+          <div className="w-full max-w-full relative z-20 text-center px-3 flex flex-col justify-center h-full pt-24 pb-8 overflow-hidden">
             <div className="flex-grow flex flex-col items-center justify-center">
               {/* Logo with glow effect */}
               <div className="relative mb-4">

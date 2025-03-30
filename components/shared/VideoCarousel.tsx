@@ -28,7 +28,7 @@ export default function VideoCarousel() {
   };
 
   return (
-    <div className="video-carousel-container video-carousel-xs h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] max-h-[600px] shadow-xl border border-white/10">
+    <div className="video-carousel-container video-carousel-xs h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] max-h-[600px] shadow-xl border border-white/10 overflow-hidden relative w-full">
       {videos.map((url, index) => (
         <video
           key={url}
