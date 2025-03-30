@@ -1,19 +1,23 @@
 import { notFound } from 'next/navigation';
-import { eventsData, EventType } from '../eventsData';
+import { eventsData } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-// Define the params type separately for better reusability
-type Params = { id: string };
-
-// Use the standard Next.js page props pattern
-type PageProps = {
-  params: Params;
-  searchParams: { [key: string]: string | string[] | undefined };
+// Define params type according to Netlify Edge function specs
+type Params = {
+  id: string;
 };
 
-export default function EventPage({ params, searchParams }: PageProps) {
+// Use Next.js standard props pattern
+interface PageProps {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export default function EventPage({ params }: PageProps) {
+  const { id } = params;
+
   // Find the current event
-  const event = eventsData.find(e => e.id === params.id);
+  const event = eventsData.find(e => e.id === id);
 
   // If event not found, show 404
   if (!event) {
@@ -22,15 +26,18 @@ export default function EventPage({ params, searchParams }: PageProps) {
 
   // Get related events (excluding current event)
   const relatedEvents = eventsData
-    .filter(e => e.id !== params.id)
+    .filter(e => e.id !== id)
     .slice(0, 3); // Limit to 3 related events
 
   return <EventPageClient event={event} relatedEvents={relatedEvents} />;
 }
 
 // Generate static params for all events
-export function generateStaticParams(): Array<Params> {
+export function generateStaticParams() {
   return eventsData.map((event) => ({
     id: event.id,
   }));
-} 
+}
+
+// Configure for Netlify Edge with latest format
+export const runtime = 'edge'; 
