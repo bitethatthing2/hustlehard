@@ -2,18 +2,18 @@ import { notFound } from 'next/navigation';
 import { eventsData } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-// Define params type for Netlify Edge
+// Define params type for static routes
 interface Params {
   id: string;
 }
 
-// Props type following Next.js + Netlify Edge pattern
+// Props type following Next.js pattern
 interface PageProps {
   params: Params;
 }
 
-// Server Component for Edge runtime
-export default async function EventPage({ params }: PageProps) {
+// Server Component with static generation
+export default function EventPage({ params }: PageProps) {
   // Destructure id from params
   const { id } = params;
 
@@ -34,17 +34,8 @@ export default async function EventPage({ params }: PageProps) {
 }
 
 // Generate static params for all events
-export async function generateStaticParams(): Promise<Params[]> {
+export function generateStaticParams(): Params[] {
   return eventsData.map((event) => ({
     id: event.id,
   }));
-}
-
-// Configure for Netlify Edge
-export const runtime = 'edge';
-
-// Add Netlify Edge specific config
-export const config = {
-  runtime: 'edge',
-  regions: ['all'], // Deploy to all regions
-}; 
+} 
