@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <head>
         {/* Load environment variables before any other scripts */}
         <Script src="/env-config.js" strategy="beforeInteractive" />
@@ -75,7 +75,7 @@ export default function RootLayout({
         {/* Add referrer policy to enable third-party content loading */}
         <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>
-      <body className={`${inter.className} bg-black min-h-screen`}>
+      <body className={`${inter.className} bg-black min-h-screen overflow-x-hidden`}>
         <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
           <div className="w-full max-w-7xl mx-auto px-4 py-2 sm:py-3 flex justify-between items-center">
             <div className="h-10 sm:h-12 w-auto">
@@ -93,7 +93,7 @@ export default function RootLayout({
           </div>
         </header>
         
-        <main className="pt-16 sm:pt-20 w-full flex flex-col items-center">
+        <main className="pt-16 sm:pt-20 w-full flex flex-col items-center overflow-hidden">
           <Toaster />
           {children}
         </main>
