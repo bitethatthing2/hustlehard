@@ -36,12 +36,5 @@ export default async function EventPage({ params }: PageProps) {
   return <EventPageClient event={event} relatedEvents={relatedEvents} />;
 }
 
-// Generate static params for all events (still needed for local development)
-export async function generateStaticParams(): Promise<Params[]> {
-  return eventsData.map((event) => ({
-    id: event.id,
-  }));
-}
-
 // Configure for Netlify Edge
 export const runtime = 'edge'; 
