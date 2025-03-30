@@ -2,13 +2,13 @@ import { notFound } from 'next/navigation';
 import { eventsData, EventType } from '../eventsData';
 import EventPageClient from './EventPageClient';
 
-interface PageProps {
+type Props = {
   params: {
     id: string;
   };
-}
+};
 
-export default function EventPage({ params }: PageProps) {
+export default async function EventPage({ params }: Props) {
   // Find the current event
   const event = eventsData.find(e => e.id === params.id);
 
