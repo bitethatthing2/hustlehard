@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 const videos = [
   'https://video.wixstatic.com/video/6c399c_7cfb19f9f26d42c8b568f0f6fefdd2cd/720p/mp4/file.mp4',
@@ -68,7 +69,16 @@ export default function VideoCarousel() {
       {/* Title Overlay */}
       <div className="absolute top-0 left-0 right-0 p-3 sm:p-4 md:p-5 bg-gradient-to-b from-black/70 to-transparent z-20">
         <p className="text-white text-xs sm:text-sm md:text-base font-medium flex items-center justify-between">
-          <span>Lone Wolf Collection</span>
+          <span className="flex items-center gap-2">
+            <Image 
+              src="/only_these/logos/welcome_to_pack.png" 
+              alt="Wolf Icon" 
+              width={20} 
+              height={20} 
+              className="w-5 h-5" 
+            />
+            Lone Wolf Collection
+          </span>
           <span className="bg-black/30 px-2 py-1 rounded-full text-xs">{currentVideoIndex + 1}/{videos.length}</span>
         </p>
       </div>

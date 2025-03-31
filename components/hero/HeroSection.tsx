@@ -288,16 +288,16 @@ const HeroSection: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-3 sm:mb-6">
                   <div className="flex items-center justify-center gap-2 sm:gap-4">
                     <Image 
-                      src="/salem_location.png" 
-                      alt="Salem Location" 
+                      src="/only_these/logos/welcome_to_pack.png" 
+                      alt="Wolf Icon" 
                       width={40} 
                       height={40} 
                       className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" 
                     />
                     <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white text-center">Lone Wolf Collection</h2>
                     <Image 
-                      src="/salem_location.png" 
-                      alt="Salem Location" 
+                      src="/only_these/logos/welcome_to_pack.png" 
+                      alt="Wolf Icon" 
                       width={40} 
                       height={40} 
                       className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" 
