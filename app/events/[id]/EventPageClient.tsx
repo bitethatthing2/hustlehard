@@ -76,7 +76,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                 <h3 className="text-lg font-bold text-white mb-2">Location</h3>
                 <p className="text-white">{event.location}</p>
                 {event.address && (
-                  <p className="text-white/70 text-sm mt-1">{event.address}</p>
+                  <p className="text-white mt-1">{event.address}</p>
                 )}
               </div>
 
@@ -102,7 +102,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(event.title)}&url=${encodeURIComponent(window.location.href)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-white hover:text-white/80 transition-colors"
+                    className="p-2 text-white hover:bg-white/10 transition-colors"
                     aria-label="Share on Twitter"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-white hover:text-white/80 transition-colors"
+                    className="p-2 text-white hover:bg-white/10 transition-colors"
                     aria-label="Share on Facebook"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     href={event.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-white hover:text-white/80 transition-colors"
+                    className="p-2 text-white hover:bg-white/10 transition-colors"
                     aria-label="View on Instagram"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -157,10 +157,10 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     />
                   </div>
                   <div className="p-3 md:p-4">
-                    <h3 className="font-bold text-white group-hover:text-white/80 transition-colors">
+                    <h3 className="font-bold text-white">
                       {relatedEvent.title}
                     </h3>
-                    <p className="text-white/70 text-sm mt-1">{relatedEvent.date}</p>
+                    <p className="text-white mt-1">{relatedEvent.date}</p>
                   </div>
                 </Link>
               ))}

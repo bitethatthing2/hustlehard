@@ -218,6 +218,22 @@
   .icon-contrast-inverse {
     @apply text-white;
   }
+
+  /* Remove any glow effects from event titles */
+  .events-title {
+    text-shadow: none !important;
+  }
+
+  /* Ensure all text colors are white in events pages */
+  .events-page h1, 
+  .events-page h2, 
+  .events-page h3, 
+  .events-page p,
+  .events-page span,
+  .events-page button,
+  .events-page a {
+    @apply text-white;
+  }
 }
 
 /* Custom animations */
@@ -293,10 +309,8 @@
 /* Drop shadow effect for the logo */
 .filter.drop-shadow-glow,
 .drop-shadow-glow {
-  filter: drop-shadow(0 0 5px hsl(var(--bar-accent)))
-         drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
-  text-shadow: 0 0 5px hsl(var(--bar-accent)),
-               0 0 10px rgba(255, 255, 255, 0.5);
+  filter: none;
+  text-shadow: none;
 }
 
 /* Custom styles for the Bar */
@@ -391,17 +405,13 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
-  box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.5),
-              0 0 15px 0 hsl(var(--bar-accent)/0.4),
-              0 0 20px -3px rgba(255, 255, 255, 0.2) inset;
+  box-shadow: none;
   transition: all 0.3s ease;
   border: 2px solid rgba(255, 255, 255, 0.25) !important;
 }
 
 .holographic-border:hover {
-  box-shadow: 0 4px 25px -1px rgba(0, 0, 0, 0.5),
-              0 0 20px 2px hsl(var(--bar-accent)/0.5),
-              0 0 25px -3px rgba(255, 255, 255, 0.25) inset;
+  box-shadow: none;
 }
 
 .holographic-border::before {
@@ -412,26 +422,8 @@
   right: -1px;
   bottom: -1px;
   z-index: -1;
-  background: linear-gradient(
-    45deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.12) 45%, 
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(255, 255, 255, 0.12) 55%,
-    transparent 60%
-  );
-  background-size: 200% 200%;
-  animation: holographic-border-shine 3s linear infinite;
+  background: none;
   pointer-events: none;
-}
-
-@keyframes holographic-border-shine {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 /* Modern card styles */

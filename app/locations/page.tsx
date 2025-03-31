@@ -57,11 +57,11 @@ const LocationsPageContent = () => {
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-3 mb-4">
             <Image 
-              src="/SHB_Logo_WhiteonBlackBG.png"
+              src="/only_these/logos/hustle_pdx_for_maps.png"
               alt="Side Hustle Map Icon"
-              width={40}
-              height={40}
-              className="w-10 h-10 object-contain"
+              width={80}
+              height={80}
+              className="w-16 h-16 object-contain"
             />
             <h3 className="text-2xl font-bold text-white text-center">
               {selectedLocation === 'portland' ? 'SIDEHUSTLE PDX' : 'SIDEHUSTLE SALEM'}

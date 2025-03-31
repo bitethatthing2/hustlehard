@@ -35,7 +35,7 @@ export default function EventsPage() {
             {upcomingEvents.length === 0 && (
               <Link 
                 href="#newsletter" 
-                className="px-4 py-2 bg-transparent border border-white text-white rounded-md font-semibold hover:bg-white/10 transition-colors transform hover:scale-[1.02]"
+                className="px-4 py-2 bg-transparent border border-white text-white rounded-md font-semibold hover:bg-white/10 transition-colors"
               >
                 Get Notified
               </Link>
