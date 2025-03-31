@@ -7,12 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 
 // Standard button styles matching Shadcn UI standards
 export const buttonVariants = {
-  default: "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
-  primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-  outline: "border border-input hover:bg-accent hover:text-accent-foreground",
-  ghost: "hover:bg-accent hover:text-accent-foreground",
-  destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+  default: "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-white text-black border border-input shadow-sm hover:bg-gray-50/80",
+  primary: "bg-white text-black border-input hover:bg-gray-50/80",
+  secondary: "bg-white text-black border-input hover:bg-gray-50/80",
+  outline: "bg-white text-black border border-input hover:bg-gray-50/80",
+  ghost: "bg-white text-black hover:bg-gray-50/80 border-transparent",
+  destructive: "bg-white text-black border-destructive hover:bg-destructive/10 hover:text-destructive"
 }
 
 // Standard sizes for buttons

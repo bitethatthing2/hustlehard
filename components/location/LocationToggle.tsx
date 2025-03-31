@@ -1,48 +1,47 @@
-import React from 'react';
-import { useLocation } from '@/contexts/LocationContext';
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const LocationToggle: React.FC = () => {
-  const { selectedLocation, setSelectedLocation } = useLocation();
+  const [selectedLocation, setSelectedLocation] = useState('portland');
 
   return (
-    <div className="relative flex items-center bg-black/80 p-1.5 rounded-full border-2 border-bar-accent/50 backdrop-blur-sm holographic-border shadow-lg w-[280px]">
-      {/* Enhanced outer glow effect for the container */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-bar-accent/30 via-white/10 to-bar-accent/30 blur-lg opacity-70 rounded-full"></div>
-      
-      {/* Sliding Indicator with enhanced glow */}
+    <div className="relative flex items-center p-1 bg-background/20 backdrop-blur-sm rounded-full border border-white/10 shadow-md w-full max-w-xs mx-auto">
+      {/* Sliding indicator */}
       <div
-        className={`absolute h-[calc(100%-6px)] top-[3px] w-[calc(50%-3px)] rounded-full bg-gradient-to-r from-bar-accent/50 to-bar-accent/30 border border-bar-accent/70 shadow-lg transition-transform duration-300 ease-in-out pulsing-shadow ${
-          selectedLocation === 'salem' ? 'translate-x-[calc(100%+3px)]' : 'translate-x-[3px]'
-        }`}
-      >
-        <div className="absolute inset-0 bg-white/10 rounded-full"></div>
-        {/* Additional inner glow for the active indicator */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-bar-accent/20 to-transparent blur-sm"></div>
-      </div>
+        className={cn(
+          "absolute h-[calc(100%-8px)] top-[4px] w-[calc(50%-4px)] rounded-full bg-white/10 border border-white/20 shadow-sm transition-transform duration-300 ease-in-out",
+          selectedLocation === 'salem' ? 'translate-x-[calc(100%+4px)]' : 'translate-x-[4px]'
+        )}
+      />
       
       {/* Portland Button */}
-      <button
+      <Button
         onClick={() => setSelectedLocation('portland')}
-        className={`relative z-10 px-4 py-2 rounded-full transition-all duration-300 text-sm font-bold tracking-wider w-1/2 ${
-          selectedLocation === 'portland'
-            ? 'text-white drop-shadow-glow'
-            : 'text-white/60 hover:text-white/90 hover:drop-shadow-glow'
-        }`}
+        variant={selectedLocation === 'portland' ? 'default' : 'ghost'}
+        className={cn(
+          "relative z-10 px-4 py-2 rounded-full w-1/2 border-0 shadow-none bg-transparent",
+          selectedLocation === 'portland' 
+            ? "text-black font-bold bg-white"
+            : "text-white hover:text-white/90 hover:bg-white/10"
+        )}
       >
         PORTLAND
-      </button>
+      </Button>
 
       {/* Salem Button */}
-      <button
+      <Button
         onClick={() => setSelectedLocation('salem')}
-        className={`relative z-10 px-4 py-2 rounded-full transition-all duration-300 text-sm font-bold tracking-wider w-1/2 ${
-          selectedLocation === 'salem'
-            ? 'text-white drop-shadow-glow'
-            : 'text-white/60 hover:text-white/90 hover:drop-shadow-glow'
-        }`}
+        variant={selectedLocation === 'salem' ? 'default' : 'ghost'}
+        className={cn(
+          "relative z-10 px-4 py-2 rounded-full w-1/2 border-0 shadow-none bg-transparent",
+          selectedLocation === 'salem' 
+            ? "text-black font-bold bg-white"
+            : "text-white hover:text-white/90 hover:bg-white/10"
+        )}
       >
         SALEM
-      </button>
+      </Button>
     </div>
   );
 };
