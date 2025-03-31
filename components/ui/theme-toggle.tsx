@@ -37,36 +37,27 @@ export function ThemeToggle({ onToggle }: ThemeToggleProps) {
             height={32}
             className="w-8 h-8"
           />
-          <div className="flex items-center gap-1">
-            <span>Portland</span>
-            <Image 
-              src="/only_these/logos/welcome_to_pack.png"
-              alt="Wolf Icon"
-              width={20}
-              height={20}
-              className="w-5 h-5"
-            />
-          </div>
+          <span>Portland</span>
         </>
       ) : (
         <>
-          <Image 
-            src="/salem_location.png"
-            alt="Salem"
-            width={32}
-            height={32}
-            className="w-8 h-8"
-          />
-          <div className="flex items-center gap-1">
-            <span>Salem</span>
+          <div className="relative">
+            <Image 
+              src="/salem_location.png"
+              alt="Salem"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
             <Image 
               src="/only_these/logos/welcome_to_pack.png"
               alt="Wolf Icon"
               width={20}
               height={20}
-              className="w-5 h-5"
+              className="absolute -right-1 -bottom-1 w-5 h-5"
             />
           </div>
+          <span>Salem</span>
         </>
       )}
     </Button>
