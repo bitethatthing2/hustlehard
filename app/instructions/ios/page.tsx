@@ -108,10 +108,11 @@ export default function IOSInstructionsPage() {
               <div className="flex items-center gap-3 mb-3">
                 <Image 
                   src="/only_these/logos/welcome_to_pack.png" 
-                  alt="Welcome to the Pack" 
-                  width={32} 
-                  height={32}
-                  className="w-8 h-8"
+                  alt="Wolf Icon" 
+                  width={40} 
+                  height={40} 
+                  className="w-8 h-8 object-contain mr-2"
+                  unoptimized
                 />
                 <h2 className="text-xl font-semibold text-bar-accent">Welcome to the Pack!</h2>
               </div>

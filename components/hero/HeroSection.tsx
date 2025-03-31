@@ -350,6 +350,7 @@ const HeroSection: React.FC = () => {
                       width={40} 
                       height={40} 
                       className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" 
+                      unoptimized
                     />
                     <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white text-center">Lone Wolf Collection</h2>
                     <Image 
@@ -357,7 +358,8 @@ const HeroSection: React.FC = () => {
                       alt="Wolf Icon" 
                       width={40} 
                       height={40} 
-                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" 
+                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
+                      unoptimized
                     />
                   </div>
                   <div className="mt-2 sm:mt-0 text-center sm:text-left">

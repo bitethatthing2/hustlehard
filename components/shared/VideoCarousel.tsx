@@ -73,9 +73,10 @@ export default function VideoCarousel() {
             <Image 
               src="/only_these/logos/welcome_to_pack.png" 
               alt="Wolf Icon" 
-              width={20} 
-              height={20} 
-              className="w-5 h-5" 
+              width={40} 
+              height={40} 
+              className="w-8 h-8 object-contain mr-2"
+              unoptimized
             />
             Lone Wolf Collection
           </span>

@@ -34,13 +34,15 @@ export function ThemeToggle({ onToggle, className }: ThemeToggleProps) {
       )}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
     >
-      <div className="relative w-8 h-8 flex items-center justify-center">
+      <div className="flex items-center gap-3 rounded-full p-1 relative ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
         <Image 
-          src="/only_these/logos/welcome_to_pack.png"
-          alt="Wolf Icon"
-          width={32}
-          height={32}
-          className="w-8 h-8"
+          src="/only_these/logos/welcome_to_pack.png" 
+          alt="Location Toggle" 
+          width={30} 
+          height={30}
+          className="w-7 h-7 object-contain absolute left-1 top-1 transition-opacity"
+          unoptimized
+          style={{ opacity: theme === 'light' ? 0 : 1 }}
         />
       </div>
       <span className="text-white">

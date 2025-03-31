@@ -202,10 +202,11 @@ const OrderOptions = () => {
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
               <Image 
                 src="/only_these/logos/welcome_to_pack.png" 
-                alt="Delivery" 
-                width={24} 
-                height={24}
-                className="w-6 h-6" 
+                alt="Wolf Icon" 
+                width={40} 
+                height={40} 
+                className="w-8 h-8 object-contain"
+                unoptimized
               />
             </div>
             <span className="font-semibold">Delivery</span>
@@ -221,10 +222,11 @@ const OrderOptions = () => {
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
               <Image 
                 src="/only_these/logos/welcome_to_pack.png" 
-                alt="Pickup" 
-                width={24} 
-                height={24}
-                className="w-6 h-6" 
+                alt="Wolf Icon" 
+                width={40} 
+                height={40} 
+                className="w-8 h-8 object-contain"
+                unoptimized
               />
             </div>
             <span className="font-semibold">Pickup</span>
