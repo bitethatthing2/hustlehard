@@ -203,7 +203,7 @@ const HeroSection: React.FC = () => {
 
               {/* Main hero information card */}
               <div className="w-full max-w-2xl mx-auto">
-                <div className="text-lg md:text-xl lg:text-2xl text-white font-medium mb-8 md:mb-10 mx-auto rounded-lg p-5 border border-gray-700 bg-black shadow-md">
+                <div className="text-lg md:text-xl lg:text-2xl text-white font-medium mb-8 md:mb-10 mx-auto rounded-lg p-5 border border-gray-700 bg-black">
                   <p className="mb-3">High-Energy Sports Bar • Restaurant • Nightclub</p>
                   <p className="font-semibold mb-1">Featuring Executive Chef Rebecca Sanchez</p>
                   <p className="text-sm md:text-base italic">#1 Rated Mexican Food & Best Tacos in Town</p>
@@ -211,7 +211,7 @@ const HeroSection: React.FC = () => {
                   {/* Install buttons container */}
                   <div className="flex flex-col items-center gap-6 mt-6">
                     {/* Menu Feature Highlight */}
-                    <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative shadow-md">
+                    <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative">
                       <div className="relative z-10 flex items-center gap-3 mb-3">
                         <div className="p-2 rounded-full border border-gray-600 flex items-center justify-center">
                           <Image
@@ -310,7 +310,7 @@ const HeroSection: React.FC = () => {
                 
                 {/* Shop Now Button */}
                 <div className="w-full flex justify-center mb-4 sm:mb-0 mt-6">
-                  <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative shadow-md">
+                  <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative">
                     {/* Button with Shadcn UI styling */}
                     <div className="relative z-10">
                       <Button

@@ -115,7 +115,7 @@ export default function EventsPage() {
                 Subscribe
               </button>
             </div>
-            <p className="text-white/60 text-sm mt-4">
+            <p className="text-white mt-4">
               We respect your privacy and will never share your information.
             </p>
           </div>
