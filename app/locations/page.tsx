@@ -1,23 +1,29 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, LocationProvider } from '@/contexts/LocationContext';
 import PortlandMap from '@/components/maps/PortlandMap';
 import SalemMap from '@/components/maps/SalemMap';
 import LocationDirectionButtons from '@/components/maps/LocationDirectionButtons';
-import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import PageHeader from '@/components/shared/PageHeader';
 import { PhoneCall, Mail, Clock } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 const LocationsPageContent = () => {
   const { selectedLocation, locationData } = useLocation();
+  const { theme } = useTheme();
   
-  const portlandInfo = locationData.portland;
-  const salemInfo = locationData.salem;
-
-  // Determine which location to show first based on the selected location
-  const showPortlandFirst = selectedLocation === 'portland';
+  // Get the active location data
+  const activeLocation = selectedLocation === 'portland' ? locationData.portland : locationData.salem;
+  
+  // YouTube embed URLs for each location (replace with actual URLs)
+  const portlandEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d359640.0992522873!2d-123.1637501704348!3d45.233873097998526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1743394983254!5m2!1sen!2sus";
+  const salemEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.155837503885!2d-123.04139512405341!3d44.94049986822883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1743394931645!5m2!1sen!2sus";
+  
+  // Get the current embed URL based on selected location
+  const currentEmbedUrl = selectedLocation === 'portland' ? portlandEmbedUrl : salemEmbedUrl;
   
   return (
     <div className="container mx-auto px-4 py-8 mb-24">
@@ -26,112 +32,99 @@ const LocationsPageContent = () => {
         subtitle="Visit us at either of our locations in Portland or Salem"
       />
       
-      <div className="max-w-xl mx-auto mb-6">
-        <ThemeToggle className="max-w-xs mx-auto" />
-      </div>
-      
-      {/* Active Location Map - Shows directly below the toggle */}
-      <div className="w-full max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-white text-center my-4">
-          {showPortlandFirst ? portlandInfo.name : salemInfo.name}
-        </h2>
-        <div className="mb-6">
-          {showPortlandFirst ? <PortlandMap /> : <SalemMap />}
-        </div>
-        <LocationDirectionButtons location={showPortlandFirst ? 'portland' : 'salem'} />
-      </div>
-      
-      {/* Location Details */}
-      <div className="flex flex-col gap-20 mt-12">
-        {/* Active Location */}
-        <div className="flex flex-col gap-8" id={showPortlandFirst ? "portland" : "salem"}>
-          {/* Location Info */}
-          <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-            <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
-              <h3 className="text-xl font-semibold text-white">Contact Information</h3>
-              
-              <div className="flex items-center gap-3">
-                <PhoneCall className="w-5 h-5 text-white/60" />
-                <p className="text-white">{showPortlandFirst ? portlandInfo.phone : salemInfo.phone}</p>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-white/60" />
-                <p className="text-white">{showPortlandFirst ? portlandInfo.email : salemInfo.email}</p>
-              </div>
-              
-              <p className="text-white mt-4">
-                {showPortlandFirst ? portlandInfo.address : salemInfo.address}
-              </p>
-            </div>
-            
-            <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
-              <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-white/60" />
-                <h3 className="text-xl font-semibold text-white">Hours</h3>
-              </div>
-              
-              <div className="space-y-2">
-                {Object.entries(showPortlandFirst ? portlandInfo.hours : salemInfo.hours).map(([day, hours]) => (
-                  <div key={day} className="flex justify-between items-center">
-                    <span className="text-white/80">{day}</span>
-                    <span className="text-white">{hours}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <div className="flex flex-col items-center mb-6">
+        {/* Location Toggle - Prominently displayed */}
+        <div className="w-full max-w-md mx-auto">
+          <ThemeToggle className="w-full mx-auto" />
         </div>
         
-        {/* Second Location */}
-        <div className="flex flex-col gap-8" id={showPortlandFirst ? "salem" : "portland"}>
-          <h2 className="text-3xl font-bold text-white text-center">
-            {showPortlandFirst ? salemInfo.name : portlandInfo.name}
-          </h2>
-          
-          {/* Map */}
-          <div className="w-full max-w-4xl mx-auto">
-            {showPortlandFirst ? <SalemMap /> : <PortlandMap />}
+        {/* Active Location Title */}
+        <h2 className="text-3xl font-bold text-white text-center mt-6 mb-4">
+          {activeLocation.name}
+        </h2>
+      </div>
+      
+      {/* Active Location Map - Directly below toggle */}
+      <div className="w-full max-w-4xl mx-auto mb-8">
+        <div className="mb-6">
+          {selectedLocation === 'portland' ? <PortlandMap /> : <SalemMap />}
+        </div>
+        <LocationDirectionButtons location={selectedLocation} />
+      </div>
+      
+      {/* YouTube Embed Section - Changes based on location toggle */}
+      <div className="w-full max-w-4xl mx-auto mt-8 mb-12">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-4">
+            <Image 
+              src="/hustle_pdx_for maps.png"
+              alt="Side Hustle Map Icon"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain"
+            />
+            <h3 className="text-2xl font-bold text-white text-center">
+              {selectedLocation === 'portland' ? 'SIDEHUSTLE PDX' : 'SIDEHUSTLE SALEM'}
+            </h3>
           </div>
           
-          {/* Direction Buttons */}
-          <LocationDirectionButtons location={showPortlandFirst ? 'salem' : 'portland'} />
+          <div className="w-full rounded-lg overflow-hidden border border-white/10 shadow-lg">
+            <div className="aspect-video w-full">
+              <iframe
+                src={currentEmbedUrl}
+                title={`${activeLocation.name} Location Map`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </div>
           
-          {/* Location Info */}
-          <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-            <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
-              <h3 className="text-xl font-semibold text-white">Contact Information</h3>
-              
-              <div className="flex items-center gap-3">
-                <PhoneCall className="w-5 h-5 text-white/60" />
-                <p className="text-white">{showPortlandFirst ? salemInfo.phone : portlandInfo.phone}</p>
+          <p className="text-white/80 mt-4 text-center max-w-2xl">
+            {selectedLocation === 'portland' 
+              ? 'THE WOLF IS IN DOWNTOWN PDX' 
+              : 'THE WOLF IS IN DOWNTOWN SALEM'}
+          </p>
+        </div>
+      </div>
+      
+      {/* Location Details for the active location */}
+      <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-8">
+        <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
+          <h3 className="text-xl font-semibold text-white">Contact Information</h3>
+          
+          <div className="flex items-center gap-3">
+            <PhoneCall className="w-5 h-5 text-white/60" />
+            <p className="text-white">{activeLocation.phone}</p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Mail className="w-5 h-5 text-white/60" />
+            <p className="text-white">{activeLocation.email}</p>
+          </div>
+          
+          <p className="text-white mt-4">
+            {activeLocation.address}
+          </p>
+        </div>
+        
+        <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5 text-white/60" />
+            <h3 className="text-xl font-semibold text-white">Hours</h3>
+          </div>
+          
+          <div className="space-y-2">
+            {Object.entries(activeLocation.hours).map(([day, hours]) => (
+              <div key={day} className="flex justify-between items-center">
+                <span className="text-white/80">{day}</span>
+                <span className="text-white">{hours}</span>
               </div>
-              
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-white/60" />
-                <p className="text-white">{showPortlandFirst ? salemInfo.email : portlandInfo.email}</p>
-              </div>
-              
-              <p className="text-white mt-4">
-                {showPortlandFirst ? salemInfo.address : portlandInfo.address}
-              </p>
-            </div>
-            
-            <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
-              <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-white/60" />
-                <h3 className="text-xl font-semibold text-white">Hours</h3>
-              </div>
-              
-              <div className="space-y-2">
-                {Object.entries(showPortlandFirst ? salemInfo.hours : portlandInfo.hours).map(([day, hours]) => (
-                  <div key={day} className="flex justify-between items-center">
-                    <span className="text-white/80">{day}</span>
-                    <span className="text-white">{hours}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

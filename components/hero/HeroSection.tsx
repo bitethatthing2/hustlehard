@@ -25,6 +25,13 @@ const HeroSection: React.FC = () => {
   // Get the current logo based on theme
   const logoImage = theme === 'dark' ? portlandLogoPath : salemLogoPath;
   
+  // Google Maps embed URLs for Portland and Salem locations
+  const portlandMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d359640.0992522873!2d-123.1637501704348!3d45.233873097998526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1743394983254!5m2!1sen!2sus";
+  const salemMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.155837503885!2d-123.04139512405341!3d44.94049986822883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1743394931645!5m2!1sen!2sus";
+  
+  // Get the current map URL based on theme
+  const currentMapUrl = theme === 'dark' ? portlandMapUrl : salemMapUrl;
+  
   // Handle theme change to refresh the image
   const handleThemeChange = (newTheme: string) => {
     console.log('Theme changed to:', newTheme);
@@ -280,6 +287,46 @@ const HeroSection: React.FC = () => {
                       )}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Google Maps Embed Section - Changes based on theme toggle */}
+              <div className="w-full max-w-4xl mx-auto mt-6 mb-8 px-3 sm:px-4">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Image 
+                      src="/hustle_pdx_for maps.png"
+                      alt="Side Hustle Map Icon"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 object-contain"
+                    />
+                    <h3 className="text-2xl font-bold text-white text-center">
+                      {theme === 'dark' ? 'SIDEHUSTLE PDX' : 'SIDEHUSTLE SALEM'}
+                    </h3>
+                  </div>
+                  
+                  <div className="w-full rounded-lg overflow-hidden border border-white/10 shadow-lg">
+                    <div className="aspect-video w-full">
+                      <iframe
+                        src={currentMapUrl}
+                        title={`${theme === 'dark' ? 'Portland' : 'Salem'} Location Map`}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="w-full h-full"
+                      ></iframe>
+                    </div>
+                  </div>
+                  
+                  <p className="text-white/80 mt-4 text-center max-w-2xl">
+                    {theme === 'dark' 
+                      ? 'THE WOLF IS IN DOWNTOWN PDX' 
+                      : 'THE WOLF IS IN DOWNTOWN SALEM'}
+                  </p>
                 </div>
               </div>
 
