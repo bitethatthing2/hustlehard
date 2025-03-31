@@ -146,6 +146,7 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
 
+              {/* Remove Welcome To Pack Image Section */}
               <div className="mt-3 mb-6 w-full flex justify-center">
                 <ThemeToggle onToggle={handleThemeChange} />
               </div>

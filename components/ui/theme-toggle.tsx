@@ -30,31 +30,26 @@ export function ThemeToggle({ onToggle }: ThemeToggleProps) {
     >
       {theme === "dark" ? (
         <>
-          <Image 
-            src="/only_these/logos/SHB_Logo_WhiteonBlackBG.png"
-            alt="Portland"
-            width={32}
-            height={32}
-            className="w-8 h-8"
-          />
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <Image 
+              src="/only_these/logos/welcome_to_pack.png"
+              alt="Wolf Icon"
+              width={24}
+              height={24}
+              className="w-6 h-6"
+            />
+          </div>
           <span>Portland</span>
         </>
       ) : (
         <>
-          <div className="relative">
-            <Image 
-              src="/salem_location.png"
-              alt="Salem"
-              width={32}
-              height={32}
-              className="w-8 h-8"
-            />
+          <div className="relative w-8 h-8 flex items-center justify-center">
             <Image 
               src="/only_these/logos/welcome_to_pack.png"
               alt="Wolf Icon"
-              width={20}
-              height={20}
-              className="absolute -right-1 -bottom-1 w-5 h-5"
+              width={24}
+              height={24}
+              className="w-6 h-6"
             />
           </div>
           <span>Salem</span>
