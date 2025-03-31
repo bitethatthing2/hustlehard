@@ -125,7 +125,6 @@ const HeroSection: React.FC = () => {
   };
 
   // Common button styling
-  const buttonClasses = "flex items-center gap-2 px-6 py-2.5 bg-white/10 rounded-lg hover:bg-white/20 transition-colors min-w-[180px] justify-center";
   const iconClasses = "w-7 h-7 object-contain";
   const textClasses = "text-base font-medium";
 
@@ -199,10 +198,11 @@ const HeroSection: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mt-2 px-4">
                   <Link href="/order?option=delivery" className="flex-1">
                     <Button
-                      className="text-md py-5 px-6 rounded-xl bg-bar-accent text-black hover:bg-bar-accent/80 w-full"
+                      variant="default"
+                      className="text-md py-5 px-6 w-full"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center bg-black/30 rounded-full">
+                        <div className="w-8 h-8 flex items-center justify-center bg-gray-100/10 rounded-full">
                           <Image 
                             src="/delivery-icon.svg" 
                             alt="Delivery" 
@@ -218,10 +218,11 @@ const HeroSection: React.FC = () => {
                   
                   <Link href="/order?option=pickup" className="flex-1">
                     <Button
-                      className="text-md py-5 px-6 rounded-xl bg-black/40 border border-gray-800 text-white hover:bg-black/60 w-full"
+                      variant="outline"
+                      className="text-md py-5 px-6 w-full"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center bg-black/30 rounded-full">
+                        <div className="w-8 h-8 flex items-center justify-center bg-gray-100/10 rounded-full">
                           <Image 
                             src="/pickup-icon.svg" 
                             alt="Pickup" 
@@ -239,42 +240,37 @@ const HeroSection: React.FC = () => {
 
               {/* Main hero information card */}
               <div className="w-full max-w-2xl mx-auto">
-                <div className="text-lg md:text-xl lg:text-2xl text-white font-medium mb-8 md:mb-10 mx-auto rounded-lg backdrop-blur-lg p-5 border border-white/10 bg-black/70 holographic-border shadow-lg">
+                <div className="text-lg md:text-xl lg:text-2xl text-white font-medium mb-8 md:mb-10 mx-auto rounded-lg backdrop-blur-lg p-5 border border-gray-700 bg-black/70 shadow-md">
                   <p className="mb-3">High-Energy Sports Bar • Restaurant • Nightclub</p>
-                  <p className="text-bar-accent font-semibold mb-1">Featuring Executive Chef Rebecca Sanchez</p>
+                  <p className="font-semibold mb-1">Featuring Executive Chef Rebecca Sanchez</p>
                   <p className="text-sm md:text-base italic">#1 Rated Mexican Food & Best Tacos in Town</p>
                   
                   {/* Install buttons container */}
                   <div className="flex flex-col items-center gap-6 mt-6">
                     {/* Menu Feature Highlight */}
-                    <div className="w-full max-w-md p-4 rounded-lg bg-black/50 border-2 border-white/30 holographic-border relative overflow-hidden shadow-2xl corner-accents">
-                      <span></span>
-                      {/* Enhanced glow effects */}
-                      <div className="absolute -inset-1 bg-gradient-to-r from-bar-accent/30 via-white/15 to-bar-accent/30 blur-xl opacity-80"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse-slow"></div>
-                      
+                    <div className="w-full max-w-md p-4 rounded-lg bg-black/50 border border-gray-700 relative overflow-hidden shadow-md">
                       <div className="relative z-10 flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-full bg-gradient-to-br from-bar-accent/20 to-bar-accent/5 border border-white/30 pulsing-shadow">
+                        <div className="p-2 rounded-full bg-gray-100/10 border border-gray-600 flex items-center justify-center">
                           <Image
                             src="/menu_icon.png"
                             alt="Home Menu Button"
                             width={32}
                             height={32}
-                            className="w-8 h-8 object-contain drop-shadow-glow"
+                            className="w-8 h-8 object-contain"
                           />
                         </div>
-                        <p className="text-base font-medium text-bar-accent drop-shadow-md">Check Out Our Main Menu</p>
+                        <p className="text-base font-medium">Check Out Our Main Menu</p>
                       </div>
-                      <p className="text-sm text-white/90 relative z-10 bg-black/30 p-3 rounded-lg border border-white/10">
+                      <p className="text-sm text-white/90 relative z-10 bg-black/30 p-3 rounded-lg border border-gray-700">
                         Click the home menu button to experience all the app features, settings, and navigation options in one convenient place.
                       </p>
                     </div>
 
                     <div className="flex flex-col justify-center items-center gap-4">
                       {deviceType === 'ios' ? (
-                        <button
+                        <Button
                           onClick={handleInstallClick}
-                          className={buttonClasses + " w-full"}
+                          className="w-full min-w-[180px] flex items-center gap-2"
                         >
                           <Image
                             src="/only_these/ios_pwa_install.png"
@@ -284,12 +280,12 @@ const HeroSection: React.FC = () => {
                             className={iconClasses}
                           />
                           <span className={textClasses}>Add to Home Screen</span>
-                        </button>
+                        </Button>
                       ) : (
                         <>
-                          <button
+                          <Button
                             onClick={handleInstallClick}
-                            className={buttonClasses + " w-full"}
+                            className="w-full min-w-[180px] flex items-center gap-2"
                           >
                             <Image
                               src="/only_these/android_pwa_install.png"
@@ -299,12 +295,12 @@ const HeroSection: React.FC = () => {
                               className={iconClasses}
                             />
                             <span className={textClasses}>Install App</span>
-                          </button>
+                          </Button>
                           
                           {notificationStatus === 'idle' && (
-                            <button
+                            <Button
                               onClick={handleNotificationRequest}
-                              className={buttonClasses + " w-full"}
+                              className="w-full min-w-[180px] flex items-center gap-2"
                             >
                               <Image
                                 src="/only_these/logos/icon_enable_notifications.png"
@@ -314,7 +310,7 @@ const HeroSection: React.FC = () => {
                                 className={iconClasses}
                               />
                               <span className={textClasses}>Enable Notifications</span>
-                            </button>
+                            </Button>
                           )}
                         </>
                       )}
@@ -354,46 +350,34 @@ const HeroSection: React.FC = () => {
                 
                 {/* Shop Now Button */}
                 <div className="w-full flex justify-center mb-4 sm:mb-0">
-                  <div className="w-full max-w-md p-4 rounded-lg bg-black/40 border-2 border-white/20 holographic-border relative overflow-hidden shadow-2xl">
-                    {/* Enhanced glow effects */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-bar-accent/20 via-white/10 to-bar-accent/20 blur-xl opacity-70"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse-slow"></div>
-                    
-                    {/* Button with stronger styling */}
+                  <div className="w-full max-w-md p-4 rounded-lg bg-black/40 border border-gray-700 relative overflow-hidden shadow-xl">
+                    {/* Button with Shadcn UI styling */}
                     <div className="relative z-10">
-                      <Link 
-                        href="/shop"
-                        className="w-full relative bg-gradient-to-r from-bar-accent via-bar-accent to-bar-accent/90 px-6 sm:px-8 py-4 sm:py-5 md:py-6 rounded-lg font-bold text-lg sm:text-xl md:text-2xl text-black hover:brightness-125 transition-all duration-300 flex items-center justify-center gap-3 sm:gap-4 shadow-xl transform hover:scale-[1.02] border-2 border-white/40 button-primary holographic-btn pulsing-shadow"
+                      <Button
+                        asChild
+                        size="lg"
+                        className="w-full py-6 text-lg font-bold flex items-center justify-center gap-4"
                       >
-                        {/* Inner glow effect */}
-                        <div className="absolute inset-0 rounded-lg overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-white/5 opacity-80"></div>
-                        </div>
-                        
-                        <Image
-                          src="/menu_icon.png"
-                          alt="Shop"
-                          width={40}
-                          height={40}
-                          className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain filter brightness-0 invert relative z-10 drop-shadow-glow"
-                        />
-                        <span className="relative z-10 drop-shadow-md text-white">SHOP NOW</span>
-                        <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10 drop-shadow-glow" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                        </svg>
-                      </Link>
+                        <Link href="/shop">
+                          <Image
+                            src="/menu_icon.png"
+                            alt="Shop"
+                            width={40}
+                            height={40}
+                            className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
+                          />
+                          <span>SHOP NOW</span>
+                          <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                          </svg>
+                        </Link>
+                      </Button>
                       <div className="mt-3 text-center">
                         <p className="text-sm sm:text-base text-white font-medium">
                           Explore our exclusive merchandise collection
                         </p>
                       </div>
                     </div>
-                    
-                    {/* Corner accents to draw attention */}
-                    <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-bar-accent/70 rounded-tl-sm"></div>
-                    <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-bar-accent/70 rounded-tr-sm"></div>
-                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-bar-accent/70 rounded-bl-sm"></div>
-                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-bar-accent/70 rounded-br-sm"></div>
                   </div>
                 </div>
               </div>

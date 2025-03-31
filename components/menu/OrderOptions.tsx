@@ -165,14 +165,19 @@ const OrderOptions = () => {
           </div>
           
           <div className="mt-5">
-            <Link 
-              href={option.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center font-medium transition-all duration-300 bg-black border border-gray-700 text-white hover:bg-white/10 hover:text-white hover:border-white/50 rounded-lg py-2.5 px-4 shadow-md focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white/50"
+            <Button
+              asChild
+              variant="default"
+              className="w-full"
             >
-              Order Now
-            </Link>
+              <Link 
+                href={option.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Order Now
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -190,22 +195,17 @@ const OrderOptions = () => {
       <div className="flex flex-col md:flex-row gap-6 justify-center mb-12 max-w-2xl mx-auto">
         <Button
           onClick={() => setActiveOption('delivery')}
-          className={`min-w-[180px] text-lg py-6 px-10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white/50 ${
-            activeOption === 'delivery'
-              ? 'bg-white text-black border-2 border-white/70 shadow-[0_0_15px_rgba(255,255,255,0.2)]'
-              : 'bg-black/40 border border-gray-700 text-white hover:bg-white/10 hover:text-white hover:border-white/50 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'
-          }`}
+          variant={activeOption === 'delivery' ? 'default' : 'outline'}
+          className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center"
         >
           <div className="flex items-center gap-4">
-            <div className={`w-10 h-10 flex items-center justify-center rounded-full ${
-              activeOption === 'delivery' ? 'bg-black/10' : 'bg-white/10'
-            }`}>
+            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
               <Image 
                 src="/delivery-icon.svg" 
                 alt="Delivery" 
                 width={24} 
                 height={24}
-                className="text-current filter brightness-0 invert" 
+                className="text-current" 
               />
             </div>
             <span className="font-semibold">Delivery</span>
@@ -214,22 +214,17 @@ const OrderOptions = () => {
         
         <Button
           onClick={() => setActiveOption('pickup')}
-          className={`min-w-[180px] text-lg py-6 px-10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white/50 ${
-            activeOption === 'pickup'
-              ? 'bg-white text-black border-2 border-white/70 shadow-[0_0_15px_rgba(255,255,255,0.2)]'
-              : 'bg-black/40 border border-gray-700 text-white hover:bg-white/10 hover:text-white hover:border-white/50 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'
-          }`}
+          variant={activeOption === 'pickup' ? 'default' : 'outline'}
+          className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center"
         >
           <div className="flex items-center gap-4">
-            <div className={`w-10 h-10 flex items-center justify-center rounded-full ${
-              activeOption === 'pickup' ? 'bg-black/10' : 'bg-white/10'
-            }`}>
+            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
               <Image 
                 src="/pickup-icon.svg" 
                 alt="Pickup" 
                 width={24} 
                 height={24}
-                className="text-current filter brightness-0 invert" 
+                className="text-current" 
               />
             </div>
             <span className="font-semibold">Pickup</span>
@@ -242,15 +237,17 @@ const OrderOptions = () => {
         <div className="bg-black/70 backdrop-blur-md border border-gray-700 p-6 rounded-lg mb-8 mx-auto max-w-md shadow-xl motion-safe:animate-fadeIn">
           <div className="flex justify-between items-start mb-4">
             <h3 className="font-bold text-white text-lg">Installation Guide</h3>
-            <button 
+            <Button 
               onClick={closeInstructions}
-              className="text-gray-400 hover:text-white focus:outline-none transition-colors p-1 hover:bg-white/10 rounded-full"
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
               aria-label="Close"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
-            </button>
+            </Button>
           </div>
           
           {isIOS && (
@@ -305,6 +302,35 @@ const OrderOptions = () => {
           ? deliveryOptions.map(renderServiceCard)
           : pickupOptions.map(renderServiceCard)
         }
+      </div>
+      
+      {/* Installation Options */}
+      <div className="flex flex-col sm:flex-row items-center gap-6 justify-center mt-10 mb-2">
+        {isIOS && (
+          <Button
+            onClick={handleIOSInstall}
+            variant="default"
+            className="min-w-[180px] flex items-center gap-3"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            Install on iOS
+          </Button>
+        )}
+        
+        {isAndroid && (
+          <Button
+            onClick={handleAndroidInstall}
+            variant="default"
+            className="min-w-[180px] flex items-center gap-3"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Install on Android
+          </Button>
+        )}
       </div>
       
       {/* Bottom installation guide section */}
