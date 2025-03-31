@@ -167,11 +167,11 @@ const HeroSection: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/50">
                           <Image 
-                            src="/delivery-icon.svg" 
+                            src="/only_these/icons/delivery-icon-white.svg" 
                             alt="Delivery" 
                             width={20} 
                             height={20}
-                            className="text-current" 
+                            className="text-white" 
                           />
                         </div>
                         <span className="text-lg font-semibold">Delivery</span>
@@ -187,11 +187,11 @@ const HeroSection: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/50">
                           <Image 
-                            src="/pickup-icon.svg" 
+                            src="/only_these/icons/pickup-icon-white.svg" 
                             alt="Pickup" 
                             width={20} 
                             height={20}
-                            className="text-current" 
+                            className="text-white" 
                           />
                         </div>
                         <span className="text-lg font-semibold">Pickup</span>

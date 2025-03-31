@@ -372,7 +372,7 @@ const Menu: FC = () => {
         <div className="flex justify-center">
           <Link 
             href="/order" 
-            className="bg-bar-accent text-white font-medium px-6 py-3 rounded-lg hover:bg-bar-accent/80 transition-colors"
+            className="bg-transparent border border-white text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors"
           >
             View All Ordering Options
           </Link>

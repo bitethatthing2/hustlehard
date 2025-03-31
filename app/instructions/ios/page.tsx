@@ -85,8 +85,14 @@ export default function IOSInstructionsPage() {
                 <div className="relative w-full sm:w-1/2 h-auto rounded-lg overflow-hidden border border-white/10 shadow-lg bg-gray-900 flex items-center justify-center p-6">
                   {/* Enable Notifications Button Image */}
                   <div className="w-full max-w-[300px] mx-auto">
-                    <div className="bg-black w-full text-white text-center py-3 px-5 rounded flex items-center justify-center gap-2 border border-white/20">
-                      <span className="text-white">🐾</span>
+                    <div className="bg-transparent w-full text-white text-center py-3 px-5 rounded flex items-center justify-center gap-2 border border-white/20">
+                      <Image 
+                        src="/only_these/logos/menu_icon.png" 
+                        alt="Menu Icon" 
+                        width={24} 
+                        height={24}
+                        className="w-6 h-6"
+                      />
                       <span className="font-medium text-lg">Enable Notifications</span>
                     </div>
                     <p className="text-sm text-white/60 text-center mt-4">
@@ -100,7 +106,13 @@ export default function IOSInstructionsPage() {
             {/* Welcome to the Pack Message */}
             <section className="bg-bar-accent/10 rounded-lg p-6 border border-bar-accent/30">
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-2xl">🐺</span>
+                <Image 
+                  src="/only_these/logos/welcome_to_pack.png" 
+                  alt="Welcome to the Pack" 
+                  width={32} 
+                  height={32}
+                  className="w-8 h-8"
+                />
                 <h2 className="text-xl font-semibold text-bar-accent">Welcome to the Pack!</h2>
               </div>
               <p className="text-white/90 mb-2">

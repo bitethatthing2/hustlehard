@@ -201,11 +201,11 @@ const OrderOptions = () => {
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
               <Image 
-                src="/delivery-icon.svg" 
+                src="/only_these/icons/delivery-icon-white.svg" 
                 alt="Delivery" 
                 width={24} 
                 height={24}
-                className="text-current" 
+                className="text-white" 
               />
             </div>
             <span className="font-semibold">Delivery</span>
@@ -220,11 +220,11 @@ const OrderOptions = () => {
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
               <Image 
-                src="/pickup-icon.svg" 
+                src="/only_these/icons/pickup-icon-white.svg" 
                 alt="Pickup" 
                 width={24} 
                 height={24}
-                className="text-current" 
+                className="text-white" 
               />
             </div>
             <span className="font-semibold">Pickup</span>
