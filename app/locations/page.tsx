@@ -26,25 +26,25 @@ const LocationsPageContent = () => {
         subtitle="Visit us at either of our locations in Portland or Salem"
       />
       
-      <div className="max-w-xl mx-auto mb-8">
+      <div className="max-w-xl mx-auto mb-6">
         <ThemeToggle className="max-w-xs mx-auto" />
       </div>
       
+      {/* Active Location Map - Shows directly below the toggle */}
+      <div className="w-full max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-white text-center my-4">
+          {showPortlandFirst ? portlandInfo.name : salemInfo.name}
+        </h2>
+        <div className="mb-6">
+          {showPortlandFirst ? <PortlandMap /> : <SalemMap />}
+        </div>
+        <LocationDirectionButtons location={showPortlandFirst ? 'portland' : 'salem'} />
+      </div>
+      
+      {/* Location Details */}
       <div className="flex flex-col gap-20 mt-12">
-        {/* First Location (based on selectedLocation) */}
+        {/* Active Location */}
         <div className="flex flex-col gap-8" id={showPortlandFirst ? "portland" : "salem"}>
-          <h2 className="text-3xl font-bold text-white text-center">
-            {showPortlandFirst ? portlandInfo.name : salemInfo.name}
-          </h2>
-          
-          {/* Map */}
-          <div className="w-full max-w-4xl mx-auto">
-            {showPortlandFirst ? <PortlandMap /> : <SalemMap />}
-          </div>
-          
-          {/* Direction Buttons */}
-          <LocationDirectionButtons location={showPortlandFirst ? 'portland' : 'salem'} />
-          
           {/* Location Info */}
           <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
             <div className="flex flex-col gap-5 bg-black/30 p-6 rounded-lg border border-white/10">
