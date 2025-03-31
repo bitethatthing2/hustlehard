@@ -534,7 +534,7 @@ export default function MainMenuButton() {
             src="/only_these/logos/menu_icon.png"
             alt="Menu"
             fill
-            className="object-cover rounded-full"
+            className="object-cover rounded-full z-[60]"
           />
         </Button>
         <span className="text-xs font-medium mt-1">Menu</span>
