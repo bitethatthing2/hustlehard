@@ -230,7 +230,17 @@ const HeroSection: React.FC = () => {
                             className="w-8 h-8 object-contain"
                           />
                         </div>
-                        <p className="text-base font-medium">Check Out Our Main Menu</p>
+                        <Button 
+                          variant="link"
+                          className="text-base font-medium p-0 h-auto text-white"
+                          onClick={() => {
+                            // Dispatch a custom event to open the menu
+                            const event = new CustomEvent('openMainMenu');
+                            window.dispatchEvent(event);
+                          }}
+                        >
+                          Check Out Our Main Menu
+                        </Button>
                       </div>
                       <p className="text-sm text-white relative z-10 p-3 rounded-lg border border-gray-700">
                         Click the home menu button to experience all the app features, settings, and navigation options in one convenient place.
@@ -295,11 +305,11 @@ const HeroSection: React.FC = () => {
                 <div className="flex flex-col items-center">
                   <div className="flex items-center gap-3 mb-4">
                     <Image 
-                      src="/SHB_Logo_WhiteonBlackBG.png"
+                      src="/only_these/logos/hustle_pdx_for_maps.png"
                       alt="Side Hustle Map Icon"
-                      width={40}
-                      height={40}
-                      className="w-10 h-10 object-contain"
+                      width={80}
+                      height={80}
+                      className="w-16 h-16 object-contain"
                     />
                     <h3 className="text-2xl font-bold text-white text-center">
                       {theme === 'dark' ? 'SIDEHUSTLE PDX' : 'SIDEHUSTLE SALEM'}

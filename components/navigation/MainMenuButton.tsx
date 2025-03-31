@@ -14,7 +14,18 @@ export default function MainMenuButton() {
   // Handle mounting state for the portal
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
+    
+    // Add event listener for opening the menu from other components
+    const handleOpenMenu = () => {
+      setIsOpen(true);
+    };
+    
+    window.addEventListener('openMainMenu', handleOpenMenu);
+    
+    return () => {
+      setMounted(false);
+      window.removeEventListener('openMainMenu', handleOpenMenu);
+    };
   }, []);
 
   // Prevent body scrolling when menu is open
