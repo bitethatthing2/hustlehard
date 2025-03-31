@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createPortal } from 'react-dom';
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -47,8 +46,7 @@ export default function MainMenuButton() {
           {/* Header */}
           <div className="flex justify-between items-center p-4 border-b border-gray-700 sticky top-0 z-10 bg-black/90 backdrop-blur-md">
             <h2 className="font-bold text-lg">Menu</h2>
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
+            <div className="flex items-center">
               <Button 
                 onClick={() => setIsOpen(false)}
                 variant="ghost"

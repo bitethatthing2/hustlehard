@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useLocation } from '@/contexts/LocationContext';
 
 const LocationToggle: React.FC = () => {
-  const [selectedLocation, setSelectedLocation] = useState('portland');
+  const { selectedLocation, setSelectedLocation } = useLocation();
 
   return (
     <div className="relative flex items-center p-1 bg-background/20 backdrop-blur-sm rounded-full border border-white/10 shadow-md w-full max-w-xs mx-auto">
