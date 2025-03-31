@@ -176,9 +176,6 @@ const HeroSection: React.FC = () => {
 
               <div className="mt-3 mb-6 w-full flex justify-center">
                 <ThemeToggle onToggle={handleThemeChange} />
-                <div className="ml-3 text-white text-sm">
-                  {theme === 'dark' ? 'Portland' : 'Salem'}
-                </div>
               </div>
 
               {/* Order Options Section - Moved directly under location toggle */}

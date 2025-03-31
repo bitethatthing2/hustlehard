@@ -15,16 +15,25 @@ export function ThemeToggle({ onToggle }: { onToggle?: (theme: string) => void }
   }
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
-      onClick={handleToggle}
-      className="rounded-full bg-white text-black border border-gray-300 hover:bg-gray-100"
-      aria-label="Toggle location image"
-    >
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Toggle location image</span>
-    </Button>
+    <div className="flex items-center gap-2">
+      <Button
+        variant="outline"
+        onClick={handleToggle}
+        className="rounded-full bg-white text-black border border-gray-300 hover:bg-gray-100 shadow-md px-4 py-2 h-10"
+        aria-label="Toggle location image"
+      >
+        {theme === 'dark' ? (
+          <div className="flex items-center gap-2">
+            <Moon className="h-5 w-5" />
+            <span className="font-medium">Portland</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Sun className="h-5 w-5" />
+            <span className="font-medium">Salem</span>
+          </div>
+        )}
+      </Button>
+    </div>
   )
 } 

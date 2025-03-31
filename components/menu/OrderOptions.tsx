@@ -336,7 +336,7 @@ const OrderOptions = () => {
       {/* Bottom installation guide section */}
       <div className="mt-20 pt-12 border-t border-gray-800">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-bar-accent via-amber-300 to-bar-accent">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
             Unlock the full experience!
           </h2>
           <p className="text-gray-300 mb-10 max-w-2xl mx-auto">
@@ -348,7 +348,7 @@ const OrderOptions = () => {
             <Button
               asChild
               variant="default"
-              className="min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
+              className="button-ios-guide min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
             >
               <Link href="/instructions/ios">
                 <div className="flex items-center gap-3">
@@ -363,7 +363,7 @@ const OrderOptions = () => {
             <Button
               asChild
               variant="default"
-              className="min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
+              className="button-android-guide min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
             >
               <Link href="/instructions/android">
                 <div className="flex items-center gap-3">
