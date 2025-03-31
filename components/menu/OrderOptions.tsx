@@ -348,7 +348,7 @@ const OrderOptions = () => {
             <Button
               asChild
               variant="default"
-              className="min-w-[240px] flex items-center gap-3"
+              className="min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
             >
               <Link href="/instructions/ios">
                 <div className="flex items-center gap-3">
@@ -363,7 +363,7 @@ const OrderOptions = () => {
             <Button
               asChild
               variant="default"
-              className="min-w-[240px] flex items-center gap-3"
+              className="min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
             >
               <Link href="/instructions/android">
                 <div className="flex items-center gap-3">

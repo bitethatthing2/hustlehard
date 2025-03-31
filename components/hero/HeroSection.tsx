@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import LocationToggle from '../location/LocationToggle';
 import { useLocation } from '@/contexts/LocationContext';
 import { fetchToken } from '@/firebase';
 import VideoCarousel from '../shared/VideoCarousel';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { useTheme } from 'next-themes';
 
 const HeroSection: React.FC = () => {
   const { selectedLocation } = useLocation();
@@ -15,27 +16,19 @@ const HeroSection: React.FC = () => {
   const [notificationStatus, setNotificationStatus] = useState<'idle' | 'requested' | 'granted' | 'denied'>('idle');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const { theme } = useTheme();
 
-  // Define possible paths to try in order
-  const portlandPaths = [
-    '/only_these/logos/SHB_Logo_WhiteonBlackBG.png',
-    '/SHB_Logo_WhiteonBlackBG.png',
-    '/logo.png'
-  ];
+  // Define the image paths for light and dark mode
+  const portlandLogoPath = '/only_these/logos/SHB_Logo_WhiteonBlackBG.png';
+  const salemLogoPath = '/salem_location.png';
   
-  const salemPaths = [
-    '/only_these/logos/salem_location.png',
-    '/salem_location.png',
-    '/logo.png'
-  ];
+  // Get the current logo based on theme
+  const logoImage = theme === 'dark' ? portlandLogoPath : salemLogoPath;
   
-  // Get the current path to try based on location and error count
-  const getImagePath = () => {
-    const paths = selectedLocation === 'portland' ? portlandPaths : salemPaths;
-    return paths[Math.min(imgErrorCount, paths.length - 1)];
+  // Handle theme change to refresh the image
+  const handleThemeChange = (newTheme: string) => {
+    console.log('Theme changed to:', newTheme);
   };
-  
-  const logoImage = getImagePath();
 
   // Detect device type and PWA installability on mount
   useEffect(() => {
@@ -172,9 +165,7 @@ const HeroSection: React.FC = () => {
                     height={250}
                     className="w-auto h-auto max-w-[300px] sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto object-contain"
                     onError={e => {
-                      console.error(`Error loading image: ${logoImage}, trying next path...`);
-                      setImgErrorCount(prev => prev + 1);
-                      setImgError(prev => !prev);
+                      console.error(`Error loading image: ${logoImage}`);
                       e.currentTarget.onerror = null;
                     }}
                     priority
@@ -184,7 +175,10 @@ const HeroSection: React.FC = () => {
               </div>
 
               <div className="mt-3 mb-6 w-full flex justify-center">
-                <LocationToggle />
+                <ThemeToggle onToggle={handleThemeChange} />
+                <div className="ml-3 text-white text-sm">
+                  {theme === 'dark' ? 'Portland' : 'Salem'}
+                </div>
               </div>
 
               {/* Order Options Section - Moved directly under location toggle */}
