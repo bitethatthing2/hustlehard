@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createPortal } from 'react-dom';
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function MainMenuButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,15 +45,18 @@ export default function MainMenuButton() {
           {/* Header */}
           <div className="flex justify-between items-center p-4 border-b border-bar-accent/30 sticky top-0 z-10 bg-black/90 backdrop-blur-md">
             <h2 className="text-white font-bold text-lg drop-shadow-glow-sm">Menu</h2>
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="text-gray-400 hover:text-bar-accent p-2 rounded-full transition-colors duration-300 hover:bg-bar-accent/10"
-              aria-label="Close menu"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="text-gray-400 hover:text-bar-accent p-2 rounded-full transition-colors duration-300 hover:bg-bar-accent/10"
+                aria-label="Close menu"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Content */}
@@ -379,7 +383,8 @@ export default function MainMenuButton() {
   );
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center gap-2">
+      <ThemeToggle />
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 bg-black/80 backdrop-blur-md border-2 border-gray-800 hover:border-bar-accent rounded-lg shadow-lg holographic-border transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-xl"
