@@ -75,11 +75,9 @@ const LocationsPageContent = () => {
                 title={`${activeLocation.name} Location Map`}
                 width="100%"
                 height="100%"
-                style={{ border: 0 }}
                 allowFullScreen
-                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full"
+                className="w-full h-full border-none"
               ></iframe>
             </div>
           </div>
