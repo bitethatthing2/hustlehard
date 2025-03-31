@@ -3,7 +3,7 @@ export default function ShoppingOptions() {
     <div className="pt-6 border-t border-white/20">
       <div className="space-y-4">
         <button 
-          className="w-full bg-gradient-to-r from-bar-accent via-bar-accent/90 to-bar-accent px-8 py-4 rounded-lg font-extrabold text-lg text-black hover:brightness-110 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl transform hover:scale-[1.03] animate-pulse-subtle"
+          className="w-full bg-gradient-to-r from-bar-accent via-bar-accent/90 to-bar-accent px-8 py-4 rounded-lg font-extrabold text-lg text-white hover:brightness-110 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl transform hover:scale-[1.03] animate-pulse-subtle"
         >
           <span className="text-xl">🐺</span>
           <span>BE A WOLF</span>

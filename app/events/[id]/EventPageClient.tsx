@@ -44,14 +44,14 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
         {/* Event Details */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mb-12">
           <div className="lg:col-span-2">
-            <div className="bg-bar-muted/30 border border-bar-accent/20 rounded-xl p-4 md:p-6 mb-4 md:mb-8">
+            <div className="bg-black/30 border border-white/20 rounded-xl p-4 md:p-6 mb-4 md:mb-8">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Event Details</h2>
-              <p className="text-gray-300 whitespace-pre-wrap">{event.fullDescription || event.description}</p>
+              <p className="text-white whitespace-pre-wrap">{event.fullDescription || event.description}</p>
             </div>
 
             {/* Gallery Section */}
             {event.gallery && event.gallery.length > 0 && (
-              <div className="bg-bar-muted/30 border border-bar-accent/20 rounded-xl p-4 md:p-6">
+              <div className="bg-black/30 border border-white/20 rounded-xl p-4 md:p-6">
                 <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Gallery</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                   {event.gallery.map((image: string, index: number) => (
@@ -71,12 +71,12 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-bar-muted/30 border border-bar-accent/20 rounded-xl p-4 md:p-6 sticky top-20">
+            <div className="bg-black/30 border border-white/20 rounded-xl p-4 md:p-6 sticky top-20">
               <div className="mb-6">
                 <h3 className="text-lg font-bold text-white mb-2">Location</h3>
-                <p className="text-gray-300">{event.location}</p>
+                <p className="text-white">{event.location}</p>
                 {event.address && (
-                  <p className="text-gray-400 text-sm mt-1">{event.address}</p>
+                  <p className="text-white/70 text-sm mt-1">{event.address}</p>
                 )}
               </div>
 
@@ -85,7 +85,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                   href={event.ticketLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center px-4 py-3 bg-bar-accent text-black rounded-lg font-bold hover:bg-bar-accent/90 transition-colors mb-4"
+                  className="w-full inline-flex items-center justify-center px-4 py-3 bg-transparent border border-white text-white rounded-lg font-bold hover:bg-white/10 transition-colors mb-4"
                 >
                   Get Tickets
                   <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,14 +95,14 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
               )}
 
               {/* Social Share */}
-              <div className="border-t border-bar-accent/20 pt-4 mt-4">
+              <div className="border-t border-white/20 pt-4 mt-4">
                 <h3 className="text-lg font-bold text-white mb-3">Share Event</h3>
                 <div className="flex gap-2">
                   <a
                     href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(event.title)}&url=${encodeURIComponent(window.location.href)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-gray-400 hover:text-bar-accent transition-colors"
+                    className="p-2 text-white hover:text-white/80 transition-colors"
                     aria-label="Share on Twitter"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-gray-400 hover:text-bar-accent transition-colors"
+                    className="p-2 text-white hover:text-white/80 transition-colors"
                     aria-label="Share on Facebook"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     href={event.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-gray-400 hover:text-bar-accent transition-colors"
+                    className="p-2 text-white hover:text-white/80 transition-colors"
                     aria-label="View on Instagram"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -146,7 +146,7 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                 <Link
                   key={relatedEvent.id}
                   href={`/events/${relatedEvent.id}`}
-                  className="group block bg-bar-muted/30 border border-bar-accent/20 rounded-xl overflow-hidden hover:border-bar-accent transition-colors"
+                  className="group block bg-black/30 border border-white/20 rounded-xl overflow-hidden hover:border-white/50 transition-colors"
                 >
                   <div className="aspect-video relative">
                     <Image
@@ -157,10 +157,10 @@ export default function EventPageClient({ event, relatedEvents }: EventPageClien
                     />
                   </div>
                   <div className="p-3 md:p-4">
-                    <h3 className="font-bold text-white group-hover:text-bar-accent transition-colors">
+                    <h3 className="font-bold text-white group-hover:text-white/80 transition-colors">
                       {relatedEvent.title}
                     </h3>
-                    <p className="text-gray-400 text-sm mt-1">{relatedEvent.date}</p>
+                    <p className="text-white/70 text-sm mt-1">{relatedEvent.date}</p>
                   </div>
                 </Link>
               ))}

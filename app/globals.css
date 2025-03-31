@@ -15,11 +15,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 280 75% 60%;
+    --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 260 70% 55%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
 
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
@@ -32,7 +32,7 @@
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --ring: 240 10% 3.9%;
     --radius: 0.5rem;
     
     /* Modern color palette - Legacy variables kept for compatibility */
@@ -91,10 +91,10 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 280 75% 60%;
+    --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
 
-    --secondary: 260 70% 55%;
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
@@ -187,6 +187,36 @@
     .section-mb {
       margin-bottom: 2rem;
     }
+  }
+
+  /* Dynamic text contrast utilities */
+  .text-contrast {
+    @apply text-white;
+  }
+  
+  .text-contrast-inverse {
+    @apply text-white;
+  }
+
+  /* For light backgrounds in any theme */
+  .bg-light .text-dynamic,
+  .bg-white .text-dynamic {
+    @apply text-white;
+  }
+
+  /* For dark backgrounds in any theme */
+  .bg-dark .text-dynamic,
+  .bg-black .text-dynamic {
+    @apply text-white;
+  }
+
+  /* Icon color variants */
+  .icon-contrast {
+    @apply text-white;
+  }
+  
+  .icon-contrast-inverse {
+    @apply text-white;
   }
 }
 
@@ -819,7 +849,7 @@ main,
 
 /* Dynamic color utilities for text contrast */
 .text-contrast-bg {
-  @apply text-black;
+  @apply text-white;
 }
 
 .bg-white .text-contrast-bg,
@@ -836,7 +866,7 @@ main,
 [class*="bg-"][class*="-100"] .text-contrast-bg,
 [class*="bg-"][class*="-200"] .text-contrast-bg,
 .bg-bar-accent .text-contrast-bg {
-  @apply text-black;
+  @apply text-white;
 }
 
 .bg-black .text-contrast-bg,
@@ -857,14 +887,14 @@ main,
 }
 
 .fill-contrast-bg {
-  @apply fill-black;
+  @apply fill-white;
 }
 
 .bg-white .fill-contrast-bg,
 .bg-gray-100 .fill-contrast-bg,
 .bg-gray-200 .fill-contrast-bg,
 .bg-bar-accent .fill-contrast-bg {
-  @apply fill-black;
+  @apply fill-white;
 }
 
 .bg-black .fill-contrast-bg,
@@ -874,14 +904,14 @@ main,
 }
 
 .stroke-contrast-bg {
-  @apply stroke-black;
+  @apply stroke-white;
 }
 
 .bg-white .stroke-contrast-bg,
 .bg-gray-100 .stroke-contrast-bg,
 .bg-gray-200 .stroke-contrast-bg,
 .bg-bar-accent .stroke-contrast-bg {
-  @apply stroke-black;
+  @apply stroke-white;
 }
 
 .bg-black .stroke-contrast-bg,
@@ -892,7 +922,7 @@ main,
 
 /* Ensure Shadcn UI buttons have proper contrast */
 .bg-white, [class*="bg-white"] {
-  @apply text-black;
+  @apply text-white;
 }
 
 .bg-black, [class*="bg-black"] {
@@ -901,9 +931,9 @@ main,
 
 /* Fix for installation guide buttons */
 .button-ios-guide, .button-android-guide {
-  @apply bg-white text-black hover:bg-gray-100 border border-gray-200;
+  @apply bg-transparent text-white hover:bg-slate-100/20 border border-slate-200;
 }
 
 .button-ios-guide svg, .button-android-guide svg {
-  @apply text-black;
+  @apply text-white;
 }

@@ -20,10 +20,10 @@ export default function EventsPage() {
           <BackButton className="mb-4" />
         </div>
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-bar-accent drop-shadow-glow">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             Side Hustle Events
           </h1>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-white max-w-3xl mx-auto">
             Join us for unforgettable nights featuring talented performers, incredible music, and the best vibes in town.
           </p>
         </div>
@@ -35,7 +35,7 @@ export default function EventsPage() {
             {upcomingEvents.length === 0 && (
               <Link 
                 href="#newsletter" 
-                className="px-4 py-2 bg-bar-accent text-black rounded-md font-semibold hover:bg-bar-accent/90 transition-colors transform hover:scale-[1.02] shadow-glow-sm"
+                className="px-4 py-2 bg-transparent border border-white text-white rounded-md font-semibold hover:bg-white/10 transition-colors transform hover:scale-[1.02]"
               >
                 Get Notified
               </Link>
@@ -58,9 +58,9 @@ export default function EventsPage() {
               ))}
             </div>
           ) : (
-            <div className="bg-black/30 backdrop-blur-sm border border-gray-800 rounded-xl p-6 md:p-8 text-center">
+            <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl p-6 md:p-8 text-center">
               <h3 className="text-xl font-bold mb-3 text-white">New Events Coming Soon!</h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-white mb-6">
                 We're planning more exciting events. Sign up for our newsletter to be the first to know when new events are announced.
               </p>
               <div className="max-w-md mx-auto">
@@ -68,9 +68,9 @@ export default function EventsPage() {
                   <input 
                     type="email" 
                     placeholder="Enter your email" 
-                    className="flex-1 bg-black/50 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-bar-accent"
+                    className="flex-1 bg-black/50 border border-white/20 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
-                  <button className="px-4 py-2 bg-bar-accent text-black rounded-md font-semibold hover:bg-bar-accent/90 transition-colors">
+                  <button className="px-4 py-2 bg-transparent border border-white text-white rounded-md font-semibold hover:bg-white/10 transition-colors">
                     Subscribe
                   </button>
                 </div>
@@ -99,23 +99,23 @@ export default function EventsPage() {
         </section>
 
         {/* Newsletter Section */}
-        <section id="newsletter" className="mt-20 bg-gradient-to-br from-black/60 to-gray-900/60 backdrop-blur-md border border-gray-800 rounded-xl p-6 md:p-8">
+        <section id="newsletter" className="mt-20 bg-black/60 backdrop-blur-md border border-white/10 rounded-xl p-6 md:p-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-bar-accent">Stay Updated</h2>
-            <p className="text-gray-300 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Stay Updated</h2>
+            <p className="text-white mb-6">
               Subscribe to our newsletter to receive notifications about upcoming events, special performances, and exclusive offers.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input 
                 type="email" 
                 placeholder="Your email address" 
-                className="flex-1 bg-black/50 border border-gray-700 text-white rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-bar-accent"
+                className="flex-1 bg-black/50 border border-white/20 text-white rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
               />
-              <button className="px-6 py-3 bg-bar-accent text-black rounded-md font-bold hover:bg-bar-accent/90 transition-colors shadow-glow-sm">
+              <button className="px-6 py-3 bg-transparent border border-white text-white rounded-md font-bold hover:bg-white/10 transition-colors">
                 Subscribe
               </button>
             </div>
-            <p className="text-gray-500 text-sm mt-4">
+            <p className="text-white/60 text-sm mt-4">
               We respect your privacy and will never share your information.
             </p>
           </div>

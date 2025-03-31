@@ -22,14 +22,14 @@ export default function EventCard({ id, title, date, description, link, image, u
   
   return upcoming ? (
     <div 
-      className="bg-black/60 backdrop-blur-md border-2 border-bar-accent/50 rounded-xl overflow-hidden shadow-xl group holographic-border hover:shadow-glow transform hover:scale-[1.02] transition-all duration-300"
+      className="bg-black/60 backdrop-blur-md border border-white/20 rounded-xl overflow-hidden shadow-md group transform hover:scale-[1.02] transition-all duration-300"
     >
       <Link href={`/events/${id}`} className="block">
         <div className="relative h-56 overflow-hidden">
-          <div className="absolute top-0 left-0 bg-gradient-to-r from-bar-accent to-purple-700 text-black font-bold py-1 px-4 rounded-br-lg z-10">
+          <div className="absolute top-0 left-0 bg-white text-black font-bold py-1 px-4 rounded-br-lg z-10">
             Upcoming
           </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-black/80 to-gray-800/80 z-0"></div>
+          <div className="absolute inset-0 bg-black/80 z-0"></div>
           <Image 
             src={imageError ? fallbackImage : image} 
             alt={title}
@@ -43,16 +43,16 @@ export default function EventCard({ id, title, date, description, link, image, u
         </div>
       </Link>
       
-      <div className="p-6">
-        <Link href={`/events/${id}`} className="block hover:text-bar-accent transition-colors">
-          <h3 className="text-xl font-bold mb-2 text-bar-accent">{title}</h3>
+      <div className="p-4">
+        <Link href={`/events/${id}`} className="block hover:text-white/80 transition-colors">
+          <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
         </Link>
         <p className="text-white font-medium mb-2">{date}</p>
-        <p className="text-gray-300 mb-4">{description}</p>
+        <p className="text-white/80 mb-4">{description}</p>
         <div className="flex gap-3">
           <Link 
             href={`/events/${id}`}
-            className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-bar-accent text-black rounded-md font-bold text-sm hover:bg-bar-accent/90 transition-colors transform hover:scale-[1.05] active:scale-[0.98] shadow-lg"
+            className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-transparent border border-white text-white rounded-md font-bold text-sm hover:bg-white/10 transition-colors transform hover:scale-[1.05] active:scale-[0.98]"
           >
             <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -60,11 +60,12 @@ export default function EventCard({ id, title, date, description, link, image, u
             </svg>
             Event Details
           </Link>
+          
           <a 
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-3 py-2 border border-bar-accent/50 text-bar-accent rounded-md font-medium text-sm hover:bg-bar-accent/10 transition-colors"
+            className="inline-flex items-center justify-center px-3 py-2 border border-white/50 text-white rounded-md font-medium text-sm hover:bg-white/10 transition-colors"
             aria-label="View on Instagram"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -76,11 +77,11 @@ export default function EventCard({ id, title, date, description, link, image, u
     </div>
   ) : (
     <div 
-      className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden shadow-lg group hover:border-gray-600 transition-all duration-300"
+      className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden shadow-md group hover:border-white/30 transition-all duration-300"
     >
       <Link href={`/events/${id}`} className="block">
         <div className="relative h-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-black/80 to-gray-800/80 z-0"></div>
+          <div className="absolute inset-0 bg-black/80 z-0"></div>
           <Image 
             src={imageError ? fallbackImage : image} 
             alt={title}
@@ -93,16 +94,16 @@ export default function EventCard({ id, title, date, description, link, image, u
         </div>
       </Link>
       
-      <div className="p-5">
-        <Link href={`/events/${id}`} className="block hover:text-bar-accent transition-colors">
+      <div className="p-4">
+        <Link href={`/events/${id}`} className="block hover:text-white/80 transition-colors">
           <h3 className="text-lg font-bold mb-1 text-white">{title}</h3>
         </Link>
-        <p className="text-gray-400 text-sm mb-2">{date}</p>
-        <p className="text-gray-300 text-sm mb-4 line-clamp-2">{description}</p>
+        <p className="text-white text-sm mb-2">{date}</p>
+        <p className="text-white/80 text-sm mb-4 line-clamp-2">{description}</p>
         <div className="flex gap-2">
           <Link 
             href={`/events/${id}`}
-            className="inline-flex items-center text-gray-300 hover:text-bar-accent text-sm transition-colors"
+            className="inline-flex items-center text-white hover:text-white/80 text-sm transition-colors"
           >
             <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -110,12 +111,12 @@ export default function EventCard({ id, title, date, description, link, image, u
             </svg>
             View Details
           </Link>
-          <span className="text-gray-600">•</span>
+          <span className="text-white/50">•</span>
           <a 
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-gray-300 hover:text-bar-accent text-sm transition-colors"
+            className="inline-flex items-center text-white hover:text-white/80 text-sm transition-colors"
           >
             <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

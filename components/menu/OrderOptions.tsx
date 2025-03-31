@@ -158,9 +158,9 @@ const OrderOptions = () => {
           
           <div className="mt-1 space-y-2 text-sm flex-grow">
             {isDelivery && (
-              <p className="text-gray-300">{(option as DeliveryService).serviceFee}</p>
+              <p className="text-white/60">{(option as DeliveryService).serviceFee}</p>
             )}
-            <p className="text-gray-300">{option.fee}</p>
+            <p className="text-white/60">{option.fee}</p>
             <p className="text-bar-accent font-medium">{option.time}</p>
           </div>
           
@@ -260,7 +260,7 @@ const OrderOptions = () => {
                 </div>
                 <h4 className="font-bold text-white text-lg">How to install on iOS:</h4>
               </div>
-              <ol className="list-decimal pl-6 text-gray-300 space-y-4">
+              <ol className="list-decimal pl-6 text-white/70 space-y-4">
                 <li className="pb-3 border-b border-gray-700">Tap the <span className="px-2 py-1 bg-gray-800 rounded text-white">Share</span> button at the bottom of the screen</li>
                 <li className="pb-3 border-b border-gray-700">Scroll down and tap <span className="px-2 py-1 bg-gray-800 rounded text-white">Add to Home Screen</span></li>
                 <li>Tap <span className="px-2 py-1 bg-gray-800 rounded text-white">Add</span> in the top right corner</li>
@@ -278,7 +278,7 @@ const OrderOptions = () => {
                 </div>
                 <h4 className="font-bold text-white text-lg">How to install on Android:</h4>
               </div>
-              <ol className="list-decimal pl-6 text-gray-300 space-y-4">
+              <ol className="list-decimal pl-6 text-white/70 space-y-4">
                 <li className="pb-3 border-b border-gray-700">Tap the menu button (<span className="px-2 py-1 bg-gray-800 rounded text-white">⋮</span>) in the top right</li>
                 <li className="pb-3 border-b border-gray-700">Tap <span className="px-2 py-1 bg-gray-800 rounded text-white">Add to Home screen</span></li>
                 <li>Tap <span className="px-2 py-1 bg-gray-800 rounded text-white">Add</span> when prompted</li>
@@ -292,7 +292,7 @@ const OrderOptions = () => {
         <h3 className="text-xl font-semibold text-white mb-2">
           Choose your preferred {activeOption === 'delivery' ? 'delivery' : 'pickup'} service:
         </h3>
-        <p className="text-gray-400 text-sm max-w-xl mx-auto">
+        <p className="text-white/60 text-sm max-w-xl mx-auto">
           Select from our trusted partners below and have your favorite Side Hustle Bar items {activeOption === 'delivery' ? 'delivered right to your door' : 'ready for pickup at your convenience'}
         </p>
       </div>
@@ -339,7 +339,7 @@ const OrderOptions = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
             Unlock the full experience!
           </h2>
-          <p className="text-gray-300 mb-10 max-w-2xl mx-auto">
+          <p className="text-white/60 mb-10 max-w-2xl mx-auto">
             Install our app and be the first to know about upcoming events, new menu items, exclusive artist spotlights, and even raffles and giveaways. Don't miss out - download now for instant updates!
           </p>
 

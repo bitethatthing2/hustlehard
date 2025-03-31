@@ -1,39 +1,56 @@
-import * as React from "react"
+"use client"
+
+import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
-import { Moon, Sun } from "lucide-react"
+import Image from "next/image"
 
-export function ThemeToggle({ onToggle }: { onToggle?: (theme: string) => void }) {
+interface ThemeToggleProps {
+  onToggle?: (theme: string) => void;
+}
+
+export function ThemeToggle({ onToggle }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme()
-
-  const handleToggle = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
+  
+  // Toggle between 'light' (Salem) and 'dark' (Portland)
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark"
+    setTheme(newTheme)
     if (onToggle) {
-      onToggle(newTheme);
+      onToggle(newTheme)
     }
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Button
-        variant="outline"
-        onClick={handleToggle}
-        className="rounded-full bg-white text-black border border-gray-300 hover:bg-gray-100 shadow-md px-4 py-2 h-10"
-        aria-label="Toggle location image"
-      >
-        {theme === 'dark' ? (
-          <div className="flex items-center gap-2">
-            <Moon className="h-5 w-5" />
-            <span className="font-medium">Portland</span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <Sun className="h-5 w-5" />
-            <span className="font-medium">Salem</span>
-          </div>
-        )}
-      </Button>
-    </div>
+    <Button
+      variant="outline"
+      size="lg"
+      onClick={toggleTheme}
+      className="w-auto px-4 py-2 rounded-md font-medium flex items-center gap-2 bg-transparent text-white border border-white hover:bg-white/10"
+    >
+      {theme === "dark" ? (
+        <>
+          <Image 
+            src="/only_these/logos/SHB_Logo_WhiteonBlackBG.png"
+            alt="Portland"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+          <span>Portland</span>
+        </>
+      ) : (
+        <>
+          <Image 
+            src="/salem_location.png"
+            alt="Salem"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+          <span>Salem</span>
+        </>
+      )}
+    </Button>
   )
 } 

@@ -122,41 +122,13 @@ const HeroSection: React.FC = () => {
   const textClasses = "text-base font-medium";
 
   return (
-    <div className="relative min-h-screen overflow-hidden w-full">
-      <div className="relative z-10 min-h-screen bg-gradient-to-b from-black/80 via-black/50 to-black/80">
-        <section className="relative min-h-[85vh] flex flex-col overflow-hidden bg-black border-b border-bar-accent/30 w-full -mt-16">
-          {/* Background effects and animations */}
-          <div className="absolute inset-0 bg-black z-10 overflow-hidden">
-            {/* Animated light beams */}
-            <div className="absolute inset-0 opacity-15 overflow-hidden">
-              <div className="absolute top-0 left-[20%] w-[1px] h-full bg-bar-accent animate-pulse-subtle"></div>
-              <div className="absolute top-0 left-[40%] w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-700"></div>
-              <div className="absolute top-0 left-[60%] w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-1300"></div>
-              <div className="absolute top-0 left-[80%] w-[1px] h-full bg-bar-accent animate-pulse-subtle animation-delay-1000"></div>
-              
-              {/* Diagonal accent lines */}
-              <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10">
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-bar-accent to-transparent transform rotate-[30deg] translate-y-[10vh]"></div>
-                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-bar-accent to-transparent transform rotate-[-30deg] -translate-y-[10vh]"></div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="w-full max-w-full relative z-20 text-center px-3 flex flex-col justify-center h-full pt-24 pb-8 overflow-hidden">
+    <div className="relative min-h-screen w-full bg-black">
+      <div className="relative z-10 min-h-screen">
+        <section className="relative min-h-[85vh] flex flex-col bg-black border-b border-gray-800 w-full -mt-16">
+          <div className="w-full max-w-full relative z-20 text-center px-3 flex flex-col justify-center h-full pt-24 pb-8">
             <div className="flex-grow flex flex-col items-center justify-center">
-              {/* Logo with glow effect */}
-              <div className="relative mb-4">
-                <div className="absolute inset-0 animate-pulse-slow opacity-70 blur-md flex items-center justify-center">
-                  <Image 
-                    src={logoImage} 
-                    alt="The Sidehustle Bar - Glow Effect" 
-                    width={450}
-                    height={250}
-                    className="w-auto h-auto max-w-[300px] sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto object-contain"
-                    priority={false}
-                    unoptimized
-                  />
-                </div>
+              {/* Logo */}
+              <div className="relative mb-4 pt-6">
                 <div className="relative z-10 flex items-center justify-center">
                   <Image 
                     src={logoImage} 
@@ -181,7 +153,7 @@ const HeroSection: React.FC = () => {
               {/* Order Options Section - Moved directly under location toggle */}
               <div className="w-full max-w-md mx-auto mb-8">
                 <div className="text-center mb-2">
-                  <p className="text-lg text-bar-accent font-medium">
+                  <p className="text-lg text-white font-medium">
                     Ready to order? Choose an option:
                   </p>
                 </div>
@@ -193,7 +165,7 @@ const HeroSection: React.FC = () => {
                       className="text-md py-5 px-6 w-full"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center bg-gray-100/10 rounded-full">
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/50">
                           <Image 
                             src="/delivery-icon.svg" 
                             alt="Delivery" 
@@ -213,7 +185,7 @@ const HeroSection: React.FC = () => {
                       className="text-md py-5 px-6 w-full"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center bg-gray-100/10 rounded-full">
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/50">
                           <Image 
                             src="/pickup-icon.svg" 
                             alt="Pickup" 
@@ -231,7 +203,7 @@ const HeroSection: React.FC = () => {
 
               {/* Main hero information card */}
               <div className="w-full max-w-2xl mx-auto">
-                <div className="text-lg md:text-xl lg:text-2xl text-white font-medium mb-8 md:mb-10 mx-auto rounded-lg backdrop-blur-lg p-5 border border-gray-700 bg-black/70 shadow-md">
+                <div className="text-lg md:text-xl lg:text-2xl text-white font-medium mb-8 md:mb-10 mx-auto rounded-lg p-5 border border-gray-700 bg-black shadow-md">
                   <p className="mb-3">High-Energy Sports Bar • Restaurant • Nightclub</p>
                   <p className="font-semibold mb-1">Featuring Executive Chef Rebecca Sanchez</p>
                   <p className="text-sm md:text-base italic">#1 Rated Mexican Food & Best Tacos in Town</p>
@@ -239,9 +211,9 @@ const HeroSection: React.FC = () => {
                   {/* Install buttons container */}
                   <div className="flex flex-col items-center gap-6 mt-6">
                     {/* Menu Feature Highlight */}
-                    <div className="w-full max-w-md p-4 rounded-lg bg-black/50 border border-gray-700 relative overflow-hidden shadow-md">
+                    <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative shadow-md">
                       <div className="relative z-10 flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-full bg-gray-100/10 border border-gray-600 flex items-center justify-center">
+                        <div className="p-2 rounded-full border border-gray-600 flex items-center justify-center">
                           <Image
                             src="/menu_icon.png"
                             alt="Home Menu Button"
@@ -252,7 +224,7 @@ const HeroSection: React.FC = () => {
                         </div>
                         <p className="text-base font-medium">Check Out Our Main Menu</p>
                       </div>
-                      <p className="text-sm text-white/90 relative z-10 bg-black/30 p-3 rounded-lg border border-gray-700">
+                      <p className="text-sm text-white relative z-10 p-3 rounded-lg border border-gray-700">
                         Click the home menu button to experience all the app features, settings, and navigation options in one convenient place.
                       </p>
                     </div>
@@ -261,7 +233,7 @@ const HeroSection: React.FC = () => {
                       {deviceType === 'ios' ? (
                         <Button
                           onClick={handleInstallClick}
-                          className="w-full min-w-[180px] flex items-center gap-2"
+                          className="w-full min-w-[180px] flex items-center gap-2 bg-transparent border border-white"
                         >
                           <Image
                             src="/only_these/ios_pwa_install.png"
@@ -276,7 +248,7 @@ const HeroSection: React.FC = () => {
                         <>
                           <Button
                             onClick={handleInstallClick}
-                            className="w-full min-w-[180px] flex items-center gap-2"
+                            className="w-full min-w-[180px] flex items-center gap-2 bg-transparent border border-white"
                           >
                             <Image
                               src="/only_these/android_pwa_install.png"
@@ -291,7 +263,7 @@ const HeroSection: React.FC = () => {
                           {notificationStatus === 'idle' && (
                             <Button
                               onClick={handleNotificationRequest}
-                              className="w-full min-w-[180px] flex items-center gap-2"
+                              className="w-full min-w-[180px] flex items-center gap-2 bg-transparent border border-white"
                             >
                               <Image
                                 src="/only_these/logos/icon_enable_notifications.png"
@@ -336,12 +308,9 @@ const HeroSection: React.FC = () => {
                 </div>
                 <VideoCarousel />
                 
-                {/* Connect line */}
-                <div className="w-20 h-px mx-auto bg-gradient-to-r from-transparent via-bar-accent/50 to-transparent my-4 sm:my-5"></div>
-                
                 {/* Shop Now Button */}
-                <div className="w-full flex justify-center mb-4 sm:mb-0">
-                  <div className="w-full max-w-md p-4 rounded-lg bg-black/40 border border-gray-700 relative overflow-hidden shadow-xl">
+                <div className="w-full flex justify-center mb-4 sm:mb-0 mt-6">
+                  <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative shadow-md">
                     {/* Button with Shadcn UI styling */}
                     <div className="relative z-10">
                       <Button
@@ -374,9 +343,6 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
           </div>
-          
-          {/* Decorative elements */}
-          <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-bar-accent/70 to-transparent"></div>
         </section>
       </div>
     </div>

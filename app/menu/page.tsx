@@ -329,31 +329,31 @@ const Menu: FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Asada</p>
-              <p className="text-gray-400 text-sm">Beef</p>
+              <p className="text-white/60 text-sm">Beef</p>
             </div>
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Birria</p>
-              <p className="text-gray-400 text-sm">Beef</p>
+              <p className="text-white/60 text-sm">Beef</p>
             </div>
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Al Pastor</p>
-              <p className="text-gray-400 text-sm">Pork</p>
+              <p className="text-white/60 text-sm">Pork</p>
             </div>
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Carnitas</p>
-              <p className="text-gray-400 text-sm">Pork</p>
+              <p className="text-white/60 text-sm">Pork</p>
             </div>
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Chorizo</p>
-              <p className="text-gray-400 text-sm">Pork</p>
+              <p className="text-white/60 text-sm">Pork</p>
             </div>
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Pollo</p>
-              <p className="text-gray-400 text-sm">Chicken</p>
+              <p className="text-white/60 text-sm">Chicken</p>
             </div>
             <div className="bg-bar-dark/40 p-3 rounded">
               <p className="text-white font-medium">Veggies</p>
-              <p className="text-gray-400 text-sm">+$2.00 Lengua</p>
+              <p className="text-white/60 text-sm">+$2.00 Lengua</p>
             </div>
           </div>
         </div>
@@ -366,13 +366,13 @@ const Menu: FC = () => {
         <h2 className="font-display text-2xl md:text-3xl font-bold text-white mb-4">
           Ready to Order?
         </h2>
-        <p className="text-gray-300 max-w-2xl mx-auto mb-6">
+        <p className="text-white max-w-2xl mx-auto mb-6">
           Choose how you'd like to receive your delicious Side Hustle Bar experience or view all ordering options.
         </p>
         <div className="flex justify-center">
           <Link 
             href="/order" 
-            className="bg-bar-accent text-black font-medium px-6 py-3 rounded-lg hover:bg-bar-accent/80 transition-colors"
+            className="bg-bar-accent text-white font-medium px-6 py-3 rounded-lg hover:bg-bar-accent/80 transition-colors"
           >
             View All Ordering Options
           </Link>

@@ -15,7 +15,7 @@ const MenuItem: FC<MenuItemProps> = ({ name, price, description, tags }) => {
         <span className="text-bar-accent font-medium">{price}</span>
       </div>
       {description && (
-        <p className="text-gray-400 text-sm">{description}</p>
+        <p className="text-white/60 text-sm">{description}</p>
       )}
       {tags && tags.length > 0 && (
         <div className="flex gap-2 mt-1">

@@ -26,7 +26,7 @@ const PageHeader: FC<PageHeaderProps> = ({
           {title}
         </h1>
         {subtitle && (
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <p className="text-white max-w-2xl mx-auto">
             {subtitle}
           </p>
         )}
