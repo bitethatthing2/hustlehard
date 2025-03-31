@@ -6,6 +6,9 @@ import { fetchToken } from '@/firebase';
 import { LocationProvider } from '@/contexts/LocationContext';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { MapPin } from "lucide-react";
 
 // Import components dynamically to avoid hydration issues
 const HeroSection = dynamic(() => import('@/components/hero/HeroSection'), {
@@ -108,6 +111,23 @@ export default function Home(): React.ReactElement {
           <Suspense fallback={<div className="py-12 flex items-center justify-center bg-black">Loading reviews...</div>}>
             <GoogleReviewsSection />
           </Suspense>
+        </div>
+
+        <div className="w-full max-w-2xl mx-auto mt-10 mb-16 px-4">
+          <div className="bg-black/30 p-6 rounded-lg border border-white/10 text-center">
+            <h2 className="text-2xl font-bold text-white mb-4">Find Our Locations</h2>
+            <p className="text-white/70 mb-6">Visit us at our Portland or Salem locations. View maps, get directions, and see our hours of operation.</p>
+            <Button
+              asChild
+              variant="outline"
+              className="bg-transparent border-white text-white px-6 py-2"
+            >
+              <Link href="/locations" className="flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                <span>View Our Locations</span>
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </LocationProvider>

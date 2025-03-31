@@ -109,6 +109,67 @@ export default function MainMenuButton() {
               </ul>
             </div>
 
+            {/* Locations Section */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold mb-4 text-white">Locations</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-transparent border-white text-white w-full justify-start"
+                >
+                  <Link 
+                    href="https://www.google.com/maps/dir/?api=1&destination=Side+Hustle+Bar,+Salem,+OR" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Salem Directions
+                  </Link>
+                </Button>
+                
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-transparent border-white text-white w-full justify-start"
+                >
+                  <Link 
+                    href="https://www.google.com/maps/dir/?api=1&destination=Side+Hustle,+Portland,+OR" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Portland Directions
+                  </Link>
+                </Button>
+                
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-transparent border-white text-white w-full justify-start col-span-1 sm:col-span-2"
+                >
+                  <Link href="/locations" className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                      <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                      <line x1="3" x2="21" y1="9" y2="9"></line>
+                      <line x1="3" x2="21" y1="15" y2="15"></line>
+                      <line x1="9" x2="9" y1="3" y2="21"></line>
+                      <line x1="15" x2="15" y1="3" y2="21"></line>
+                    </svg>
+                    View Our Locations
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
             {/* Navigation Section */}
             <div className="mb-6 px-2">
               <h3 className="font-bold mb-3 text-base flex items-center px-2">
@@ -261,7 +322,24 @@ export default function MainMenuButton() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                       </svg>
                     </div>
-                    <span className="font-medium">Side Hustle DJs</span>
+                    <span className="font-medium">Meet Our DJs</span>
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="default"
+                  className="w-full justify-start py-5 h-auto"
+                >
+                  <Link 
+                    href="/social"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100/10 flex items-center justify-center mr-3">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <span className="font-medium">Social Media</span>
                   </Link>
                 </Button>
                 <Button
