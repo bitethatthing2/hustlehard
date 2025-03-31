@@ -532,9 +532,9 @@ export default function MainMenuButton() {
         <Image
           src="/only_these/logos/menu_icon.png"
           alt="Menu"
-          width={36}
-          height={36}
-          className="w-9 h-9"
+          width={48}
+          height={48}
+          className="w-12 h-12"
         />
       </Button>
       {mounted && isOpen && createPortal(<MenuContent />, document.body)}
