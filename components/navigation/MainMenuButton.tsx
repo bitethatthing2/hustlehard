@@ -523,20 +523,22 @@ export default function MainMenuButton() {
 
   return (
     <>
-      <Button
-        variant="default"
-        onClick={() => setIsOpen(true)}
-        className="fixed top-4 right-4 z-50 rounded-full p-3 h-auto w-auto"
-        aria-label="Open menu"
-      >
-        <Image
-          src="/only_these/logos/menu_icon.png"
-          alt="Menu"
-          width={48}
-          height={48}
-          className="w-12 h-12"
-        />
-      </Button>
+      <div className="fixed top-4 right-4 z-50 flex flex-col items-center" style={{ width: "50px" }}>
+        <Button
+          variant="default"
+          onClick={() => setIsOpen(true)}
+          className="rounded-full p-0 w-10 h-10 relative"
+          aria-label="Open menu"
+        >
+          <Image
+            src="/only_these/logos/menu_icon.png"
+            alt="Menu"
+            fill
+            className="object-cover rounded-full"
+          />
+        </Button>
+        <span className="text-xs font-medium mt-1">Menu</span>
+      </div>
       {mounted && isOpen && createPortal(<MenuContent />, document.body)}
     </>
   );
