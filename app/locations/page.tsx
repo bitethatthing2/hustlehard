@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useLocation } from '@/contexts/LocationContext';
+import { useLocation, LocationProvider } from '@/contexts/LocationContext';
 import PortlandMap from '@/components/maps/PortlandMap';
 import SalemMap from '@/components/maps/SalemMap';
 import LocationDirectionButtons from '@/components/maps/LocationDirectionButtons';
@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import PageHeader from '@/components/shared/PageHeader';
 import { PhoneCall, Mail, Clock } from 'lucide-react';
 
-export default function LocationsPage() {
+const LocationsPageContent = () => {
   const { selectedLocation, locationData } = useLocation();
   
   const portlandInfo = locationData.portland;
@@ -136,5 +136,13 @@ export default function LocationsPage() {
         </div>
       </div>
     </div>
+  );
+};
+
+export default function LocationsPage() {
+  return (
+    <LocationProvider>
+      <LocationsPageContent />
+    </LocationProvider>
   );
 } 
