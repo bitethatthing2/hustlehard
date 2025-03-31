@@ -150,7 +150,10 @@
   /* Additional universal approach */
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    /* Firefox - using @supports to check if scrollbar-width is supported */
+    @supports (scrollbar-width: none) {
+      scrollbar-width: none;
+    }
     overflow-y: scroll;
   }
   

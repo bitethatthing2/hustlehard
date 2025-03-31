@@ -10,6 +10,7 @@ import PageHeader from '@/components/shared/PageHeader';
 import { PhoneCall, Mail, Clock } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
+import GoogleMapEmbed from '@/components/maps/GoogleMapEmbed';
 
 const LocationsPageContent = () => {
   const { selectedLocation, locationData } = useLocation();
@@ -68,19 +69,11 @@ const LocationsPageContent = () => {
             </h3>
           </div>
           
-          <div className="w-full rounded-lg overflow-hidden border border-white/10 shadow-lg">
-            <div className="aspect-video w-full">
-              <iframe
-                src={currentEmbedUrl}
-                title={`${activeLocation.name} Location Map`}
-                width="100%"
-                height="100%"
-                allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full border-none"
-              ></iframe>
-            </div>
-          </div>
+          <GoogleMapEmbed
+            src={currentEmbedUrl}
+            title={`${activeLocation.name} Location Map`}
+            className="rounded-lg shadow-lg border border-white/10"
+          />
           
           <p className="text-white/80 mt-4 text-center max-w-2xl">
             {selectedLocation === 'portland' 

@@ -1,57 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import ElfsightWidget from '@/components/social/ElfsightWidget';
 
 const GoogleReviewsSection: React.FC = () => {
-  const [elfsightLoaded, setElfsightLoaded] = useState(true);
+  const [widgetFailed, setWidgetFailed] = useState(false);
 
-  // More efficient loading check using MutationObserver
+  // Google Reviews widget ID
+  const GOOGLE_REVIEWS_WIDGET_ID = "f4fdffed-81de-4d5d-b688-2da302faebbe";
+
+  // Add error handler for widget not found errors
   useEffect(() => {
-    const container = document.querySelector('.elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe');
-    if (!container) return;
-
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === 'childList' && mutation.target.childNodes.length === 0) {
-          setElfsightLoaded(false);
-          observer.disconnect();
-          break;
-        }
+    const handleErrors = (event: ErrorEvent) => {
+      if (
+        event.message?.includes('eapps.Platform') && 
+        (event.message?.includes('WIDGET_NOT_FOUND') || 
+         event.message?.includes(`"${GOOGLE_REVIEWS_WIDGET_ID}"`) ||
+         event.message?.includes('can`t be initialized'))
+      ) {
+        console.warn("Google Reviews widget failed to load, using fallback");
+        setWidgetFailed(true);
       }
-    });
+    };
 
-    observer.observe(container, { childList: true, subtree: true });
-
-    // Fallback timeout reduced to 3 seconds
-    const timer = setTimeout(() => {
-      if (container.children.length === 0) {
-        setElfsightLoaded(false);
-      }
-      observer.disconnect();
-    }, 3000);
-
+    window.addEventListener('error', handleErrors as EventListener);
+    
     return () => {
-      observer.disconnect();
-      clearTimeout(timer);
+      window.removeEventListener('error', handleErrors as EventListener);
     };
   }, []);
-
-  // Define the callback outside of useEffect
-  const handleErrors = useCallback((event: ErrorEvent) => {
-    if (event.message?.includes('Tracking Prevention') && 
-        event.message?.includes('googleusercontent.com')) {
-      // Only log once per session using sessionStorage
-      if (!sessionStorage.getItem('tracking-warning-logged')) {
-        console.warn('Tracking prevention for Google User Images - using fallback');
-        sessionStorage.setItem('tracking-warning-logged', 'true');
-      }
-    }
-  }, []);
-
-  // Optimized error handling for tracking prevention
-  useEffect(() => {
-    window.addEventListener('error', handleErrors, { passive: true });
-    return () => window.removeEventListener('error', handleErrors);
-  }, [handleErrors]); // Include handleErrors in the dependency array
 
   return (
     <>
@@ -69,8 +47,12 @@ const GoogleReviewsSection: React.FC = () => {
           </div>
           
           <div className="w-full overflow-hidden">
-            {elfsightLoaded ? (
-              <div className="elfsight-app-f4fdffed-81de-4d5d-b688-2da302faebbe" data-elfsight-app-lazy></div>
+            {!widgetFailed ? (
+              <ElfsightWidget
+                widgetId={GOOGLE_REVIEWS_WIDGET_ID}
+                fallbackMessage="Loading reviews..."
+                wrapperClassName="w-full max-w-6xl mx-auto"
+              />
             ) : (
               <div className="bg-gray-800/30 p-8 rounded-lg border border-gray-700">
                 <div className="flex flex-col items-center text-center">
@@ -101,14 +83,5 @@ const GoogleReviewsSection: React.FC = () => {
     </>
   );
 };
-
-// Add the global type declaration
-declare global {
-  interface Window {
-    elfsight?: {
-      initialize: () => void;
-    }
-  }
-}
 
 export default GoogleReviewsSection; 

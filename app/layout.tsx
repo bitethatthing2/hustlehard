@@ -61,7 +61,7 @@ export default function RootLayout({
         <Script src="/notification-icon.js" strategy="afterInteractive" />
         {/* Load PWA installation fix */}
         <Script src="/pwa-fix.js" strategy="afterInteractive" />
-        {/* Load Elfsight Widget */}
+        {/* Load Elfsight Widget with error handling */}
         <Script 
           src="https://static.elfsight.com/platform/platform.js" 
           data-use-service-core 
@@ -69,6 +69,27 @@ export default function RootLayout({
           crossOrigin="anonymous"
           nonce="elfsight-nonce"
         />
+        {/* Script to handle Elfsight errors and loading globally */}
+        <Script id="elfsight-error-handler" strategy="afterInteractive">
+          {`
+            // Handle Elfsight platform script loading errors
+            window.addEventListener('error', function(event) {
+              if (event.target && event.target.src && event.target.src.includes('static.elfsight.com/platform/platform.js')) {
+                console.warn('Elfsight platform script failed to load');
+                window.elfsightLoadFailed = true;
+              }
+              
+              // Handle Elfsight widget errors
+              if (event.message && 
+                  (event.message.includes('eapps.Platform') || 
+                   event.message.includes('WIDGET_NOT_FOUND'))) {
+                console.warn('Caught Elfsight error:', event.message);
+                // Prevent the error from showing in console
+                event.preventDefault();
+              }
+            });
+          `}
+        </Script>
         {/* Preconnect to external domains to improve performance */}
         <link rel="preconnect" href="https://static.elfsight.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://lh3.googleusercontent.com" crossOrigin="anonymous" />
