@@ -57,7 +57,7 @@ const LocationsPageContent = () => {
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-3 mb-4">
             <Image 
-              src="/hustle_pdx_for maps.png"
+              src="/SHB_Logo_WhiteonBlackBG.png"
               alt="Side Hustle Map Icon"
               width={40}
               height={40}
