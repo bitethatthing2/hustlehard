@@ -238,13 +238,15 @@ const HeroSection: React.FC = () => {
                           onClick={handleInstallClick}
                           className="w-full min-w-[180px] flex items-center gap-2 bg-white text-black border border-white font-bold hover:bg-white"
                         >
-                          <Image
-                            src="/only_these/ios_pwa_install.png"
-                            alt="Install on iOS"
-                            width={24}
-                            height={24}
-                            className={iconClasses}
-                          />
+                          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
+                            <Image
+                              src="/only_these/ios_pwa_install.png"
+                              alt="Install on iOS"
+                              width={24}
+                              height={24}
+                              className="w-6 h-6 object-contain"
+                            />
+                          </div>
                           <span className="text-black font-bold">Add to Home Screen</span>
                         </Button>
                       ) : (
@@ -253,13 +255,15 @@ const HeroSection: React.FC = () => {
                             onClick={handleInstallClick}
                             className="w-full min-w-[180px] flex items-center gap-2 bg-white text-black border border-white font-bold hover:bg-white"
                           >
-                            <Image
-                              src="/only_these/android_pwa_install.png"
-                              alt="Install on Android"
-                              width={24}
-                              height={24}
-                              className={iconClasses}
-                            />
+                            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
+                              <Image
+                                src="/only_these/android_pwa_install.png"
+                                alt="Install on Android"
+                                width={24}
+                                height={24}
+                                className="w-6 h-6 object-contain"
+                              />
+                            </div>
                             <span className="text-black font-bold">Install App</span>
                           </Button>
                           
@@ -268,13 +272,15 @@ const HeroSection: React.FC = () => {
                               onClick={handleNotificationRequest}
                               className="w-full min-w-[180px] flex items-center gap-2 bg-white text-black border border-white font-bold hover:bg-white"
                             >
-                              <Image
-                                src="/only_these/logos/icon_enable_notifications.png"
-                                alt="Enable Notifications"
-                                width={28}
-                                height={28}
-                                className={iconClasses}
-                              />
+                              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
+                                <Image
+                                  src="/only_these/logos/icon_enable_notifications.png"
+                                  alt="Enable Notifications"
+                                  width={24}
+                                  height={24}
+                                  className="w-7 h-7 object-contain scale-110"
+                                />
+                              </div>
                               <span className="text-black font-bold">Enable Notifications</span>
                             </Button>
                           )}

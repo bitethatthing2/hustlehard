@@ -152,7 +152,7 @@ const OrderOptions = () => {
         >
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black">
-              <svg viewBox="0 0 24 24" width="20" height="20" className="w-5 h-5" fill="white">
+              <svg viewBox="0 0 24 24" width="20" height="20" className="w-10 h-10 scale-150" fill="white">
                 <path d="M19 7c0-1.1-.9-2-2-2h-3v2h3v2.65L13.52 14H10V9H6c-2.21 0-4 1.79-4 4v3h2c0 1.66 1.34 3 3 3s3-1.34 3-3h4.48L19 10.35V7zM7 17c-.55 0-1-.45-1-1h2c0 .55-.45 1-1 1z" />
                 <path d="M5 6h5v2H5zm14 7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm0 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
               </svg>
@@ -168,7 +168,7 @@ const OrderOptions = () => {
         >
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black">
-              <svg viewBox="0 0 24 24" width="20" height="20" className="w-5 h-5" fill="white">
+              <svg viewBox="0 0 24 24" width="20" height="20" className="w-8 h-8 scale-110" fill="white">
                 <path d="M19 7h-4V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0H9V5h4v2z" />
               </svg>
             </div>

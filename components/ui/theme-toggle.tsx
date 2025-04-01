@@ -35,13 +35,15 @@ export function ThemeToggle({ onToggle, className }: ThemeToggleProps) {
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
     >
       <div className="flex items-center justify-center">
-        <Image
-          src="/only_these/logos/salem_portland_toggle_icon.png"
-          alt="Location Toggle Icon"
-          width={55}
-          height={55}
-          className="w-14 h-14 object-contain"
-        />
+        <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black">
+          <Image
+            src="/only_these/logos/salem_portland_toggle_icon.png"
+            alt="Location Toggle Icon"
+            width={55}
+            height={55}
+            className="w-11 h-11 object-contain scale-110"
+          />
+        </div>
       </div>
       <span className="ml-2 font-bold text-black">
         {theme === "dark" ? "Portland" : "Salem"}
