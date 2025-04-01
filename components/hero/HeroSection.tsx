@@ -331,7 +331,7 @@ const HeroSection: React.FC = () => {
                       >
                         <Link href="/shop">
                           <Image
-                            src="/menu_icon.png"
+                            src="/only_these/logos/shop_now_icon.png"
                             alt="Shop"
                             width={40}
                             height={40}

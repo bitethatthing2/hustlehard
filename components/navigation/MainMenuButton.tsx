@@ -175,121 +175,16 @@ export default function MainMenuButton() {
               <p className="text-white/80 text-sm mt-2">Join us for games, live music, and our famous tacos!</p>
             </div>
             
-            {/* Featured specials section - filling the gap */}
-            <div className="px-5 py-4 text-center">
-              <h3 className="text-white font-bold text-lg mb-2">TODAY'S SPECIALS</h3>
-              <div className="bg-white/5 rounded-lg p-3 mb-3 border border-white/10">
-                <p className="text-white font-medium">Taco Tuesday: $2 Tacos</p>
-                <p className="text-white/70 text-sm">All Day | Dine-in Only</p>
-              </div>
-              <div className="bg-white/5 rounded-lg p-3 mb-3 border border-white/10">
-                <p className="text-white font-medium">Happy Hour: 4PM - 7PM</p>
-                <p className="text-white/70 text-sm">$5 Draft Beer | $7 Cocktails</p>
-              </div>
-              <p className="text-white/80 text-xs italic mt-1 mb-3">*Specials and hours may vary by location</p>
-            </div>
-            
             {/* Location Information - Added from screenshot */}
             <div className="flex justify-center items-center mb-3">
               <div className="bg-white px-4 py-2 rounded-full flex items-center gap-2">
-                <Image
-                  src="/only_these/logos/menu_icon.png"
-                  alt="Location"
-                  width={24}
-                  height={24}
-                  className="object-contain rounded-full"
-                />
+                <div className="flex-shrink-0 w-6 h-6 mr-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                  </svg>
+                </div>
                 <span className="font-bold">Portland</span>
               </div>
-            </div>
-            
-            {/* Order Online Section - Moved up to appear before "Ready to order?" section */}
-            <div className="mb-1 py-2 px-4 bg-gray-100/5 rounded-lg border border-gray-700 shadow-inner">
-              <h3 className="font-bold mb-2 flex items-center text-base text-white">
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                ORDER ONLINE
-              </h3>
-              <p className="text-gray-300 text-sm mb-4">Choose delivery or pickup options from our food menu:</p>
-              <Button
-                asChild
-                variant="outline"
-                className="w-full bg-transparent hover:bg-white/10 border-gray-700 h-14 justify-start"
-              >
-                <Link 
-                  href="/order"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center"
-                >
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                  </div>
-                  <span className="font-bold text-white">Order Online</span>
-                </Link>
-              </Button>
-            </div>
-            
-            {/* Main Wolf Icon - MAKING THIS BIGGER - Moved below ORDER ONLINE section */}
-            
-            {/* Order Options - Added from screenshot */}
-            <div className="mt-3">
-              <p className="text-center text-white font-bold mb-4">Ready to order? Choose an option:</p>
-              <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  className="w-full h-14 bg-white hover:bg-white/90 border-gray-200 justify-center"
-                  asChild
-                >
-                  <Link href="/order/delivery" className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <span className="font-bold text-black">Delivery</span>
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full h-14 bg-white hover:bg-white/90 border-gray-200 justify-center"
-                  asChild
-                >
-                  <Link href="/order/pickup" className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                      </svg>
-                    </div>
-                    <span className="font-bold text-black">Pickup</span>
-                  </Link>
-                </Button>
-              </div>
-            </div>
-
-            {/* Find Our Locations Section - Added from screenshot */}
-            <div className="mb-8 p-4 bg-black rounded-lg border border-gray-800">
-              <h3 className="font-bold text-xl text-white text-center mb-2">Find Our Locations</h3>
-              <p className="text-white text-center mb-4">
-                Visit us at our Portland or Salem locations. View maps, get directions, and see our hours of operation.
-              </p>
-              <Button
-                variant="outline"
-                className="w-full h-12 border-gray-200 justify-center"
-                asChild
-              >
-                <Link href="/locations" className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                    <svg className="w-8 h-8 text-white scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <span className="font-medium">View Our Locations</span>
-                </Link>
-              </Button>
             </div>
             
             {/* Navigation Section */}
