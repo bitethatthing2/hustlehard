@@ -1,6 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface BackButtonProps {
   className?: string;
@@ -11,27 +14,28 @@ export default function BackButton({ className = '', label = 'Back' }: BackButto
   const router = useRouter();
 
   return (
-    <button
+    <Button
       onClick={() => router.back()}
-      className={`inline-flex items-center text-white px-4 py-2 rounded-lg hover:bg-bar-accent/10 transition-all duration-300 group ${className}`}
+      variant="default"
+      className={cn(
+        'flex items-center gap-2 bg-white text-black hover:bg-white/90 px-5 py-2 h-auto shadow-md rounded-md',
+        className
+      )}
+      size="default"
       aria-label="Go back"
     >
-      <svg 
-        className="w-5 h-5 mr-2 text-bar-accent group-hover:translate-x-[-2px] transition-transform" 
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke="currentColor"
-      >
-        <path 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          strokeWidth={2} 
-          d="M10 19l-7-7m0 0l7-7m-7 7h18" 
+      <div className="relative w-6 h-6 flex-shrink-0">
+        <Image 
+          src="/only_these/logos/menu_icon_back _button.png"
+          alt="Back"
+          width={24}
+          height={24}
+          className="object-contain"
         />
-      </svg>
-      <span className="text-sm font-medium group-hover:text-bar-accent transition-colors">
+      </div>
+      <span className="text-sm font-bold text-black">
         {label}
       </span>
-    </button>
+    </Button>
   );
 } 

@@ -7,6 +7,7 @@ import VideoCarousel from '../shared/VideoCarousel';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useTheme } from 'next-themes';
+import { MapPin } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   const { selectedLocation } = useLocation();
@@ -170,19 +171,16 @@ const HeroSection: React.FC = () => {
                   <Link href="/order?option=delivery" className="flex-1">
                     <Button
                       variant="default"
-                      className="text-md py-5 px-6 w-full"
+                      className="text-md py-5 px-6 w-full bg-white text-black hover:bg-white font-bold"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/50">
-                          <Image 
-                            src="/only_these/icons/delivery-icon-white.svg" 
-                            alt="Delivery" 
-                            width={20} 
-                            height={20}
-                            className="text-white" 
-                          />
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
+                          <svg viewBox="0 0 24 24" width="14" height="14" className="w-4 h-4" fill="white">
+                            <path d="M19 7c0-1.1-.9-2-2-2h-3v2h3v2.65L13.52 14H10V9H6c-2.21 0-4 1.79-4 4v3h2c0 1.66 1.34 3 3 3s3-1.34 3-3h4.48L19 10.35V7zM7 17c-.55 0-1-.45-1-1h2c0 .55-.45 1-1 1z" />
+                            <path d="M5 6h5v2H5zm14 7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm0 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                          </svg>
                         </div>
-                        <span className="text-lg font-semibold">Delivery</span>
+                        <span className="text-lg font-bold text-black">Delivery</span>
                       </div>
                     </Button>
                   </Link>
@@ -190,22 +188,38 @@ const HeroSection: React.FC = () => {
                   <Link href="/order?option=pickup" className="flex-1">
                     <Button
                       variant="outline"
-                      className="text-md py-5 px-6 w-full"
+                      className="text-md py-5 px-6 w-full bg-white text-black hover:bg-white font-bold"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/50">
-                          <Image 
-                            src="/only_these/icons/pickup-icon-white.svg" 
-                            alt="Pickup" 
-                            width={20} 
-                            height={20}
-                            className="text-white" 
-                          />
+                        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
+                          <svg viewBox="0 0 24 24" width="14" height="14" className="w-4 h-4" fill="white">
+                            <path d="M19 7h-4V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0H9V5h4v2z" />
+                          </svg>
                         </div>
-                        <span className="text-lg font-semibold">Pickup</span>
+                        <span className="text-lg font-bold text-black">Pickup</span>
                       </div>
                     </Button>
                   </Link>
+                </div>
+              </div>
+
+              {/* Find Our Locations Section */}
+              <div className="w-full max-w-md mx-auto mb-8">
+                <div className="bg-black/30 p-6 rounded-lg border border-white/10 text-center">
+                  <h2 className="text-2xl font-bold text-white mb-4">Find Our Locations</h2>
+                  <p className="text-white/70 mb-6">Visit us at our Portland or Salem locations. View maps, get directions, and see our hours of operation.</p>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white text-black hover:bg-white font-bold px-6 py-2"
+                  >
+                    <Link href="/locations" className="flex items-center gap-2">
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
+                        <MapPin className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-black font-bold">View Our Locations</span>
+                    </Link>
+                  </Button>
                 </div>
               </div>
 
@@ -218,40 +232,11 @@ const HeroSection: React.FC = () => {
                   
                   {/* Install buttons container */}
                   <div className="flex flex-col items-center gap-6 mt-6">
-                    {/* Menu Feature Highlight */}
-                    <div className="w-full max-w-md p-4 rounded-lg bg-black border border-gray-700 relative">
-                      <div className="relative z-10 flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-full border border-gray-600 flex items-center justify-center">
-                          <Image
-                            src="/menu_icon.png"
-                            alt="Home Menu Button"
-                            width={32}
-                            height={32}
-                            className="w-8 h-8 object-contain"
-                          />
-                        </div>
-                        <Button 
-                          variant="link"
-                          className="text-base font-medium p-0 h-auto text-white"
-                          onClick={() => {
-                            // Dispatch a custom event to open the menu
-                            const event = new CustomEvent('openMainMenu');
-                            window.dispatchEvent(event);
-                          }}
-                        >
-                          Check Out Our Main Menu
-                        </Button>
-                      </div>
-                      <p className="text-sm text-white relative z-10 p-3 rounded-lg border border-gray-700">
-                        Click the home menu button to experience all the app features, settings, and navigation options in one convenient place.
-                      </p>
-                    </div>
-
                     <div className="flex flex-col justify-center items-center gap-4">
                       {deviceType === 'ios' ? (
                         <Button
                           onClick={handleInstallClick}
-                          className="w-full min-w-[180px] flex items-center gap-2 bg-transparent border border-white"
+                          className="w-full min-w-[180px] flex items-center gap-2 bg-white text-black border border-white font-bold hover:bg-white"
                         >
                           <Image
                             src="/only_these/ios_pwa_install.png"
@@ -260,13 +245,13 @@ const HeroSection: React.FC = () => {
                             height={24}
                             className={iconClasses}
                           />
-                          <span className={textClasses}>Add to Home Screen</span>
+                          <span className="text-black font-bold">Add to Home Screen</span>
                         </Button>
                       ) : (
                         <>
                           <Button
                             onClick={handleInstallClick}
-                            className="w-full min-w-[180px] flex items-center gap-2 bg-transparent border border-white"
+                            className="w-full min-w-[180px] flex items-center gap-2 bg-white text-black border border-white font-bold hover:bg-white"
                           >
                             <Image
                               src="/only_these/android_pwa_install.png"
@@ -275,13 +260,13 @@ const HeroSection: React.FC = () => {
                               height={24}
                               className={iconClasses}
                             />
-                            <span className={textClasses}>Install App</span>
+                            <span className="text-black font-bold">Install App</span>
                           </Button>
                           
                           {notificationStatus === 'idle' && (
                             <Button
                               onClick={handleNotificationRequest}
-                              className="w-full min-w-[180px] flex items-center gap-2 bg-transparent border border-white"
+                              className="w-full min-w-[180px] flex items-center gap-2 bg-white text-black border border-white font-bold hover:bg-white"
                             >
                               <Image
                                 src="/only_these/logos/icon_enable_notifications.png"
@@ -290,51 +275,13 @@ const HeroSection: React.FC = () => {
                                 height={28}
                                 className={iconClasses}
                               />
-                              <span className={textClasses}>Enable Notifications</span>
+                              <span className="text-black font-bold">Enable Notifications</span>
                             </Button>
                           )}
                         </>
                       )}
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Google Maps Embed Section - Changes based on theme toggle */}
-              <div className="w-full max-w-4xl mx-auto mt-6 mb-8 px-3 sm:px-4">
-                <div className="flex flex-col items-center">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Image 
-                      src="/only_these/logos/hustle_pdx_for_maps.png"
-                      alt="Side Hustle Map Icon"
-                      width={80}
-                      height={80}
-                      className="w-16 h-16 object-contain"
-                    />
-                    <h3 className="text-2xl font-bold text-white text-center">
-                      {theme === 'dark' ? 'SIDEHUSTLE PDX' : 'SIDEHUSTLE SALEM'}
-                    </h3>
-                  </div>
-                  
-                  <div className="w-full rounded-lg overflow-hidden border border-white/10 shadow-lg">
-                    <div className="aspect-video w-full">
-                      <iframe
-                        src={currentMapUrl}
-                        title={`${theme === 'dark' ? 'Portland' : 'Salem'} Location Map`}
-                        width="100%"
-                        height="100%"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                        className="w-full h-full border-none"
-                      ></iframe>
-                    </div>
-                  </div>
-                  
-                  <p className="text-white/80 mt-4 text-center max-w-2xl">
-                    {theme === 'dark' 
-                      ? 'THE WOLF IS IN DOWNTOWN PDX' 
-                      : 'THE WOLF IS IN DOWNTOWN SALEM'}
-                  </p>
                 </div>
               </div>
 
@@ -374,7 +321,7 @@ const HeroSection: React.FC = () => {
                       <Button
                         asChild
                         size="lg"
-                        className="w-full py-6 text-lg font-bold flex items-center justify-center gap-4"
+                        className="w-full py-6 text-lg font-bold flex items-center justify-center gap-4 bg-white text-black hover:bg-white"
                       >
                         <Link href="/shop">
                           <Image
@@ -384,8 +331,8 @@ const HeroSection: React.FC = () => {
                             height={40}
                             className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
                           />
-                          <span>SHOP NOW</span>
-                          <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <span className="text-black font-bold">SHOP NOW</span>
+                          <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9" fill="none" viewBox="0 0 24 24" stroke="black" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                           </svg>
                         </Link>

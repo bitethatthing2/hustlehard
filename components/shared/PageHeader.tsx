@@ -17,16 +17,16 @@ const PageHeader: FC<PageHeaderProps> = ({
   return (
     <div className={`relative py-16 px-4 ${className}`}>
       {showBackButton && (
-        <div className="absolute left-4 top-1/2 -translate-y-1/2">
+        <div className="absolute left-4 top-6 md:left-8 z-10">
           <BackButton />
         </div>
       )}
-      <div className="text-center">
+      <div className="text-center pt-8">
         <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-white max-w-2xl mx-auto">
+          <p className="text-white font-medium text-lg max-w-2xl mx-auto">
             {subtitle}
           </p>
         )}

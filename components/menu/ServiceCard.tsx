@@ -28,13 +28,13 @@ export function ServiceCard({ option, index, className }: ServiceCardProps) {
   
   return (
     <Card className={cn(
-      "h-full transition-all duration-300 border-border/50 hover:border-border/80 shadow-sm hover:shadow-md",
+      "h-full transition-all duration-300 border-border/50 hover:border-border/80 shadow-sm hover:shadow-md bg-black text-white",
       className
     )}>
       <CardHeader className="pb-3">
         <div className="flex items-center gap-3">
           {option.logo && (
-            <div className="w-10 h-10 rounded-full bg-background p-1.5 border border-border/50 shadow-sm flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-white p-1.5 border border-border/50 shadow-sm flex-shrink-0">
               <Image 
                 src={option.logo} 
                 alt={option.name} 
@@ -44,25 +44,25 @@ export function ServiceCard({ option, index, className }: ServiceCardProps) {
               />
             </div>
           )}
-          <CardTitle className="text-base">{option.name}</CardTitle>
+          <CardTitle className="text-base font-bold text-white">{option.name}</CardTitle>
         </div>
       </CardHeader>
       
       <CardContent className="py-2">
         <div className="space-y-1.5 text-sm">
           {isDelivery && (
-            <p className="text-muted-foreground">{(option as DeliveryService).serviceFee}</p>
+            <p className="text-white/80 font-medium">{(option as DeliveryService).serviceFee}</p>
           )}
-          <p className="text-muted-foreground">{option.fee}</p>
-          <p className="text-primary font-medium">{option.time}</p>
+          <p className="text-white/80 font-medium">{option.fee}</p>
+          <p className="text-bar-accent font-bold">{option.time}</p>
         </div>
       </CardContent>
       
       <CardFooter className="pt-4">
         <Button 
           asChild 
-          variant="outline" 
-          className="w-full"
+          variant="default"
+          className="w-full bg-white hover:bg-white/90 text-black font-bold"
         >
           <Link 
             href={option.url} 

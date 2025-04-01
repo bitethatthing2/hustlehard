@@ -5,19 +5,21 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-bold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-transparent text-white hover:bg-black/20 border border-white",
+        default: "bg-white text-black hover:bg-white border border-white font-bold",
         destructive:
-          "bg-transparent text-white hover:bg-red-500/20 border border-red-500",
+          "bg-white text-black hover:bg-white border border-white font-bold",
         outline:
-          "border border-white bg-transparent text-white hover:bg-white/10",
+          "border border-white bg-white text-black hover:bg-white font-bold",
         secondary:
-          "bg-transparent text-white hover:bg-slate-200/20 border border-slate-200",
-        ghost: "hover:bg-slate-100/10 text-white",
-        link: "text-white underline-offset-4 hover:underline",
+          "bg-white text-black hover:bg-white border border-white font-bold",
+        ghost: "bg-white text-black hover:bg-white font-bold",
+        link: "text-black bg-white underline-offset-4 hover:underline hover:bg-white font-bold",
+        "dark": "bg-black text-white hover:bg-black border border-black font-bold",
+        "dark-outline": "border border-white bg-transparent text-white hover:bg-black/10 font-bold",
       },
       size: {
         default: "h-10 px-4 py-2",

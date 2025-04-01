@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Script from "next/script";
 import MainMenuButton from "@/components/navigation/MainMenuButton";
+import QuickNav from "@/components/navigation/QuickNav";
 import Image from "next/image";
 import { ThemeProvider } from "@/app/providers";
 
@@ -101,18 +102,25 @@ export default function RootLayout({
         <ThemeProvider>
           <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
             <div className="w-full max-w-7xl mx-auto px-4 py-2 sm:py-3 flex justify-between items-center">
-              <div className="h-10 sm:h-12 w-auto">
+              <div className="h-12 sm:h-14 w-auto">
                 <Image
                   src="/only_these/logos/logo.png"
                   alt="Side Hustle Bar Logo"
-                  width={48}
-                  height={48}
+                  width={55}
+                  height={55}
                   className="object-contain h-full w-auto"
                   priority
                   unoptimized
                 />
               </div>
-              <MainMenuButton />
+              {/* Display QuickNav on medium and larger screens */}
+              <div className="hidden md:block">
+                <QuickNav />
+              </div>
+              {/* Keep MainMenuButton for mobile */}
+              <div className="md:hidden">
+                <MainMenuButton />
+              </div>
             </div>
           </header>
           

@@ -25,25 +25,25 @@ export function ThemeToggle({ onToggle, className }: ThemeToggleProps) {
 
   return (
     <Button
-      variant="outline"
+      variant="default"
       size="lg"
       onClick={toggleTheme}
       className={cn(
-        "rounded-full p-2 bg-transparent text-white border border-white hover:bg-white/10 flex items-center justify-center",
+        "rounded-full p-2 bg-white text-black font-bold border border-white hover:bg-white hover:text-black focus:bg-white focus:text-black active:bg-white active:text-black flex items-center justify-center",
         className
       )}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
     >
       <div className="flex items-center justify-center">
         <Image
-          src="/icon-192x192.png"
-          alt="Location Icon"
-          width={48}
-          height={48}
-          className="w-12 h-12 object-contain"
+          src="/only_these/logos/salem_portland_toggle_icon.png"
+          alt="Location Toggle Icon"
+          width={55}
+          height={55}
+          className="w-14 h-14 object-contain"
         />
       </div>
-      <span className="ml-2 text-white">
+      <span className="ml-2 font-bold text-black">
         {theme === "dark" ? "Portland" : "Salem"}
       </span>
     </Button>

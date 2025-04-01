@@ -51,7 +51,7 @@ export const HeroButtonExamples = () => {
           <div className="flex justify-center">
             <Button
               size="lg"
-              className="py-6 px-8 rounded-lg font-bold text-lg sm:text-xl md:text-2xl text-white hover:brightness-125 transition-all duration-300 flex items-center justify-center gap-3 sm:gap-4 shadow-xl transform hover:scale-[1.02] border-2 border-white/40 button-primary holographic-border"
+              className="py-6 px-8 rounded-lg font-bold text-lg sm:text-xl md:text-2xl flex items-center justify-center gap-3 sm:gap-4 shadow-sm bg-white text-black hover:bg-white border border-white"
             >
               <Image
                 src="/menu_icon.png"
@@ -60,8 +60,8 @@ export const HeroButtonExamples = () => {
                 height={40}
                 className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
               />
-              <span>SHOP NOW</span>
-              <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <span className="text-black font-bold">SHOP NOW</span>
+              <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="black" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
               </svg>
             </Button>

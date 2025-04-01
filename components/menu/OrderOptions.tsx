@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { ServiceCard } from '@/components/menu/ServiceCard';
 
 interface ServiceOption {
   name: string;
@@ -135,59 +136,10 @@ const OrderOptions = () => {
     }
   ];
 
-  const renderServiceCard = (option: ServiceOption | DeliveryService, index: number) => {
-    const isDelivery = 'serviceFee' in option;
-    
-    return (
-      <div key={index} className="border border-gray-800 rounded-xl p-5 bg-gradient-to-b from-black/60 to-black/30 hover:from-black/70 hover:to-black/40 transition-all duration-300 shadow-lg hover:shadow-xl hover:border-gray-700 group">
-        <div className="flex flex-col h-full">
-          <div className="flex items-center space-x-3 mb-4">
-            {option.logo && (
-              <div className="w-10 h-10 flex-shrink-0 bg-white rounded-full p-1.5 shadow-md">
-                <Image 
-                  src={option.logo} 
-                  alt={option.name} 
-                  width={40} 
-                  height={40}
-                  className="w-full h-full object-contain" 
-                />
-              </div>
-            )}
-            <h3 className="font-semibold text-white text-base">{option.name}</h3>
-          </div>
-          
-          <div className="mt-1 space-y-2 text-sm flex-grow">
-            {isDelivery && (
-              <p className="text-white/60">{(option as DeliveryService).serviceFee}</p>
-            )}
-            <p className="text-white/60">{option.fee}</p>
-            <p className="text-bar-accent font-medium">{option.time}</p>
-          </div>
-          
-          <div className="mt-5">
-            <Button
-              asChild
-              variant="default"
-              className="w-full"
-            >
-              <Link 
-                href={option.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                Order Now
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="max-w-5xl mx-auto px-4 pt-8 pb-20">
-      <div className="text-center mb-12">
-        <p className="text-xl text-bar-accent font-semibold mb-8">
+      <div className="text-center mb-12 bg-black py-8 px-4 rounded-xl">
+        <p className="text-xl md:text-2xl text-white font-bold mb-8">
           Ready to order? Choose how you'd like to receive your delicious Side Hustle Bar experience:
         </p>
       </div>
@@ -199,17 +151,13 @@ const OrderOptions = () => {
           className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center"
         >
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
-              <Image 
-                src="/only_these/logos/welcome_to_pack.png" 
-                alt="Wolf Icon" 
-                width={40} 
-                height={40} 
-                className="w-8 h-8 object-contain"
-                unoptimized
-              />
+            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black">
+              <svg viewBox="0 0 24 24" width="20" height="20" className="w-5 h-5" fill="white">
+                <path d="M19 7c0-1.1-.9-2-2-2h-3v2h3v2.65L13.52 14H10V9H6c-2.21 0-4 1.79-4 4v3h2c0 1.66 1.34 3 3 3s3-1.34 3-3h4.48L19 10.35V7zM7 17c-.55 0-1-.45-1-1h2c0 .55-.45 1-1 1z" />
+                <path d="M5 6h5v2H5zm14 7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm0 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+              </svg>
             </div>
-            <span className="font-semibold">Delivery</span>
+            <span className="font-bold text-lg text-black">Delivery</span>
           </div>
         </Button>
         
@@ -219,17 +167,12 @@ const OrderOptions = () => {
           className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center"
         >
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100/10">
-              <Image 
-                src="/only_these/logos/welcome_to_pack.png" 
-                alt="Wolf Icon" 
-                width={40} 
-                height={40} 
-                className="w-8 h-8 object-contain"
-                unoptimized
-              />
+            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black">
+              <svg viewBox="0 0 24 24" width="20" height="20" className="w-5 h-5" fill="white">
+                <path d="M19 7h-4V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0H9V5h4v2z" />
+              </svg>
             </div>
-            <span className="font-semibold">Pickup</span>
+            <span className="font-bold text-lg text-black">Pickup</span>
           </div>
         </Button>
       </div>
@@ -243,7 +186,7 @@ const OrderOptions = () => {
               onClick={closeInstructions}
               variant="ghost"
               size="icon"
-              className="rounded-full"
+              className="rounded-full text-white hover:bg-white/10"
               aria-label="Close"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -290,92 +233,59 @@ const OrderOptions = () => {
         </div>
       )}
       
-      <div className="mb-8 text-center">
-        <h3 className="text-xl font-semibold text-white mb-2">
+      {/* Service Selection Header */}
+      <div className="mb-8 bg-black py-8 px-4 rounded-xl">
+        <h2 className="text-xl md:text-2xl font-bold text-white mb-6 text-center">
           Choose your preferred {activeOption === 'delivery' ? 'delivery' : 'pickup'} service:
-        </h3>
-        <p className="text-white/60 text-sm max-w-xl mx-auto">
-          Select from our trusted partners below and have your favorite Side Hustle Bar items {activeOption === 'delivery' ? 'delivered right to your door' : 'ready for pickup at your convenience'}
+        </h2>
+        <p className="text-base md:text-lg text-white/80 font-medium mb-8 text-center max-w-3xl mx-auto">
+          We've partnered with these services to make your ordering experience seamless. Select one to place your order.
         </p>
       </div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {activeOption === 'delivery' 
-          ? deliveryOptions.map(renderServiceCard)
-          : pickupOptions.map(renderServiceCard)
-        }
-      </div>
-      
-      {/* Installation Options */}
-      <div className="flex flex-col sm:flex-row items-center gap-6 justify-center mt-10 mb-2">
-        {isIOS && (
-          <Button
-            onClick={handleIOSInstall}
-            variant="default"
-            className="min-w-[180px] flex items-center gap-3"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-            </svg>
-            Install on iOS
-          </Button>
-        )}
-        
-        {isAndroid && (
-          <Button
-            onClick={handleAndroidInstall}
-            variant="default"
-            className="min-w-[180px] flex items-center gap-3"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            Install on Android
-          </Button>
-        )}
-      </div>
-      
-      {/* Bottom installation guide section */}
-      <div className="mt-20 pt-12 border-t border-gray-800">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-            Unlock the full experience!
-          </h2>
-          <p className="text-white/60 mb-10 max-w-2xl mx-auto">
-            Install our app and be the first to know about upcoming events, new menu items, exclusive artist spotlights, and even raffles and giveaways. Don't miss out - download now for instant updates!
-          </p>
 
-          {/* Bottom installation guide buttons - updated design */}
-          <div className="flex flex-col md:flex-row gap-5 justify-center mx-auto">
-            <Button
-              asChild
-              variant="default"
-              className="button-ios-guide min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
-            >
-              <Link href="/instructions/ios">
-                <div className="flex items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-5 h-5 fill-current">
-                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
-                  </svg>
-                  <span className="font-medium">iOS Installation Guide</span>
-                </div>
-              </Link>
-            </Button>
+      {/* Service Options Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+        {(activeOption === 'delivery' ? deliveryOptions : pickupOptions).map((option, index) => (
+          <ServiceCard key={index} option={option} index={index} />
+        ))}
+      </div>
+      
+      {/* App Installation Banner */}
+      <div className="max-w-3xl mx-auto mt-24 bg-black rounded-xl overflow-hidden shadow-xl">
+        <div className="p-6 md:p-8">
+          <h3 className="text-lg md:text-xl font-bold text-white mb-3">
+            Get the best experience with our app
+          </h3>
+          <p className="text-white/80 mb-6">
+            Install our app on your device for faster ordering, special deals, and a smoother experience.
+          </p>
+          
+          <div className="flex flex-wrap gap-4">
+            {isIOS && (
+              <Button
+                onClick={handleIOSInstall}
+                variant="outline"
+                className="border-white text-white hover:bg-white/10"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-5 h-5 mr-2 fill-current">
+                  <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                </svg>
+                iOS Installation
+              </Button>
+            )}
             
-            <Button
-              asChild
-              variant="default"
-              className="button-android-guide min-w-[240px] max-w-xs mx-auto flex items-center gap-3"
-            >
-              <Link href="/instructions/android">
-                <div className="flex items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="w-5 h-5 fill-current">
-                    <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/>
-                  </svg>
-                  <span className="font-medium">Android Installation Guide</span>
-                </div>
-              </Link>
-            </Button>
+            {isAndroid && (
+              <Button
+                onClick={handleAndroidInstall}
+                variant="outline"
+                className="border-white text-white hover:bg-white/10"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="w-5 h-5 mr-2 fill-current">
+                  <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55" />
+                </svg>
+                Android Installation
+              </Button>
+            )}
           </div>
         </div>
       </div>
