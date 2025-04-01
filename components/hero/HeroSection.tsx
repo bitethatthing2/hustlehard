@@ -295,23 +295,27 @@ const HeroSection: React.FC = () => {
               <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-6 md:mt-8 px-3 sm:px-4">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-3 sm:mb-6">
                   <div className="flex items-center justify-center gap-2 sm:gap-4">
-                    <Image 
-                      src="/only_these/logos/welcome_to_pack.png" 
-                      alt="Wolf Icon" 
-                      width={40} 
-                      height={40} 
-                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" 
-                      unoptimized
-                    />
+                    <div className="flex items-center justify-center bg-black rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
+                      <Image 
+                        src="/only_these/logos/welcome_to_pack.png" 
+                        alt="Wolf Icon" 
+                        width={40} 
+                        height={40} 
+                        className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11 object-contain" 
+                        unoptimized
+                      />
+                    </div>
                     <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white text-center">Lone Wolf Collection</h2>
-                    <Image 
-                      src="/only_these/logos/welcome_to_pack.png" 
-                      alt="Wolf Icon" 
-                      width={40} 
-                      height={40} 
-                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
-                      unoptimized
-                    />
+                    <div className="flex items-center justify-center bg-black rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
+                      <Image 
+                        src="/only_these/logos/welcome_to_pack.png" 
+                        alt="Wolf Icon" 
+                        width={40} 
+                        height={40} 
+                        className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11 object-contain"
+                        unoptimized
+                      />
+                    </div>
                   </div>
                   <div className="mt-2 sm:mt-0 text-center sm:text-left">
                     <span className="text-xs sm:text-sm text-gray-300 px-3 py-1 bg-white/10 rounded-full">Exclusive designs</span>
@@ -330,17 +334,21 @@ const HeroSection: React.FC = () => {
                         className="w-full py-6 text-lg font-bold flex items-center justify-center gap-4 bg-white text-black hover:bg-white"
                       >
                         <Link href="/shop">
-                          <Image
-                            src="/only_these/logos/shop_now_icon.png"
-                            alt="Shop"
-                            width={40}
-                            height={40}
-                            className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
-                          />
+                          <div className="flex items-center justify-center bg-black rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
+                            <Image
+                              src="/only_these/logos/shop_now_icon.png"
+                              alt="Shop"
+                              width={24}
+                              height={24}
+                              className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 object-contain"
+                            />
+                          </div>
                           <span className="text-black font-bold">SHOP NOW</span>
-                          <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9" fill="none" viewBox="0 0 24 24" stroke="black" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                          </svg>
+                          <div className="flex items-center justify-center bg-black rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
+                            <svg className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={1.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                            </svg>
+                          </div>
                         </Link>
                       </Button>
                       <div className="mt-3 text-center">
