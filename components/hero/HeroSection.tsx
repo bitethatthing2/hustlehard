@@ -340,7 +340,7 @@ const HeroSection: React.FC = () => {
                               alt="Shop"
                               width={24}
                               height={24}
-                              className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 object-contain"
+                              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
                             />
                           </div>
                           <span className="text-black font-bold">SHOP NOW</span>
