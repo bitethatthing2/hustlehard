@@ -5,9 +5,9 @@ import { useLocation } from '@/contexts/LocationContext';
 import { fetchToken } from '@/firebase';
 import VideoCarousel from '../shared/VideoCarousel';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useTheme } from 'next-themes';
 import { MapPin } from 'lucide-react';
+import { LocationSwitch } from '@/components/ui/location-switch';
 
 const HeroSection: React.FC = () => {
   const { selectedLocation } = useLocation();
@@ -23,8 +23,8 @@ const HeroSection: React.FC = () => {
   const portlandLogoPath = '/only_these/logos/SHB_Logo_WhiteonBlackBG.png';
   const salemLogoPath = '/salem_location.png';
   
-  // Get the current logo based on theme
-  const logoImage = theme === 'dark' ? portlandLogoPath : salemLogoPath;
+  // Get the current logo based on selected location
+  const logoImage = selectedLocation === 'portland' ? portlandLogoPath : salemLogoPath;
   
   // Google Maps embed URLs for Portland and Salem locations
   const portlandMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d359640.0992522873!2d-123.1637501704348!3d45.233873097998526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950bbb77279f67%3A0xfb5a916203b1c05a!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1743394983254!5m2!1sen!2sus";
@@ -154,9 +154,9 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Remove Welcome To Pack Image Section */}
+              {/* Location Switch */}
               <div className="mt-3 mb-6 w-full flex justify-center">
-                <ThemeToggle onToggle={handleThemeChange} />
+                <LocationSwitch />
               </div>
 
               {/* Order Options Section - Moved directly under location toggle */}

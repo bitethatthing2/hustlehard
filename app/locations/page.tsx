@@ -5,12 +5,12 @@ import { useLocation, LocationProvider } from '@/contexts/LocationContext';
 import PortlandMap from '@/components/maps/PortlandMap';
 import SalemMap from '@/components/maps/SalemMap';
 import LocationDirectionButtons from '@/components/maps/LocationDirectionButtons';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import PageHeader from '@/components/shared/PageHeader';
 import { PhoneCall, Mail, Clock } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import GoogleMapEmbed from '@/components/maps/GoogleMapEmbed';
+import { LocationSwitch } from '@/components/ui/location-switch';
 
 const LocationsPageContent = () => {
   const { selectedLocation, locationData } = useLocation();
@@ -34,9 +34,9 @@ const LocationsPageContent = () => {
       />
       
       <div className="flex flex-col items-center mb-6">
-        {/* Location Toggle - Prominently displayed */}
+        {/* Location Switch - Prominently displayed */}
         <div className="w-full max-w-md mx-auto">
-          <ThemeToggle className="w-full mx-auto" />
+          <LocationSwitch className="w-full mx-auto" />
         </div>
         
         {/* Active Location Title */}

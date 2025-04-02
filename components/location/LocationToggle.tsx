@@ -1,6 +1,4 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useLocation } from '@/contexts/LocationContext';
 import Image from 'next/image';
 
@@ -8,56 +6,43 @@ const LocationToggle: React.FC = () => {
   const { selectedLocation, setSelectedLocation } = useLocation();
 
   return (
-    <div className="relative flex items-center p-1 bg-black rounded-full border border-white/10 shadow-md w-full max-w-xs mx-auto">
-      {/* Portland Button */}
-      <Button
-        onClick={() => setSelectedLocation('portland')}
-        variant="default"
-        className={cn(
-          "relative z-10 px-4 py-2 rounded-full w-1/2 border-0 shadow-none",
-          selectedLocation === 'portland' 
-            ? "bg-white text-black font-bold hover:bg-white"
-            : "bg-transparent text-white hover:bg-white hover:text-black"
-        )}
-      >
-        <div className="flex items-center gap-2 justify-center">
-          <div className="w-6 h-6 flex items-center justify-center rounded-full bg-white" style={{ backgroundColor: '#FFFFFF' }}>
-            <Image 
-              src="/only_these/logos/welcome_to_pack.png" 
-              alt="Wolf Icon" 
-              width={16} 
-              height={16}
-              className="object-contain" 
-            />
-          </div>
-          <span className={selectedLocation === 'portland' ? "font-bold" : ""}>PORTLAND</span>
-        </div>
-      </Button>
-
+    <div className="relative flex items-center justify-between p-2 bg-black rounded-full border border-white/10 shadow-md w-full max-w-xs mx-auto">
       {/* Salem Button */}
-      <Button
+      <button
         onClick={() => setSelectedLocation('salem')}
-        variant="default"
-        className={cn(
-          "relative z-10 px-4 py-2 rounded-full w-1/2 border-0 shadow-none",
+        className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all ${
           selectedLocation === 'salem' 
-            ? "bg-white text-black font-bold hover:bg-white"
-            : "bg-transparent text-white hover:bg-white hover:text-black"
-        )}
+            ? "bg-white text-black font-bold"
+            : "text-white hover:bg-white/10"
+        }`}
       >
-        <div className="flex items-center gap-2 justify-center">
-          <div className="w-6 h-6 flex items-center justify-center rounded-full bg-white" style={{ backgroundColor: '#FFFFFF' }}>
-            <Image 
-              src="/only_these/logos/welcome_to_pack.png" 
-              alt="Wolf Icon" 
-              width={16} 
-              height={16}
-              className="object-contain" 
-            />
-          </div>
-          <span className={selectedLocation === 'salem' ? "font-bold" : ""}>SALEM</span>
+        <span className={selectedLocation === 'salem' ? "font-bold" : ""}>SALEM</span>
+      </button>
+
+      {/* Center Wolf Icon */}
+      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center">
+        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white">
+          <Image 
+            src="/only_these/logos/welcome_to_pack.png" 
+            alt="Wolf Icon" 
+            width={32} 
+            height={32}
+            className="object-contain" 
+          />
         </div>
-      </Button>
+      </div>
+
+      {/* Portland Button */}
+      <button
+        onClick={() => setSelectedLocation('portland')}
+        className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all ${
+          selectedLocation === 'portland' 
+            ? "bg-white text-black font-bold"
+            : "text-white hover:bg-white/10"
+        }`}
+      >
+        <span className={selectedLocation === 'portland' ? "font-bold" : ""}>PORTLAND</span>
+      </button>
     </div>
   );
 };
