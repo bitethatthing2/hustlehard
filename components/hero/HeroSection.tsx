@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { MapPin } from 'lucide-react';
 import { LocationSwitch } from '@/components/ui/location-switch';
+import GoogleMap from '@/components/maps/GoogleMap';
 
 const HeroSection: React.FC = () => {
   const { selectedLocation } = useLocation();
@@ -203,23 +204,19 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Find Our Locations Section */}
+              {/* Dynamic Map Section - Replacing "Find Our Locations" */}
               <div className="w-full max-w-md mx-auto mb-8">
                 <div className="bg-black/30 p-6 rounded-lg border border-white/10 text-center">
                   <h2 className="text-2xl font-bold text-white mb-4">Find Our Locations</h2>
-                  <p className="text-white/70 mb-6">Visit us at our Portland or Salem locations. View maps, get directions, and see our hours of operation.</p>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="bg-white text-black hover:bg-white font-bold px-6 py-2"
-                  >
-                    <Link href="/locations" className="flex items-center gap-2">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black">
-                        <MapPin className="w-4 h-4 text-white" />
-                      </div>
-                      <span className="text-black font-bold">View Our Locations</span>
-                    </Link>
-                  </Button>
+                  <p className="text-white/70 mb-6">Visit us at our Portland or Salem locations.</p>
+                  <div className="relative w-full" style={{ height: "300px", minHeight: "300px" }}>
+                    <GoogleMap 
+                      height="300px"
+                      className="w-full"
+                      showControls={true}
+                      zoom={15}
+                    />
+                  </div>
                 </div>
               </div>
 
