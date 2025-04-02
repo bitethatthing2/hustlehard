@@ -7,6 +7,9 @@ import MainMenuButton from "@/components/navigation/MainMenuButton";
 import QuickNav from "@/components/navigation/QuickNav";
 import Image from "next/image";
 import { ThemeProvider } from "@/app/providers";
+import { LocationProvider } from "@/contexts/LocationContext";
+import DynamicFooter from "@/components/layout/DynamicFooter";
+import MobileFooter from "@/components/layout/MobileFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -131,34 +134,44 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} bg-black min-h-screen overflow-x-hidden`}>
         <ThemeProvider>
-          <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
-            <div className="w-full max-w-7xl mx-auto px-4 py-3 sm:py-4 flex justify-between items-center">
-              <div className="h-10 sm:h-12 w-auto flex items-center justify-center">
-                <Image
-                  src="/only_these/logos/logo.png"
-                  alt="Side Hustle Bar Logo"
-                  width={80}
-                  height={80}
-                  className="object-contain h-full w-auto"
-                  priority
-                  unoptimized
-                />
+          <LocationProvider>
+            <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
+              <div className="w-full max-w-7xl mx-auto px-4 py-3 sm:py-4 flex justify-between items-center">
+                <div className="h-10 sm:h-12 w-auto flex items-center justify-center">
+                  <Image
+                    src="/only_these/logos/logo.png"
+                    alt="Side Hustle Bar Logo"
+                    width={80}
+                    height={80}
+                    className="object-contain h-full w-auto"
+                    priority
+                    unoptimized
+                  />
+                </div>
+                {/* Display QuickNav on medium and larger screens */}
+                <div className="hidden md:flex items-center justify-center">
+                  <QuickNav />
+                </div>
+                {/* Keep MainMenuButton for mobile */}
+                <div className="md:hidden flex items-center justify-center">
+                  <MainMenuButton />
+                </div>
               </div>
-              {/* Display QuickNav on medium and larger screens */}
-              <div className="hidden md:flex items-center justify-center">
-                <QuickNav />
-              </div>
-              {/* Keep MainMenuButton for mobile */}
-              <div className="md:hidden flex items-center justify-center">
-                <MainMenuButton />
-              </div>
+            </header>
+            
+            <main className="pt-16 sm:pt-20 pb-16 md:pb-0 w-full flex flex-col items-center overflow-hidden">
+              <Toaster />
+              {children}
+            </main>
+            
+            {/* Desktop Footer */}
+            <div className="hidden md:block">
+              <DynamicFooter />
             </div>
-          </header>
-          
-          <main className="pt-16 sm:pt-20 w-full flex flex-col items-center overflow-hidden">
-            <Toaster />
-            {children}
-          </main>
+            
+            {/* Mobile Footer */}
+            <MobileFooter />
+          </LocationProvider>
         </ThemeProvider>
       </body>
     </html>
