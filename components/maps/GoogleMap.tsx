@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from '@/contexts/LocationContext';
+import { MapPin } from 'lucide-react';
 
 interface GoogleMapProps {
   height?: string;
@@ -42,6 +43,15 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
     }
   };
   
+  // Force reload of iframe when location changes
+  useEffect(() => {
+    setIsLoaded(false);
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [selectedLocation]);
+  
   // Detect mobile devices
   useEffect(() => {
     const checkMobile = () => {
@@ -63,43 +73,36 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
   
   const currentLocation = locations[selectedLocation];
   
-  // Format URL parameters
-  const params = new URLSearchParams({
-    key: 'AIzaSyB71GmQ4CrYfmwjKPLzTHz0_xJasKTQXPE', // This key is restricted to your domain
-    q: currentLocation.query,
-    zoom: zoom.toString(),
-    maptype: mapType,
-    language: 'en',
-    region: 'us'
-  });
+  // Hardcoded embed URLs for better reliability
+  const portlandMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2796.2831380132644!2d-122.65576638446376!3d45.50493727910162!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950a7b3f75aeef%3A0xb30808567a1ad979!2sSide%20Hustle!5e0!3m2!1sen!2sus!4v1645558127244!5m2!1sen!2sus";
+  const salemMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2824.155837503885!2d-123.04139512405341!3d44.94049986822883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54bfff43800426c7%3A0xe32b22509988966e!2sSide%20Hustle%20Bar!5e0!3m2!1sen!2sus!4v1743394931645!5m2!1sen!2sus";
   
-  if (showControls) {
-    params.append('controls', '1');
-  } else {
-    params.append('controls', '0');
-  }
-  
-  if (!scrollwheel) {
-    params.append('scrollwheel', '0');
-  }
-  
-  // Add mobile optimizations
-  if (isMobile) {
-    params.append('mobile', '1');
-  }
-  
-  const mapSrc = `${currentLocation.mapUrl}?${params.toString()}`;
+  // Use direct map URLs instead of API calls for reliability
+  const mapSrc = selectedLocation === 'portland' ? portlandMapUrl : salemMapUrl;
   
   return (
     <div 
-      className={`w-full overflow-hidden rounded-lg border border-gray-700 flex flex-col ${className}`} 
+      className={`w-full overflow-hidden rounded-lg relative ${className}`} 
       style={{ height }}
     >
       {!isLoaded && (
-        <div className="w-full h-full flex items-center justify-center bg-black/50">
-          <div className="text-white">Loading map...</div>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-10">
+          <div className="flex flex-col items-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-white mb-3"></div>
+            <div className="text-white font-medium">Loading {selectedLocation === 'portland' ? 'Portland' : 'Salem'} map...</div>
+          </div>
         </div>
       )}
+      
+      {/* Location label */}
+      <div className="absolute top-2 right-2 z-20 bg-black/80 px-3 py-1 rounded-full border border-gray-700">
+        <div className="flex items-center">
+          <MapPin className="w-4 h-4 text-bar-accent mr-1" />
+          <span className="text-white text-sm font-medium">
+            {selectedLocation === 'portland' ? 'Portland Location' : 'Salem Location'}
+          </span>
+        </div>
+      </div>
       
       <iframe
         title={`Google Map - ${currentLocation.address}`}
@@ -122,7 +125,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
           rel="noopener noreferrer"
           className="text-blue-400 hover:text-blue-300 text-xs transition"
         >
-          View in Google Maps
+          Open in Google Maps
         </a>
       </div>
     </div>
