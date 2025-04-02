@@ -27,7 +27,7 @@ const LocationSwitch = React.forwardRef<
       
       <SwitchPrimitives.Root
         className={cn(
-          "peer inline-flex h-14 w-28 shrink-0 cursor-pointer items-center rounded-full border-2 border-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-50 bg-black",
+          "peer inline-flex h-14 w-28 shrink-0 cursor-pointer items-center rounded-full border-4 border-white shadow-[0_0_0_1px_rgba(255,255,255,1)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-50 bg-black",
           selectedLocation === 'portland' ? "justify-end" : "justify-start",
           className
         )}
@@ -38,7 +38,7 @@ const LocationSwitch = React.forwardRef<
       >
         <SwitchPrimitives.Thumb
           className={cn(
-            "pointer-events-none flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg ring-0 transition-transform",
+            "pointer-events-none flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] border border-white/80 ring-0 transition-transform",
             selectedLocation === 'portland' ? "translate-x-0" : "-translate-x-0"
           )}
         >

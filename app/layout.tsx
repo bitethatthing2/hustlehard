@@ -102,12 +102,12 @@ export default function RootLayout({
         <ThemeProvider>
           <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
             <div className="w-full max-w-7xl mx-auto px-4 py-3 sm:py-4 flex justify-between items-center">
-              <div className="h-14 sm:h-16 w-auto flex items-center justify-center">
+              <div className="h-10 sm:h-12 w-auto flex items-center justify-center">
                 <Image
                   src="/only_these/logos/logo.png"
                   alt="Side Hustle Bar Logo"
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                   className="object-contain h-full w-auto"
                   priority
                   unoptimized

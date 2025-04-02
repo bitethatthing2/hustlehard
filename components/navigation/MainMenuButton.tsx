@@ -53,7 +53,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Menu',
-      href: '/menu',
+      href: '/coming-soon',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -71,7 +71,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Events',
-      href: '/events',
+      href: '/coming-soon',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -83,7 +83,7 @@ export default function MainMenuButton() {
   const serviceLinks = [
     {
       label: 'Reservations',
-      href: '/reservations',
+      href: '/coming-soon',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -92,7 +92,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Catering',
-      href: '/catering',
+      href: '/coming-soon',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -104,7 +104,7 @@ export default function MainMenuButton() {
   const connectLinks = [
     {
       label: 'Social Media',
-      href: '/social',
+      href: '/coming-soon',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -113,7 +113,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Meet The Pack',
-      href: '/team',
+      href: '/coming-soon',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -136,30 +136,31 @@ export default function MainMenuButton() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex justify-between items-center p-4 border-b border-gray-700 sticky top-0 z-10 bg-black/90 backdrop-blur-md">
-            <h2 className="font-bold text-lg text-white">Menu</h2>
-            
-            {/* Close button in top-right corner with HOME text */}
-            <div className="flex flex-col items-center">
-              <Button 
-                onClick={() => setIsOpen(false)}
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/10 relative overflow-hidden"
-                aria-label="Close menu"
+          <div className="flex justify-between items-center p-4 border-b border-gray-700 sticky top-0 z-10 bg-black/90 backdrop-blur-md relative">
+            <Button 
+              onClick={() => setIsOpen(false)}
+              variant="ghost"
+              size="sm"
+              className="text-black bg-white hover:bg-white/90 relative rounded-full p-0 h-9 w-9 flex items-center justify-center"
+              aria-label="Close menu"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="black" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="w-5 h-5"
               >
-                <div className="relative w-10 h-10 flex items-center justify-center">
-                  <Image 
-                    src="/only_these/logos/menu_icon_back _button_close.png"
-                    alt="Close"
-                    width={80}
-                    height={80}
-                    className="object-contain scale-150"
-                  />
-                </div>
-              </Button>
-              <span className="text-white font-bold text-sm">HOME</span>
-            </div>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </Button>
+            
+            {/* Empty div to maintain the space-between alignment */}
+            <div></div>
           </div>
 
           <div className="flex flex-col p-0 overflow-y-auto">
@@ -173,18 +174,6 @@ export default function MainMenuButton() {
             <div className="text-center px-4 py-2">
               <p className="text-white text-base">Experience the best food, drinks, and entertainment in Portland</p>
               <p className="text-white/80 text-sm mt-2">Join us for games, live music, and our famous tacos!</p>
-            </div>
-            
-            {/* Location Information - Added from screenshot */}
-            <div className="flex justify-center items-center mb-3">
-              <div className="bg-white px-4 py-2 rounded-full flex items-center gap-2">
-                <div className="flex-shrink-0 w-6 h-6 mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="font-bold">Portland</span>
-              </div>
             </div>
             
             {/* Navigation Section */}
@@ -288,7 +277,7 @@ export default function MainMenuButton() {
             <div className="mt-auto p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
               <h3 className="font-bold mb-2 flex items-center text-black">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-black flex items-center justify-center mr-2">
-                  <svg className="w-7 h-7 text-white scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                   </svg>
                 </div>
@@ -297,9 +286,9 @@ export default function MainMenuButton() {
               <p className="text-black font-medium text-sm mb-4">Add our app to your home screen for the best experience:</p>
               <div className="flex flex-col space-y-2">
                 <Button asChild variant="outline" className="bg-black hover:bg-black/90 border-gray-200 w-full justify-start h-14 text-white">
-                  <Link href="/install/ios" className="flex items-center">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3">
-                      <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <Link href="/coming-soon" className="flex items-center">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 384 512">
                         <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
                       </svg>
                     </div>
@@ -307,9 +296,9 @@ export default function MainMenuButton() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="bg-black hover:bg-black/90 border-gray-200 w-full justify-start h-14 text-white">
-                  <Link href="/install/android" className="flex items-center">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3">
-                      <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <Link href="/coming-soon" className="flex items-center">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 576 512">
                         <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55" />
                       </svg>
                     </div>
@@ -326,21 +315,21 @@ export default function MainMenuButton() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-[60px]">
+      <div className="flex flex-col items-center justify-center w-[40px]">
         <Button
           variant="default"
           onClick={() => setIsOpen(true)}
-          className="rounded-full p-0 w-14 h-14 relative bg-white hover:bg-white flex items-center justify-center overflow-hidden"
+          className="rounded-full p-0 w-10 h-10 relative bg-white hover:bg-white flex items-center justify-center overflow-hidden"
           aria-label="Open menu"
         >
           <Image
             src="/only_these/logos/menu_icon.png"
             alt="Menu"
             fill
-            className="object-contain scale-125 rounded-full z-[60]"
+            className="object-contain scale-100 rounded-full z-[60]"
           />
         </Button>
-        <span className="text-xs font-bold text-white mt-1 text-center">Menu</span>
+        <span className="text-[10px] font-bold text-white mt-1 text-center">Menu</span>
       </div>
       {mounted && isOpen && createPortal(<MenuContent />, document.body)}
     </>
