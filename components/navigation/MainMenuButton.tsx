@@ -326,7 +326,7 @@ export default function MainMenuButton() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center" style={{ width: "60px" }}>
+      <div className="flex flex-col items-center justify-center w-[60px]">
         <Button
           variant="default"
           onClick={() => setIsOpen(true)}
