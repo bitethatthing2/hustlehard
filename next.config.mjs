@@ -1,66 +1,77 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   reactStrictMode: true,
   images: {
-    domains: ['lh3.googleusercontent.com', 'maps.googleapis.com', 'scontent.cdninstagram.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'maps.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'scontent.cdninstagram.com',
+      },
+    ],
+    dangerouslyAllowSVG: true,
     unoptimized: true,
   },
-  // Explicitly set experimental options
-  experimental: {
-    // Optimize for RSC
-    appDir: true,
-    serverComponents: true,
-    serverActions: true,
-    optimizeCss: true,
-    optimizePackageImports: ['react-icons'],
-  },
-  // Add custom headers for performance
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, stale-while-revalidate=86400',
+            key: 'Content-Security-Policy',
+            value: `
+              default-src 'self';
+              script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.elfsight.com https://unpkg.com https://apps.elfsight.com https://cdnjs.cloudflare.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://*.firebaseio.com https://*.googleapis.com https://cdn.jsdelivr.net https://universe-static.elfsightcdn.com https://*.elfsightcdn.com https://*.service.elfsight.com;
+              style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://apps.elfsight.com https://*.elfsightcdn.com;
+              img-src 'self' blob: data: https://lh3.googleusercontent.com https://maps.googleapis.com https://maps.gstatic.com https://scontent.cdninstagram.com https://www.google-analytics.com https://www.googletagmanager.com https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.cdninstagram.com https://*.fbcdn.net;
+              font-src 'self' https://fonts.gstatic.com https://apps.elfsight.com https://*.elfsightcdn.com;
+              connect-src 'self' https://fcmregistrations.googleapis.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://securetoken.googleapis.com https://www.googleapis.com https://maps.googleapis.com https://api.instagram.com https://graph.instagram.com https://*.google-analytics.com https://*.analytics.google.com https://*.googleapis.com https://*.supabase.co https://*.service.elfsight.com https://widget-data.service.elfsight.com https://core.service.elfsight.com https://scontent.cdninstagram.com;
+              media-src 'self';
+              frame-src 'self' https://apps.elfsight.com https://shop.sidehustlebar.com https://www.google.com/maps/ https://*.google.com;
+              worker-src 'self' blob:;
+              manifest-src 'self';
+            `.replace(/\s{2,}/g, ' ').trim(),
           },
-        ],
-      },
-      {
-        source: '/only_these/(.*)',
-        headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(self), interest-cohort=()',
           },
         ],
       },
     ];
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     // Fix for commonjs modules
     config.resolve.fallback = { fs: false, path: false };
-    
-    // Add resolvers to help with RSC
-    config.resolve.alias = {
-      ...config.resolve.alias,
-    };
-    
-    // Handle RSC URL scheme issues
-    if (!isServer) {
-      config.module.rules.push({
-        test: /\.js$/,
-        loader: 'string-replace-loader',
-        options: {
-          search: 'rsc://',
-          replace: '/',
-          flags: 'g',
-        },
-      });
-    }
-    
     return config;
   },
 };
 
-export default nextConfig; 
+export default config;
