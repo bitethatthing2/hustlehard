@@ -8,124 +8,63 @@
     /* Shadcn UI Theme Variables - Light Mode */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
     --radius: 0.5rem;
-    
-    /* Modern color palette - Legacy variables kept for compatibility */
-    --color-primary: 280, 75%, 60%;
-    --color-secondary: 260, 70%, 55%;
-    --color-accent: 0, 0%, 90%;
-    --color-background: 240, 10%, 4%;
-    --color-surface: 240, 10%, 8%;
-    --color-text: 0, 0%, 100%;
-    --color-text-secondary: 240, 10%, 80%;
-    
-    /* Bar specific colors */
-    --bar-accent: var(--color-accent);
-    --bar-dark: hsl(var(--color-background));
-    --bar-surface: hsl(var(--color-surface));
-    --bar-muted: hsl(var(--color-surface) / 0.8);
-    
-    /* Glass effect variables */
-    --glass-background: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shine: rgba(255, 255, 255, 0.15);
-    
-    /* Animation speeds */
-    --animation-slow: 700ms;
-    --animation-medium: 400ms;
-    --animation-fast: 250ms;
-    
-    /* Elevation levels */
-    --elevation-1: 0 2px 4px rgba(0,0,0,0.2);
-    --elevation-2: 0 4px 8px rgba(0,0,0,0.3);
-    --elevation-3: 0 8px 16px rgba(0,0,0,0.4);
-    
-    /* Border radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-    
-    /* Spacing */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
   }
 
   .dark {
     /* Shadcn UI Theme Variables - Dark Mode */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
-
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
-
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
 
   html {
-    transition: background-color 0.3s ease;
+    @apply transition-colors duration-300 ease-in-out;
   }
 }
 
 /* Component layer styles */
 @layer components {
-  /* Base styles */
   * {
     @apply border-border;
   }
   
   body {
     @apply bg-background text-foreground;
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -933,6 +872,16 @@ main,
 
 .button-ios-guide svg, .button-android-guide svg {
   @apply text-white;
+}
+
+/* Installation buttons global styles */
+[data-installation-button] {
+  @apply bg-transparent !important;
+  @apply border-white text-white hover:bg-white/10 transition-colors !important;
+}
+
+[data-installation-button] svg {
+  @apply text-white fill-current !important;
 }
 
 /* Instagram Embed styles */

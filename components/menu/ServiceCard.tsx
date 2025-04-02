@@ -28,32 +28,32 @@ export function ServiceCard({ option, index, className }: ServiceCardProps) {
   
   return (
     <Card className={cn(
-      "h-full transition-all duration-300 border-border/50 hover:border-border/80 shadow-sm hover:shadow-md bg-black text-white",
+      "h-full transition-all duration-300 border-border/50 hover:border-border/80 shadow-sm hover:shadow-md bg-white",
       className
     )}>
       <CardHeader className="pb-3">
         <div className="flex items-center gap-3">
           {option.logo && (
-            <div className="w-10 h-10 rounded-full bg-white p-1.5 border border-border/50 shadow-sm flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center flex-shrink-0">
               <Image 
                 src={option.logo} 
                 alt={option.name} 
-                width={40} 
-                height={40}
-                className="w-full h-full object-contain" 
+                width={32} 
+                height={32}
+                className="w-8 h-8 object-contain brightness-0 invert" 
               />
             </div>
           )}
-          <CardTitle className="text-base font-bold text-white">{option.name}</CardTitle>
+          <CardTitle className="text-base font-bold text-black">{option.name}</CardTitle>
         </div>
       </CardHeader>
       
       <CardContent className="py-2">
         <div className="space-y-1.5 text-sm">
           {isDelivery && (
-            <p className="text-white/80 font-medium">{(option as DeliveryService).serviceFee}</p>
+            <p className="text-black font-medium">{(option as DeliveryService).serviceFee}</p>
           )}
-          <p className="text-white/80 font-medium">{option.fee}</p>
+          <p className="text-black font-medium">{option.fee}</p>
           <p className="text-bar-accent font-bold">{option.time}</p>
         </div>
       </CardContent>
@@ -62,7 +62,7 @@ export function ServiceCard({ option, index, className }: ServiceCardProps) {
         <Button 
           asChild 
           variant="default"
-          className="w-full bg-white hover:bg-white/90 text-black font-bold"
+          className="w-full bg-black hover:bg-black/90 text-white font-bold"
         >
           <Link 
             href={option.url} 

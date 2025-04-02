@@ -53,7 +53,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Menu',
-      href: '/coming-soon',
+      href: '/menu',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -71,7 +71,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Events',
-      href: '/coming-soon',
+      href: '/events',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -83,7 +83,7 @@ export default function MainMenuButton() {
   const serviceLinks = [
     {
       label: 'Reservations',
-      href: '/coming-soon',
+      href: '/coming-soon/reservations',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -92,7 +92,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Catering',
-      href: '/coming-soon',
+      href: '/coming-soon/catering',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -104,7 +104,7 @@ export default function MainMenuButton() {
   const connectLinks = [
     {
       label: 'Social Media',
-      href: '/coming-soon',
+      href: '/social',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -113,7 +113,7 @@ export default function MainMenuButton() {
     },
     {
       label: 'Meet The Pack',
-      href: '/coming-soon',
+      href: '/coming-soon/team',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -286,7 +286,7 @@ export default function MainMenuButton() {
               <p className="text-black font-medium text-sm mb-4">Add our app to your home screen for the best experience:</p>
               <div className="flex flex-col space-y-2">
                 <Button asChild variant="outline" className="bg-black hover:bg-black/90 border-gray-200 w-full justify-start h-14 text-white">
-                  <Link href="/coming-soon" className="flex items-center">
+                  <Link href="/coming-soon/ios" className="flex items-center">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3">
                       <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 384 512">
                         <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
@@ -296,7 +296,7 @@ export default function MainMenuButton() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="bg-black hover:bg-black/90 border-gray-200 w-full justify-start h-14 text-white">
-                  <Link href="/coming-soon" className="flex items-center">
+                  <Link href="/coming-soon/android" className="flex items-center">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3">
                       <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 576 512">
                         <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55" />

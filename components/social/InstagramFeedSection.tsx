@@ -36,8 +36,12 @@ const InstagramFeedSection: React.FC = () => {
           <div className="w-full overflow-hidden rounded-xl holographic-border">
             <div className="bg-black/70 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-lg border border-gray-800">
               {/* Elfsight Instagram Feed Widget */}
-              <Script src="https://static.elfsight.com/platform/platform.js" async />
-              <div className="elfsight-app-4118f1f5-d59f-496f-8439-e8e0232a0fef" data-elfsight-app-lazy></div>
+              <div style={{ minHeight: "400px" }}>
+                <div 
+                  className="elfsight-app-4118f1f5-d59f-496f-8439-e8e0232a0fef" 
+                  data-elfsight-app-lazy
+                ></div>
+              </div>
             </div>
           </div>
           

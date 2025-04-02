@@ -148,11 +148,11 @@ const OrderOptions = () => {
         <Button
           onClick={() => setActiveOption('delivery')}
           variant={activeOption === 'delivery' ? 'default' : 'outline'}
-          className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center"
+          className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center bg-white hover:bg-white/90"
         >
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black">
-              <svg viewBox="0 0 24 24" width="20" height="20" className="w-10 h-10 scale-150" fill="white">
+              <svg viewBox="0 0 24 24" width="20" height="20" className="w-6 h-6" fill="white">
                 <path d="M19 7c0-1.1-.9-2-2-2h-3v2h3v2.65L13.52 14H10V9H6c-2.21 0-4 1.79-4 4v3h2c0 1.66 1.34 3 3 3s3-1.34 3-3h4.48L19 10.35V7zM7 17c-.55 0-1-.45-1-1h2c0 .55-.45 1-1 1z" />
                 <path d="M5 6h5v2H5zm14 7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm0 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
               </svg>
@@ -164,11 +164,11 @@ const OrderOptions = () => {
         <Button
           onClick={() => setActiveOption('pickup')}
           variant={activeOption === 'pickup' ? 'default' : 'outline'}
-          className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center"
+          className="min-w-[180px] text-lg py-6 px-10 flex items-center justify-center bg-white hover:bg-white/90"
         >
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black">
-              <svg viewBox="0 0 24 24" width="20" height="20" className="w-8 h-8 scale-110" fill="white">
+              <svg viewBox="0 0 24 24" width="20" height="20" className="w-6 h-6" fill="white">
                 <path d="M19 7h-4V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v1H3c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0H9V5h4v2z" />
               </svg>
             </div>
@@ -265,10 +265,11 @@ const OrderOptions = () => {
               <Button
                 onClick={handleIOSInstall}
                 variant="outline"
-                className="border-white text-white hover:bg-white/10"
+                data-installation-button
+                className="flex items-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-5 h-5 mr-2 fill-current">
-                  <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-5 h-5 mr-2">
+                  <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
                 </svg>
                 iOS Installation
               </Button>
@@ -278,9 +279,10 @@ const OrderOptions = () => {
               <Button
                 onClick={handleAndroidInstall}
                 variant="outline"
-                className="border-white text-white hover:bg-white/10"
+                data-installation-button
+                className="flex items-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="w-5 h-5 mr-2 fill-current">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="w-5 h-5 mr-2">
                   <path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55" />
                 </svg>
                 Android Installation

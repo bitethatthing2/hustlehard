@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
-// Extend the Window interface to include the Elfsight eapps property and our custom flag
+// Add typings for global window object
 declare global {
   interface Window {
     eapps?: {
+      initWidget?: (options: { widgetElemId: string }) => void;
+      initWidgetsFromBuffer?: () => void;
       AppsManager?: any;
-      Platform?: {
+      Platform?: { 
         initialized?: boolean;
       };
     };
+    elfsightLoaded?: boolean;
     elfsightLoadFailed?: boolean;
   }
 }
@@ -33,99 +36,100 @@ interface ElfsightWidgetProps {
  */
 const ElfsightWidget: React.FC<ElfsightWidgetProps> = ({
   widgetId,
-  className,
-  wrapperClassName,
-  fallbackMessage = "Widget loading..."
+  className = '',
+  wrapperClassName = '',
+  fallbackMessage = 'Loading widget...',
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-
-  // Error handler for all Elfsight widget errors
-  const handleElfsightErrors = useCallback((event: ErrorEvent) => {
-    // Check if this is an Elfsight error message
-    if (
-      event.message?.includes('eapps.Platform') && 
-      (event.message?.includes('WIDGET_NOT_FOUND') || 
-       event.message?.includes(`"${widgetId}"`) ||
-       event.message?.includes('can`t be initialized'))
-    ) {
-      console.warn(`Elfsight widget error: ${event.message}`);
-      setHasError(true);
-      setIsLoading(false);
-    }
-    
-    // Check for Elfsight script loading errors
-    if (event.target && 
-        'src' in event.target && 
-        typeof (event.target as HTMLScriptElement).src === 'string' &&
-        (event.target as HTMLScriptElement).src.includes('static.elfsight.com/platform/platform.js')) {
-      console.warn('Elfsight platform script failed to load');
-      setHasError(true);
-      setIsLoading(false);
-    }
-  }, [widgetId]);
-
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const isMounted = useRef(true);
+  const elementId = `elfsight-app-${widgetId}`;
+  
   useEffect(() => {
-    // Check if Elfsight script failed to load (set in layout.tsx)
-    if (typeof window !== 'undefined' && window.elfsightLoadFailed) {
-      setHasError(true);
-      setIsLoading(false);
-      return;
-    }
+    // Check if we're on the client side
+    if (typeof window === 'undefined') return;
     
-    // Add global error handler for Elfsight errors
-    window.addEventListener('error', handleElfsightErrors as EventListener);
+    isMounted.current = true;
     
-    // Check if Elfsight is loaded
-    if (typeof window !== 'undefined') {
-      const checkElfsightLoaded = setInterval(() => {
-        // Check if platform is initialized
-        if (window.eapps && (window.eapps.AppsManager || window.eapps.Platform?.initialized)) {
-          setIsLoading(false);
-          clearInterval(checkElfsightLoaded);
+    // Initialize widget if Elfsight platform is already loaded
+    const initializeWidget = () => {
+      try {
+        if (window.eapps && typeof window.eapps.initWidget === 'function') {
+          window.eapps.initWidget({
+            widgetElemId: elementId,
+          });
         }
-      }, 500);
-      
-      // Timeout after 10 seconds to prevent infinite checking
-      setTimeout(() => {
-        clearInterval(checkElfsightLoaded);
-        if (isLoading) {
+      } catch (err) {
+        console.warn('Error initializing Elfsight widget:', err);
+        if (isMounted.current) {
           setHasError(true);
         }
-      }, 10000);
-      
-      return () => {
-        clearInterval(checkElfsightLoaded);
-        window.removeEventListener('error', handleElfsightErrors as EventListener);
-      };
-    }
-  }, [isLoading, handleElfsightErrors]);
+      }
+    };
 
-  // Error handler for direct widget errors
-  const handleError = () => {
-    console.warn('Elfsight widget had an error loading');
-    setHasError(true);
-  };
+    // Check if widget is loaded
+    const checkWidgetLoaded = () => {
+      if (!isMounted.current) return;
+      
+      if (widgetRef.current) {
+        const widgetContainer = widgetRef.current.querySelector(`[class*="elfsight-app-"]`);
+        const hasContent = widgetContainer && widgetContainer.children.length > 0;
+        
+        if (hasContent) {
+          setIsLoaded(true);
+        } else {
+          // Check again after a delay
+          setTimeout(checkWidgetLoaded, 1000);
+        }
+      }
+    };
+
+    // Start the check process
+    initializeWidget();
+    checkWidgetLoaded();
+
+    // Clean up function
+    return () => {
+      isMounted.current = false;
+    };
+  }, [widgetId, elementId]);
+
+  // Fallback component if widget fails to load
+  if (hasError) {
+    return (
+      <div className={`elfsight-widget-error ${wrapperClassName}`}>
+        <div className="p-4 text-center">
+          <p className="text-red-500">Widget could not be loaded.</p>
+          <div className="mt-2">
+            <a 
+              href="https://g.page/r/CQFvIkYoqoS2EAE/review" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              See our reviews on Google
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={cn("elfsight-widget-wrapper w-full", wrapperClassName)}>
-      {isLoading && !hasError && (
-        <div className="text-center py-6 text-white/70">{fallbackMessage}</div>
-      )}
-      
-      {hasError && (
-        <div className="text-center py-6 text-white/70">
-          Widget could not be loaded. The widget ID may be invalid or your connection may be offline.
+    <div className={`elfsight-widget-container ${wrapperClassName}`}>
+      {!isLoaded && (
+        <div className="flex justify-center items-center p-8">
+          <div className="animate-pulse">{fallbackMessage}</div>
         </div>
       )}
       
-      {!hasError && (
-        <div 
-          className={cn("elfsight-app-" + widgetId, className)}
-          data-elfsight-app-lazy
-          onError={handleError}
-        />
-      )}
+      <div
+        ref={widgetRef}
+        id={elementId}
+        className={`${elementId} ${className}`}
+        data-elfsight-app-lazy
+      />
     </div>
   );
 };

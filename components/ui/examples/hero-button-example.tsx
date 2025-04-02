@@ -103,7 +103,7 @@ export const HeroButtonExamples = () => {
     from-white/20 via-transparent to-white/5 opacity-80"></div>
   </div>
   
-  <Image src="/menu_icon.png" alt="Shop" width={40} height={40} 
+  <Image src="/.png" alt="Shop" width={40} height={40} 
   className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />
   <span className="relative z-10">SHOP NOW</span>
   <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9">{/* ... */}</svg>

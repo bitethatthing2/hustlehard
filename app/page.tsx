@@ -21,7 +21,8 @@ const InstagramFeedSection = dynamic(() => import('@/components/social/Instagram
   loading: () => <div className="py-12 flex items-center justify-center bg-black">Loading Instagram feed...</div>
 });
 
-const GoogleReviewsSection = dynamic(() => import('@/components/reviews/GoogleReviewsSection'), {
+// Use the new ReviewsSection component instead of GoogleReviewsSection
+const ReviewsSection = dynamic(() => import('@/components/reviews/ReviewsSection'), {
   ssr: false,
   loading: () => <div className="py-12 flex items-center justify-center bg-black">Loading reviews...</div>
 });
@@ -107,9 +108,9 @@ export default function Home(): React.ReactElement {
             <InstagramFeedSection />
           </Suspense>
           
-          {/* Google Reviews Section */}
+          {/* Reviews Section */}
           <Suspense fallback={<div className="py-12 flex items-center justify-center bg-black">Loading reviews...</div>}>
-            <GoogleReviewsSection />
+            <ReviewsSection />
           </Suspense>
         </div>
       </div>

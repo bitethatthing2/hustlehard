@@ -58,21 +58,36 @@ export default function RootLayout({
         <Script src="/env-config.js" strategy="beforeInteractive" />
         {/* Load tracking fix script early */}
         <Script src="/tracking-fix.js" strategy="beforeInteractive" />
+        
+        {/* Enhanced Elfsight Widget handling - using async for faster loading as recommended by Elfsight */}
+        <Script 
+          src="https://static.elfsight.com/platform/platform.js" 
+          async
+          strategy="beforeInteractive" 
+          crossOrigin="anonymous"
+        />
+        
         {/* Load Android notification icon helper */}
         <Script src="/notification-icon.js" strategy="afterInteractive" />
         {/* Load PWA installation fix */}
         <Script src="/pwa-fix.js" strategy="afterInteractive" />
-        {/* Load Elfsight Widget with error handling */}
-        <Script 
-          src="https://static.elfsight.com/platform/platform.js" 
-          data-use-service-core 
-          strategy="lazyOnload" 
-          crossOrigin="anonymous"
-          nonce="elfsight-nonce"
-        />
+        
         {/* Script to handle Elfsight errors and loading globally */}
         <Script id="elfsight-error-handler" strategy="afterInteractive">
           {`
+            // Global flag to track Elfsight platform loading
+            window.elfsightLoaded = false;
+            
+            // Set up Elfsight loading handler
+            window.addEventListener('load', function() {
+              if (typeof window.eapps !== 'undefined') {
+                window.elfsightLoaded = true;
+                console.log('Elfsight platform loaded at page load');
+              } else {
+                console.warn('Elfsight platform not available at page load, will try init later');
+              }
+            });
+            
             // Handle Elfsight platform script loading errors
             window.addEventListener('error', function(event) {
               if (event.target && event.target.src && event.target.src.includes('static.elfsight.com/platform/platform.js')) {
@@ -91,10 +106,26 @@ export default function RootLayout({
             });
           `}
         </Script>
+        
         {/* Preconnect to external domains to improve performance */}
         <link rel="preconnect" href="https://static.elfsight.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://core.service.elfsight.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://universe-static.elfsightcdn.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://widget-data.service.elfsight.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://lh3.googleusercontent.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://scontent.cdninstagram.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://maps.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://maps.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Preload critical assets with correct 'as' attribute */}
+        <link 
+          rel="preload" 
+          href="/only_these/logos/logo.png" 
+          as="image" 
+          type="image/png"
+        />
+        
         {/* Add referrer policy to enable third-party content loading */}
         <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>

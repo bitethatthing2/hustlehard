@@ -9,7 +9,7 @@ import PageHeader from '@/components/shared/PageHeader';
 import { PhoneCall, Mail, Clock } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
-import GoogleMapEmbed from '@/components/maps/GoogleMapEmbed';
+import GoogleMap from '@/components/maps/GoogleMap';
 import { LocationSwitch } from '@/components/ui/location-switch';
 
 const LocationsPageContent = () => {
@@ -69,10 +69,11 @@ const LocationsPageContent = () => {
             </h3>
           </div>
           
-          <GoogleMapEmbed
-            src={currentEmbedUrl}
-            title={`${activeLocation.name} Location Map`}
-            className="rounded-lg shadow-lg border border-white/10"
+          <GoogleMap
+            height="500px" 
+            className="w-full" 
+            showControls={true}
+            scrollwheel={false}
           />
           
           <p className="text-white/80 mt-4 text-center max-w-2xl">

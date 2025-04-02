@@ -47,7 +47,7 @@ const LocationSwitch = React.forwardRef<
             alt="Location Toggle Icon"
             width={48}
             height={48}
-            className="w-12 h-12 object-contain"
+            className="w-12 h-auto object-contain"
           />
         </SwitchPrimitives.Thumb>
       </SwitchPrimitives.Root>
