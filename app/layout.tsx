@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
 import MainMenuButton from "@/components/navigation/MainMenuButton";
 import QuickNav from "@/components/navigation/QuickNav";
@@ -9,7 +9,7 @@ import Image from "next/image";
 import { ThemeProvider } from "@/app/providers";
 import { LocationProvider } from "@/contexts/LocationContext";
 import DynamicFooter from "@/components/layout/DynamicFooter";
-import MobileFooter from "@/components/layout/MobileFooter";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -159,18 +159,13 @@ export default function RootLayout({
               </div>
             </header>
             
-            <main className="pt-16 sm:pt-20 pb-16 md:pb-0 w-full flex flex-col items-center overflow-hidden">
+            <main className="pt-16 sm:pt-20 w-full flex flex-col items-center overflow-hidden">
               <Toaster />
               {children}
             </main>
             
-            {/* Desktop Footer */}
-            <div className="hidden md:block">
-              <DynamicFooter />
-            </div>
-            
-            {/* Mobile Footer */}
-            <MobileFooter />
+            {/* Dynamic Footer - works for all screen sizes */}
+            <DynamicFooter />
           </LocationProvider>
         </ThemeProvider>
       </body>
