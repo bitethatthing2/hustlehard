@@ -27,7 +27,7 @@ const LocationsPageContent = () => {
   const currentEmbedUrl = selectedLocation === 'portland' ? portlandEmbedUrl : salemEmbedUrl;
   
   return (
-    <div className="container mx-auto px-4 py-8 mb-24">
+    <div className="container mx-auto px-4 py-8 overflow-x-hidden mb-24">
       <PageHeader 
         title="Our Locations" 
         subtitle="Visit us at either of our locations in Portland or Salem"
@@ -71,7 +71,8 @@ const LocationsPageContent = () => {
           
           <GoogleMap
             height="500px" 
-            className="w-full" 
+            width="100%"
+            className="w-full rounded-lg" 
             showControls={true}
             scrollwheel={false}
           />
