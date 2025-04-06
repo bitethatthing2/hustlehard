@@ -4,6 +4,37 @@ import { categoryIcons, foodIcons, drinkIcons, meatIcons, sauceIcons } from '@/l
 export const menuData: FullMenu = {
   drinks: [
     {
+      title: 'HAPPY HOUR',
+      icon: categoryIcons.drinks,
+      items: [
+        {
+          name: 'ALL APPETIZERS',
+          price: '$3 OFF',
+          description: 'Get $3 off all appetizers during Happy Hour (4 PM - 7 PM M-F)',
+          icon: foodIcons.chipsGuac,
+        },
+        {
+          name: 'ALL COCKTAILS',
+          price: '$3 OFF',
+          description: 'Get $3 off all cocktails during Happy Hour (4 PM - 7 PM M-F)',
+          icon: drinkIcons.cocktail,
+        },
+        {
+          name: 'CANS OF BEER',
+          price: '$6',
+          description: 'Special Happy Hour pricing on cans of beer (4 PM - 7 PM M-F)',
+          icon: drinkIcons.beer,
+        },
+        {
+          name: 'GLASSES OF WINE',
+          price: '$7',
+          description: 'Special Happy Hour pricing on glasses of wine (4 PM - 7 PM M-F)',
+          icon: drinkIcons.wine,
+        },
+      ],
+      notes: ['Happy Hour available Monday through Friday, 4 PM - 7 PM'],
+    },
+    {
       title: 'HOUSE FAVORITES',
       icon: categoryIcons.drinks,
       items: [

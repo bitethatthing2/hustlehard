@@ -35,7 +35,7 @@ export default function MenuPage() {
             </TabsList>
           </div>
           
-          <TabsContent value="food" className="space-y-12">
+          <TabsContent value="food" id="food" className="space-y-12 scroll-mt-20">
             {menuData.food.map((section: MenuSectionType) => (
               <div key={section.title} className="mb-12">
                 <h2 className="text-2xl font-bold mb-6 text-black dark:text-white uppercase">
@@ -50,9 +50,17 @@ export default function MenuPage() {
             ))}
           </TabsContent>
           
-          <TabsContent value="drinks" className="space-y-12">
+          <TabsContent value="drinks" id="drinks" className="space-y-12 scroll-mt-20">
             {menuData.drinks.map((section: MenuSectionType) => (
-              <div key={section.title} className="mb-12">
+              <div 
+                key={section.title} 
+                id={
+                  section.title === 'HAPPY HOUR' ? 'happy-hour' :
+                  section.title === 'HOUSE FAVORITES' ? 'drinks-house-favorites' :
+                  undefined
+                }
+                className={`mb-12 ${['HAPPY HOUR', 'HOUSE FAVORITES'].includes(section.title) ? 'scroll-mt-20' : ''}`}
+              >
                 <h2 className="text-2xl font-bold mb-6 text-black dark:text-white uppercase">
                   {section.title}
                 </h2>

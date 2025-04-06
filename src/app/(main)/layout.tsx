@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "@/components/header";
+import DynamicFooter from "@/components/layout/DynamicFooter";
 
 export default function MainLayout({
   children,
@@ -13,7 +14,7 @@ export default function MainLayout({
       <main className="flex-grow">
         {children}
       </main>
-      {/* Footer can be added here later */}
+      <DynamicFooter />
     </>
   )
 }

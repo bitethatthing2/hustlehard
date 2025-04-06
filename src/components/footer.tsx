@@ -15,7 +15,7 @@ export function SiteFooter() { // Changed export name slightly for clarity
 
         {/* Left Section: Copyright */}
         <div className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-          © {currentYear} Hustle Hard. All Rights Reserved.
+          {currentYear} Hustle Hard. All Rights Reserved.
           {/* Optional: Add link to privacy policy or terms */}
         </div>
 
@@ -23,7 +23,7 @@ export function SiteFooter() { // Changed export name slightly for clarity
         <div className="flex items-center space-x-4">
           {/* Replace '#' with your actual social media URLs */}
           <Link
-            href="#"
+            href="https://www.instagram.com/sidehustle_bar"
             target="_blank"
             rel="noreferrer"
             className="font-medium underline underline-offset-4 hover:text-primary" // Example styling
@@ -33,14 +33,14 @@ export function SiteFooter() { // Changed export name slightly for clarity
              {/* Add <img src="/assets/icons/social_icon_instagram.svg"> when ready */}
           </Link>
           <Link
-            href="#"
+            href="https://www.facebook.com/p/The-Side-Hustle-Bar-100094503669280/"
             target="_blank"
             rel="noreferrer"
             className="font-medium underline underline-offset-4 hover:text-primary"
           >
              <PlaceholderGoogleIcon />
-             <span className="sr-only">Google Reviews</span>
-              {/* Add <img src="/assets/icons/social_icon_google.svg"> when ready */}
+             <span className="sr-only">Facebook</span>
+              {/* Add <img src="/assets/icons/social_icon_facebook.svg"> when ready */}
           </Link>
           {/* Add other social links here */}
         </div>
