@@ -15,7 +15,6 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     remotePatterns: [
       {
@@ -88,6 +87,8 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
+  // Configure distDir to match Netlify expectations
+  distDir: '.next',
 };
 
 export default withPWA(nextConfig);
