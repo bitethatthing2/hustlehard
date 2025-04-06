@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
-import { Download, Bell } from "lucide-react"
+import { Download, Bell, ShoppingBag, Store } from "lucide-react"
 import { LocationSwitcher } from "@/components/features/location-switcher"
 import { motion } from "framer-motion"
 import { useLocation } from "@/contexts/LocationContext";
@@ -32,8 +32,8 @@ export default function HomePage() {
       <LocationSwitcher className="mb-8" /> 
 
       {/* Header Text with Animations */}
-      <div className="space-y-4">
-        <h1 className="text-4xl sm:text-5xl font-bold text-center">
+      <div className="space-y-6 max-w-2xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl font-bold text-center text-black dark:text-white leading-tight">
           High-Energy Sports<br />
           Bar • Restaurant •<br />
           Nightclub
@@ -43,9 +43,9 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg sm:text-2xl md:text-3xl font-semibold flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 mt-4 text-center"
+          className="text-lg sm:text-xl md:text-2xl font-semibold flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 mt-2 text-center"
         >
-          <span className="w-full text-center mb-1">Featuring Executive Chef</span>
+          <span className="w-full text-center mb-1 text-gray-800 dark:text-gray-200">Featuring Executive Chef</span>
           <div className="flex items-center justify-center gap-3">
             <motion.div
               animate={{ 
@@ -56,17 +56,17 @@ export default function HomePage() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="rounded-full bg-black p-1"
+              className="rounded-full bg-black dark:bg-white p-1"
             >
               <Image 
                 src="/wolf_girl.png" 
                 alt="Wolf icon" 
                 width={24} 
                 height={24} 
-                className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full"
+                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full"
               />
             </motion.div>
-            <span>Rebecca Sanchez</span>
+            <span className="text-gray-900 dark:text-gray-100 font-semibold">Rebecca Sanchez</span>
             <motion.div
               animate={{ 
                 y: [0, -5, 0],
@@ -77,27 +77,55 @@ export default function HomePage() {
                 ease: "easeInOut",
                 delay: 0.5
               }}
-              className="rounded-full bg-black p-1"
+              className="rounded-full bg-black dark:bg-white p-1"
             >
               <Image 
                 src="/wolf_girl.png" 
                 alt="Wolf icon" 
                 width={24} 
                 height={24} 
-                className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full"
+                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full"
               />
             </motion.div>
           </div>
         </motion.h2>
         
-        <motion.p 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6, type: 'spring' }}
-          className="text-xl italic"
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-col items-center"
         >
-          #1 Rated Mexican Food & Best Tacos in Town
-        </motion.p>
+          <p className="text-xl italic text-gray-800 dark:text-gray-200 mb-5">
+            #1 Rated Mexican Food & Best Tacos in Town
+          </p>
+        </motion.div>
+        
+        {/* Order Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="flex flex-col items-center justify-center gap-4 mt-2 w-full max-w-md mx-auto"
+        >
+          <h3 className="text-2xl font-bold text-black dark:text-white">Order Online</h3>
+          <div className="flex flex-row justify-center gap-4 w-full">
+            <Button 
+              className={`h-12 w-full max-w-[160px] text-sm sm:text-base font-semibold rounded-full transition-all flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} border border-transparent hover:border-current shadow-md hover:shadow-lg transform hover:scale-105`}
+              onClick={() => window.location.href = '/order?mode=online'}
+            >
+              <ShoppingBag className={`w-3 h-3 ${theme === 'dark' ? 'text-black' : 'text-white'}`} />
+              <span>Delivery</span>
+            </Button>
+            <Button 
+              className={`h-12 w-full max-w-[160px] text-sm sm:text-base font-semibold rounded-full transition-all flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} border border-transparent hover:border-current shadow-md hover:shadow-lg transform hover:scale-105`}
+              onClick={() => window.location.href = '/order?mode=pickup'}
+            >
+              <Store className={`w-3 h-3 ${theme === 'dark' ? 'text-black' : 'text-white'}`} />
+              <span>Pickup</span>
+            </Button>
+          </div>
+        </motion.div>
         
         {/* App Installation Flow */}
         <AppInstallFlow />

@@ -119,34 +119,30 @@ const AppInstallFlow = () => {
             >
               {deviceType === "android" ? (
                 <div className="flex items-center justify-center w-full">
-                  {isDarkTheme ? (
-                    // Larger white Android icon specifically for dark mode
-                    <div className="flex items-center justify-center w-full">
-                      <div className="relative mr-4 w-10 h-10">
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
+                      {isDarkTheme ? (
                         <Image 
                           src="/android-installation-guide-white.png.png"
                           alt="Android Install"
-                          width={40}
-                          height={40}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12"
                           priority
                         />
-                      </div>
-                      <span>Install on Android</span>
+                      ) : (
+                        <Image 
+                          src="/android_installation_guide-black.png"
+                          alt="Android Install"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6"
+                          priority
+                        />
+                      )}
                     </div>
-                  ) : (
-                    // Normal size for black Android icon in light mode
-                    <div className="flex items-center justify-center w-full">
-                      <Image 
-                        src="/android_installation_guide-black.png" 
-                        alt="Android Install"
-                        width={24}
-                        height={24}
-                        className="mr-3"
-                        priority
-                      />
-                      <span>Install on Android</span>
-                    </div>
-                  )}
+                    <span>Install on Android</span>
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center w-full">
@@ -193,30 +189,30 @@ const AppInstallFlow = () => {
             onClick={handleNotificationsClick}
           >
             <div className="flex items-center justify-center w-full">
-              {isDarkTheme ? (
-                // Dark mode notification icon
-                <div className="relative mr-4 w-10 h-10">
-                  <Image 
-                    src="/enable-notifications-dark.png"
-                    alt="Enable Notifications"
-                    width={40}
-                    height={40}
-                    priority
-                  />
+              <div className="flex items-center justify-center gap-3">
+                <div className="rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
+                  {isDarkTheme ? (
+                    <Image 
+                      src="/enable-notifications-dark.png"
+                      alt="Enable Notifications"
+                      width={36}
+                      height={36}
+                      className="w-9 h-9"
+                      priority
+                    />
+                  ) : (
+                    <Image 
+                      src="/enable-notifications-light-screen.png"
+                      alt="Enable Notifications"
+                      width={36}
+                      height={36}
+                      className="w-9 h-9"
+                      priority
+                    />
+                  )}
                 </div>
-              ) : (
-                // Light mode notification icon
-                <div className="relative mr-4 w-10 h-10">
-                  <Image 
-                    src="/enable-notifications-light-screen.png"
-                    alt="Enable Notifications"
-                    width={40}
-                    height={40}
-                    priority
-                  />
-                </div>
-              )}
-              <span>Enable Notifications</span>
+                <span>Enable Notifications</span>
+              </div>
             </div>
           </Button>
         </div>
@@ -280,30 +276,30 @@ const AppInstallFlow = () => {
             onClick={handleNotificationsClick}
           >
             <div className="flex items-center justify-center w-full">
-              {isDarkTheme ? (
-                // Dark mode notification icon
-                <div className="relative mr-4 w-10 h-10">
-                  <Image 
-                    src="/enable-notifications-dark.png"
-                    alt="Enable Notifications"
-                    width={40}
-                    height={40}
-                    priority
-                  />
+              <div className="flex items-center justify-center gap-3">
+                <div className="rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
+                  {isDarkTheme ? (
+                    <Image 
+                      src="/enable-notifications-dark.png"
+                      alt="Enable Notifications"
+                      width={36}
+                      height={36}
+                      className="w-9 h-9"
+                      priority
+                    />
+                  ) : (
+                    <Image 
+                      src="/enable-notifications-light-screen.png"
+                      alt="Enable Notifications"
+                      width={36}
+                      height={36}
+                      className="w-9 h-9"
+                      priority
+                    />
+                  )}
                 </div>
-              ) : (
-                // Light mode notification icon
-                <div className="relative mr-4 w-10 h-10">
-                  <Image 
-                    src="/enable-notifications-light-screen.png"
-                    alt="Enable Notifications"
-                    width={40}
-                    height={40}
-                    priority
-                  />
-                </div>
-              )}
-              <span>Enable Notifications</span>
+                <span>Enable Notifications</span>
+              </div>
             </div>
           </Button>
           <button 
