@@ -14,8 +14,17 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "Hustle Hard",
   description: "High-Energy Sports Bar • Restaurant • Nightclub",
-  // Add manifest and theme color to metadata for better integration if desired,
-  // but explicitly putting them in <head> is crucial for PWA detection.
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Hustle Hard",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/icons/icons/icon-192x192.png",
+  },
 };
 
 export default function RootLayout({
@@ -25,15 +34,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Hustle Hard" />
-        <link rel="apple-touch-icon" href="/icons/icons/icon-192x192.png" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
